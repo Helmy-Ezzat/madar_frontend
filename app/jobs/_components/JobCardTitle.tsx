@@ -12,12 +12,12 @@ export const JobCardTitle: React.FC<JobTitleProps> = ({ titles }) => {
 
   return (
     <div className="flex flex-wrap gap-2">
-      <h1 className="text-lg font-bold text-primary2 leading-snug line-clamp-2">
+      <h1 className="text-lg font-bold text-primary leading-snug line-clamp-2">
         {visibleTitles.join(' - ')} {hiddenCount > 0 ? '...' : ''}
       </h1>
 
       {hiddenCount > 0 && (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary2/10 text-primary2 w-fit">
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary w-fit">
           + {hiddenCount} وظائف أخرى
         </span>
       )}

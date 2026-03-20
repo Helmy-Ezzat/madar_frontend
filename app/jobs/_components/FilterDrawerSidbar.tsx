@@ -18,7 +18,7 @@ export default function FilterDrawerSidbar({ children }: { children: React.React
     return (
         <>
             {/* Desktop Sidebar */}
-            <aside className="hidden lg:flex flex-col sticky top-24 h-[724px] bg-white border-t-4 border-primary2 rounded-xl shadow-xl divide-y divide-grey-icon">
+            <aside className="hidden lg:flex flex-col sticky top-24 h-[724px] bg-white border-t-4 border-primary rounded-xl shadow-xl divide-y divide-icon-bg">
                 <div className="p-5 sticky top-0">
                     <h3 className="text-lg font-bold">فلترة الوظائف</h3>
                 </div>
@@ -95,7 +95,7 @@ export default function FilterDrawerSidbar({ children }: { children: React.React
                                 <div className="w-10 h-1 rounded-full bg-gray-300" />
                             </div>
 
-                            <div className="px-5 py-2 border-b border-grey-icon" onPointerDown={(e) => dragControls.start(e)}>
+                            <div className="px-5 py-2 border-b border-icon-bg" onPointerDown={(e) => dragControls.start(e)}>
                                 <h3 className="text-lg font-bold">فلترة الوظائف</h3>
                             </div>
 

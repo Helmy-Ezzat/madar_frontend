@@ -23,13 +23,13 @@ export default async function OfficesPage() {
                 </div>
 
                 {/* Stats */}
-                <div className="bg-primary2/5 rounded-2xl p-6 mb-12 flex flex-wrap gap-8 justify-center">
+                <div className="bg-primary/5 rounded-2xl p-6 mb-12 flex flex-wrap gap-8 justify-center">
                     <div className="text-center">
-                        <p className="text-3xl font-bold text-primary2">{offices.length}</p>
+                        <p className="text-3xl font-bold text-primary">{offices.length}</p>
                         <p className="text-slate-600">مكتب</p>
                     </div>
                     <div className="text-center">
-                        <p className="text-3xl font-bold text-primary2">
+                        <p className="text-3xl font-bold text-primary">
                             {offices.reduce((sum, o) => sum + o.jobCount, 0)}
                         </p>
                         <p className="text-slate-600">وظيفة متاحة</p>
@@ -41,7 +41,7 @@ export default async function OfficesPage() {
                     {offices.map((office) => (
                         <div
                             key={office.name}
-                            className="bg-white border border-slate-200 rounded-2xl p-6 hover:border-primary2 hover:shadow-lg transition-all duration-200"
+                            className="bg-white border border-slate-200 rounded-2xl p-6 hover:border-primary hover:shadow-lg transition-all duration-200"
                         >
                             <div className="flex items-start justify-between gap-4 mb-4">
                                 <div className="flex-1">
@@ -52,9 +52,9 @@ export default async function OfficesPage() {
                                         {office.jobCount} وظيفة متاحة
                                     </p>
                                 </div>
-                                <div className="bg-primary2/10 rounded-xl flex items-center justify-center gap-2 px-2 py-1">
+                                <div className="bg-primary/10 rounded-xl flex items-center justify-center gap-2 px-2 py-1">
                                     <span className="text-slate-500 text-xs md:text-sm">ترخيص رقم</span>
-                                    <span className="text-primary2 font-bold text-xs md:text-sm">
+                                    <span className="text-primary font-bold text-xs md:text-sm">
                                         {office.license_number}
                                     </span>
                                 </div>
@@ -62,7 +62,7 @@ export default async function OfficesPage() {
                             <p className="text-slate-500 text-sm">{office.description}</p>
                             {/* <Link
                                 href={`/jobs?q=${encodeURIComponent(office.name)}`}
-                                className="mt-4 inline-flex items-center gap-2 text-primary2 text-sm font-medium hover:underline"
+                                className="mt-4 inline-flex items-center gap-2 text-primary text-sm font-medium hover:underline"
                             >
                                 عرض الوظائف
                                 <span aria-hidden="true">←</span>

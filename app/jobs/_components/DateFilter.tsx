@@ -36,13 +36,13 @@ export default function DateFilter() {
                 <div
                     key={option.value}
                     onClick={() => setDateFilter(option.value)}
-                    className={`px-5 py-2 flex items-center gap-2 cursor-pointer transition-colors ${currentFilter === option.value ? 'bg-primary2/5' : 'hover:bg-slate-50'}`}
+                    className={`px-5 py-2 flex items-center gap-2 cursor-pointer transition-colors ${currentFilter === option.value ? 'bg-primary/5' : 'hover:bg-slate-50'}`}
                 >
                     <Radio
                         label={option.label}
                         checked={currentFilter === option.value}
                         onChange={() => setDateFilter(option.value)}
-                        className={currentFilter === option.value ? 'border-primary2' : ''}
+                        className={currentFilter === option.value ? 'border-primary' : ''}
                     />
                 </div>
             ))}

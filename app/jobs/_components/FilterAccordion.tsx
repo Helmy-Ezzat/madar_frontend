@@ -13,7 +13,7 @@ export default function FilterAccordion({ title, children, defaultOpen = false }
     const hasMore = childrenArray.length > 6;
 
     return (
-        <div className="border-b border-grey-icon last:border-0">
+        <div className="border-b border-icon-bg last:border-0">
             <div
                 onClick={() => setIsOpen(!isOpen)}
                 data-state={isOpen ? "open" : "closed"}

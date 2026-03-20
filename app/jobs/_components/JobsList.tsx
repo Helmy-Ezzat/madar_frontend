@@ -30,7 +30,7 @@ export default async function JobsList({ page, q, location, company, specializat
         <p className="text-slate-500 mb-6">
           {q ? 'جرب البحث بكلمات مختلفة' : 'سيتم إضافة وظائف جديدة قريباً'}
         </p>
-        <Link href="/jobs" className="px-6 py-3 bg-primary2 text-white rounded-lg">
+        <Link href="/jobs" className="px-6 py-3 bg-primary text-white rounded-lg">
           عرض جميع الوظائف
         </Link>
       </div>

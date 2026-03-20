@@ -7,7 +7,7 @@ interface InputProps extends React.ComponentProps<"input"> {
 
 export default function Input({ className, startAccessory, ...props }: InputProps) {
     return (
-        <div className="relative w-full max-w-full border border-grey-icon focus-within:ring-2 focus-within:ring-primary2 focus-within:border-primary2 rounded-r-[4px]">
+        <div className="relative w-full max-w-full border border-icon-bg focus-within:ring-2 focus-within:ring-primary focus-within:border-primary rounded-r-[4px]">
             <input
                 {...props}
                 className={cn("rounded-[4px] px-3 py-2 truncate min-w-0 max-w-full w-full outline-none placeholder:text-slate-400/50", startAccessory !== undefined ? "ps-10" : "", className)}

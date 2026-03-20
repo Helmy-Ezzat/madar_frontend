@@ -29,7 +29,7 @@ function JobCard({ job }: { job: Job }) {
       relative group px-5 py-2.5 flex flex-col gap-2.5 bg-white 
       shadow-sm rounded-2xl transition-all duration-200 cursor-pointer
       hover:shadow-md hover:bg-[#F5F6F7]
-      ${isActive ? "lg:border-r-4 lg:border-r-primary2 bg-[#F5F6F7] shadow-md" : ""}
+      ${isActive ? "lg:border-r-4 lg:border-r-primary bg-[#F5F6F7] shadow-md" : ""}
     `}
       onClick={handleClick}
     >
@@ -46,7 +46,7 @@ function JobCard({ job }: { job: Job }) {
               <strong className="text-base font-bold truncate max-w-[240px] sm:max-w-none">
                 {job.company_name}
               </strong>
-              <BadgeCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary2" strokeWidth={3} />
+              <BadgeCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" strokeWidth={3} />
             </div>
             <span className="text-[#828A93] text-xs">(ترخيص رقم {job.license_number})</span>
           </div>
@@ -77,7 +77,7 @@ function JobCard({ job }: { job: Job }) {
           </time>
           <button
             type="button"
-            className="inline-flex items-center gap-2 py-2 px-3.5 bg-primary2 hover:bg-primary2/90 text-white rounded-lg text-xs font-semibold transition-all shadow-sm pointer-events-auto"
+            className="inline-flex items-center gap-2 py-2 px-3.5 bg-primary hover:bg-primary/90 text-white rounded-lg text-xs font-semibold transition-all shadow-sm pointer-events-auto"
           >
             <span>عرض التفاصيل</span>
           </button>

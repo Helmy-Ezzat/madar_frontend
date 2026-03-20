@@ -35,11 +35,11 @@ export default function FilterCheckbox({ label, count, value, paramName }: Filte
     return (
         <div
             onClick={toggleFilter}
-            className={`px-5 py-2 flex items-center justify-between cursor-pointer transition-colors ${isChecked ? 'bg-primary2/5' : 'hover:bg-slate-50'}`}
+            className={`px-5 py-2 flex items-center justify-between cursor-pointer transition-colors ${isChecked ? 'bg-primary/5' : 'hover:bg-slate-50'}`}
         >
             <div className="flex items-center gap-2">
                 <Checkbox checked={isChecked} onChange={toggleFilter} />
-                <span className={`text-sm ${isChecked ? 'text-primary2 font-semibold' : 'text-primary2'}`}>{label}</span>
+                <span className={`text-sm ${isChecked ? 'text-primary font-semibold' : 'text-primary'}`}>{label}</span>
             </div>
             {count !== undefined && <span className="text-xs text-[#828A93]">({count})</span>}
         </div>

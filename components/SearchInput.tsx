@@ -58,7 +58,7 @@ export default function SearchInput(props: React.ComponentProps<typeof Input> & 
             </label>
 
             <div className="relative flex-1 flex items-center">
-                <SearchIcon className="absolute right-3 w-4 h-4 text-gray-400 group-focus-within:text-primary2 transition-colors z-10" />
+                <SearchIcon className="absolute right-3 w-4 h-4 text-gray-400 group-focus-within:text-primary transition-colors z-10" />
 
                 <Input
                     {...props}
@@ -82,7 +82,7 @@ export default function SearchInput(props: React.ComponentProps<typeof Input> & 
 
             <button
                 type="submit"
-                className="bg-primary2 text-white h-[45px] px-4 md:px-8 rounded-l-lg font-bold whitespace-nowrap hover:bg-primary2/90 transition-all text-sm md:text-base shadow-md"            >
+                className="bg-primary text-white h-[45px] px-4 md:px-8 rounded-l-lg font-bold whitespace-nowrap hover:bg-primary/90 transition-all text-sm md:text-base shadow-md"            >
                 بحث
             </button>
         </form>

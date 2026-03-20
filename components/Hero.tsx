@@ -22,16 +22,16 @@ export default function Hero() {
                     id="hero-heading"
                     className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-center leading-snug sm:leading-snug md:leading-snug"
                 >
-                    <span className="text-slate-800">كل </span>
-                    <span className="text-primary2">
+                    <span className="text-text-main">كل </span>
+                    <span className="text-primary">
                         وظائف مكاتب إلحاق العمالة المصرية بالخارج
                     </span>
                     <br />
-                    <span className="text-slate-800">في </span>
+                    <span className="text-text-main">في </span>
                     <span className="relative inline-block">
-                        <span className="relative z-10 text-primary2">مكان واحد</span>
+                        <span className="relative z-10 text-primary">مكان واحد</span>
                         <svg
-                            className="absolute -bottom-1 sm:-bottom-2 left-0 w-full h-2 sm:h-3 text-primary2/30"
+                            className="absolute -bottom-1 sm:-bottom-2 left-0 w-full h-2 sm:h-3 text-primary/30"
                             viewBox="0 0 100 20"
                             preserveAspectRatio="none"
                             aria-hidden="true"
@@ -42,14 +42,14 @@ export default function Hero() {
                 </h1>
 
                 {/* Description */}
-                <p className="text-slate-700 text-base sm:text-lg md:text-xl text-center font-normal max-w-2xl px-2">
+                <p className="text-text-body text-base sm:text-lg md:text-xl text-center font-normal max-w-2xl px-2">
                     خلاص مش محتاج تتابع 50 قناة على تليجرام وفيسبوك,
-                    <strong className="font-semibold text-slate-800"> مدار</strong> جمعلك كل الوظائف المتاحة في مكان واحد.
+                    <strong className="font-semibold text-text-main"> مدار</strong> جمعلك كل الوظائف المتاحة في مكان واحد.
                 </p>
 
                 <Link
                         href="/jobs"
-                        className="group bg-primary2 text-white px-10 py-5 rounded-2xl font-bold text-xl hover:bg-primary2/90 transition-all hover:shadow-2xl hover:scale-105 inline-flex items-center gap-3"
+                        className="group bg-primary text-white px-10 py-5 rounded-2xl font-bold text-xl hover:bg-primary/90 transition-all hover:shadow-2xl hover:scale-105 inline-flex items-center gap-3"
                     >
                         <span>عرض جميع الوظائف</span>
                         <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

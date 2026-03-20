@@ -68,7 +68,7 @@ export default async function JobsPage({
 
   return (
     <JobProvider>
-      <div className="flex flex-col lg:gap-4 divide-y divide-grey-icon">
+      <div className="flex flex-col lg:gap-4 divide-y divide-icon-bg">
         {/* Search Input */}
         <Suspense fallback={<SearchInputSkeleton />}>
           <div className="bg-white px-3.5 py-5 flex justify-center shadow-sm md:shadow-none">

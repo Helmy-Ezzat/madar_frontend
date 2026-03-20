@@ -23,7 +23,7 @@ export default function Navbar() {
     return (
         <>
             <header
-                className="sticky top-0 left-0 right-0 z-50 bg-primary2 text-white py-2 md:py-4"
+                className="sticky top-0 left-0 right-0 z-50 bg-primary text-white py-2 md:py-4"
             >
                 <nav className="px-6  flex items-center justify-between md:justify-around flex-row-reverse md:flex-row">
                     {/* Mobile Menu Button */}

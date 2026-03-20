@@ -10,7 +10,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
 
     if (!job) {
         return (
-            <aside data-modal="job-details" className="fixed inset-0 z-50 bg-white lg:border-t-4 lg:border-primary2 lg:sticky lg:top-24 lg:h-205 lg:rounded-xl lg:shadow-xl lg:inset-auto lg:z-0 flex flex-col items-center justify-center p-5">
+            <aside data-modal="job-details" className="fixed inset-0 z-50 bg-white lg:border-t-4 lg:border-primary lg:sticky lg:top-24 lg:h-205 lg:rounded-xl lg:shadow-xl lg:inset-auto lg:z-0 flex flex-col items-center justify-center p-5">
                 <div className="absolute top-5 left-5">
                     <JobDetailsCloseButton />
                 </div>
@@ -57,7 +57,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
     return (
         <aside
             data-modal="job-details"
-            className="fixed inset-0 z-50 bg-white lg:border-t-4 lg:border-primary2 lg:sticky lg:top-24 lg:h-205 lg:rounded-xl lg:shadow-xl lg:inset-auto lg:z-0 flex flex-col overflow-y-hidden"
+            className="fixed inset-0 z-50 bg-white lg:border-t-4 lg:border-primary lg:sticky lg:top-24 lg:h-205 lg:rounded-xl lg:shadow-xl lg:inset-auto lg:z-0 flex flex-col overflow-y-hidden"
             aria-label="Job Details"
         >
             <script
@@ -65,7 +65,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
             {/* Header */}
-            <header className="flex flex-col gap-5 border-b border-grey-icon pb-5 p-5">
+            <header className="flex flex-col gap-5 border-b border-icon-bg pb-5 p-5">
                 <div className="flex justify-between">
                     {/* Job Title */}
                     <h2 className="text-lg font-bold line-clamp-1">
@@ -85,7 +85,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                             <strong className="text-base font-bold truncate max-w-[240px] sm:max-w-none">
                                 {job.company_name}
                             </strong>
-                            <BadgeCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary2" strokeWidth={3} />
+                            <BadgeCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" strokeWidth={3} />
                         </div>
                         <span className="text-[#828A93] text-xs">(ترخيص رقم {job.license_number})</span>
                     </div>
@@ -101,7 +101,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                         href={job.source_link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="pointer-events-auto inline-flex items-center justify-center gap-2 py-2 px-3.5 bg-primary2 hover:bg-primary2/90 text-white rounded-lg text-xs font-semibold transition-all shadow-sm"
+                        className="pointer-events-auto inline-flex items-center justify-center gap-2 py-2 px-3.5 bg-primary hover:bg-primary/90 text-white rounded-lg text-xs font-semibold transition-all shadow-sm"
                     >
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z" />

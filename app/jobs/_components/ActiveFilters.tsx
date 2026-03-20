@@ -48,7 +48,7 @@ export default function ActiveFilters({ minimal = false }: { minimal?: boolean }
                 <button
                     key={filter.key}
                     onClick={() => removeFilter(filter.key)}
-                    className="flex items-center gap-1.5 bg-primary2/10 text-primary2 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors border border-transparent group"
+                    className="flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors border border-transparent group"
                 >
                     <span>{filter.displayValue}</span>
                     <X size={14} className="group-hover:text-red-600" />

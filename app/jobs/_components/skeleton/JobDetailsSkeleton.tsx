@@ -1,8 +1,8 @@
 export default function JobDetailsSkeleton() {
     return (
-        <aside data-modal="job-details" className="fixed inset-0 z-50 bg-white lg:border-t-4 lg:border-primary2 lg:sticky lg:top-24 lg:h-205 lg:rounded-xl lg:shadow-xl lg:inset-auto lg:z-0 flex flex-col overflow-hidden">
+        <aside data-modal="job-details" className="fixed inset-0 z-50 bg-white lg:border-t-4 lg:border-primary lg:sticky lg:top-24 lg:h-205 lg:rounded-xl lg:shadow-xl lg:inset-auto lg:z-0 flex flex-col overflow-hidden">
             {/* Header */}
-            <header className="flex flex-col gap-5 border-b border-grey-icon pb-5 p-5">
+            <header className="flex flex-col gap-5 border-b border-icon-bg pb-5 p-5">
                 <div className="flex justify-between items-start">
                     {/* Title */}
                     <div className="h-7 bg-gray-200 rounded-md w-3/4" />

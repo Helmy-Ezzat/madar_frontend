@@ -1,6 +1,6 @@
 export default function FilterSkeleton() {
     return (
-        <aside className="hidden lg:flex flex-col h-[724px] bg-white border-t-4 border-primary2 rounded-xl shadow-xl divide-y divide-grey-icon animate-pulse">
+        <aside className="hidden lg:flex flex-col h-[724px] bg-white border-t-4 border-primary rounded-xl shadow-xl divide-y divide-icon-bg animate-pulse">
             <div className="p-5">
                 <div className="h-6 bg-gray-200 rounded-md w-32" />
             </div>

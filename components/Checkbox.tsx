@@ -17,7 +17,7 @@ export default function Checkbox({ className, checked = false, onChange, ...prop
       />
 
       <div
-        className={cn("w-5.5 h-5.5 rounded-lg border flex items-center justify-center transition-all duration-200 ease-in-out peer-checked:bg-primary2 peer-checked:border-primary2 bg-transparent border-gray-300", className)}
+        className={cn("w-5.5 h-5.5 rounded-lg border flex items-center justify-center transition-all duration-200 ease-in-out peer-checked:bg-primary peer-checked:border-primary bg-transparent border-gray-300", className)}
       >
         {checked === true && (
           <svg

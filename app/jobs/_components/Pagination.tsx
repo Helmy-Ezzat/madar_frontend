@@ -111,7 +111,7 @@ export default function Pagination({ metadata }: PaginationProps) {
             <li key={pageNumber}>
               {isActive ? (
                 <span
-                  className="flex items-center justify-center w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-primary2 cursor-default text-white text-xs lg:text-sm font-bold shadow-md"
+                  className="flex items-center justify-center w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-primary cursor-default text-white text-xs lg:text-sm font-bold shadow-md"
                   aria-current="page"
                 >
                   {pageNumber}

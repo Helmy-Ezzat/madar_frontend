@@ -6,18 +6,18 @@ export default async function OfficesSection() {
     const displayedOffices = offices.slice(0, 8);
 
     return (
-        <section className="py-16 px-4 bg-white" aria-labelledby="offices-heading">
+        <section className="py-16 px-4 bg-background" aria-labelledby="offices-heading">
             <div className="max-w-6xl mx-auto">
                 {/* Section Header */}
                 <div className="text-center mb-12">
                     <h2
                         id="offices-heading"
-                        className="text-2xl md:text-4xl font-bold text-slate-800 mb-4"
+                        className="text-2xl md:text-4xl font-bold text-text-main mb-4"
                     >
                         من هي المكاتب التي توظف على{" "}
-                        <span className="text-primary2">مدار</span>؟
+                        <span className="text-primary">مدار</span>؟
                     </h2>
-                    <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+                    <p className="text-text-body text-lg max-w-2xl mx-auto">
                         نجمع لك وظائف من أفضل مكاتب إلحاق العمالة المعتمدة والموثوقة
                     </p>
                 </div>
@@ -27,12 +27,12 @@ export default async function OfficesSection() {
                     {displayedOffices.map((office) => (
                         <div
                             key={office.name}
-                            className="bg-slate-50 border border-slate-200 rounded-xl p-5 text-center hover:border-primary2 hover:shadow-md transition-all duration-200"
+                            className="bg-surface border border-border rounded-xl p-5 text-center hover:border-primary hover:shadow-md transition-all duration-200"
                         >
-                            <h3 className="font-semibold text-slate-800 text-sm md:text-base mb-2 line-clamp-2">
+                            <h3 className="font-semibold text-text-main text-sm md:text-base mb-2 line-clamp-2">
                                 {office.name}
                             </h3>
-                            <p className="text-xs md:text-sm text-slate-500">
+                            <p className="text-xs md:text-sm text-text-muted">
                                 {office.jobCount} وظيفة
                             </p>
                         </div>
@@ -44,7 +44,7 @@ export default async function OfficesSection() {
                     <div className="text-center">
                         <Link
                             href="/offices"
-                            className="inline-flex items-center gap-2 text-primary2 font-semibold hover:underline"
+                            className="inline-flex items-center gap-2 text-primary font-semibold hover:underline"
                         >
                             عرض جميع المكاتب ({offices.length})
                             <span aria-hidden="true">←</span>
