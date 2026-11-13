@@ -3,6 +3,7 @@ import { Vazirmatn } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 export const vazirMatn = Vazirmatn({
   subsets: ['arabic', 'latin', 'latin-ext'],
@@ -65,11 +66,13 @@ export default function RootLayout({
       <body
         className={`${vazirMatn.className} antialiased bg-slate-50 flex flex-col`} dir="rtl"
       >
-        <Navbar />
-        <div className="flex-1 mb-4 mt-4 md:mt-0">
-          {children}
-        </div>
-        <Footer />
+        <AuthProvider>
+          <Navbar />
+          <div className="flex-1 mb-4 mt-4 md:mt-0">
+            {children}
+          </div>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
