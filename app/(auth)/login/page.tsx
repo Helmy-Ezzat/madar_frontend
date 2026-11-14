@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import FloatingInput from "@/components/FloatingInput";
 
 const GoogleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 48 48">
@@ -67,30 +68,30 @@ export default function LoginPage() {
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="email"
-          placeholder="البريد الإلكتروني"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full rounded-lg border border-border px-4 py-3 text-text-main placeholder:text-text-muted outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-        />
-        <input
-          type="password"
-          placeholder="كلمة المرور"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="w-full rounded-lg border border-border px-4 py-3 text-text-main placeholder:text-text-muted outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-        />
-        <button
-          type="submit"
-          disabled={loading || googleLoading}
-          className="w-full bg-primary hover:bg-primary-hover text-white font-medium py-3 rounded-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          {loading ? "جاري التحميل..." : "تسجيل الدخول"}
-        </button>
-      </form>
+  <FloatingInput
+    id="email"
+    type="email"
+    label="البريد الإلكتروني"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    required
+  />
+  <FloatingInput
+    id="password"
+    type="password"
+    label="كلمة المرور"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    required
+  />
+  <button
+    type="submit"
+    disabled={loading || googleLoading}
+    className="w-full bg-primary hover:bg-primary-hover text-white font-medium py-3 rounded-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+  >
+    {loading ? "جاري التحميل..." : "تسجيل الدخول"}
+  </button>
+</form>
 
       <div className="flex items-center gap-3 my-6">
         <div className="flex-1 h-px bg-border" />

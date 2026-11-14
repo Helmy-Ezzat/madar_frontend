@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { getOffices } from "@/services/officeService";
+import { pluralAr, nouns } from "@/lib/arabicPlural";
 import Link from "next/link";
 
 
@@ -26,13 +27,17 @@ export default async function OfficesPage() {
                 <div className="bg-primary/5 rounded-2xl p-6 mb-12 flex flex-wrap gap-8 justify-center">
                     <div className="text-center">
                         <p className="text-3xl font-bold text-primary">{offices.length}</p>
-                        <p className="text-slate-600">مكتب</p>
+                        <p className="text-slate-600">
+                            {pluralAr(offices.length, nouns.office, { alwaysShowNumber: false })}
+                        </p>
                     </div>
                     <div className="text-center">
                         <p className="text-3xl font-bold text-primary">
                             {offices.reduce((sum, o) => sum + o.jobCount, 0)}
                         </p>
-                        <p className="text-slate-600">وظيفة متاحة</p>
+                        <p className="text-slate-600">
+                            {pluralAr(offices.reduce((sum, o) => sum + o.jobCount, 0), nouns.job, { alwaysShowNumber: false })} متاحة
+                        </p>
                     </div>
                 </div>
 
@@ -49,7 +54,7 @@ export default async function OfficesPage() {
                                         {office.name}
                                     </h1>
                                     <p className="text-slate-500 font-medium text-sm">
-                                        {office.jobCount} وظيفة متاحة
+                                        {pluralAr(office.jobCount, nouns.job)} متاحة
                                     </p>
                                 </div>
                                 <div className="bg-primary/10 rounded-xl flex items-center justify-center gap-2 px-2 py-1">

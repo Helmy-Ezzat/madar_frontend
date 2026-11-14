@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getOffices } from "@/services/officeService";
+import { pluralAr, nouns } from "@/lib/arabicPlural";
 
 export default async function OfficesSection() {
     const offices = await getOffices();
@@ -33,7 +34,7 @@ export default async function OfficesSection() {
                                 {office.name}
                             </h3>
                             <p className="text-xs md:text-sm text-text-muted">
-                                {office.jobCount} وظيفة
+                                {pluralAr(office.jobCount, nouns.job)}
                             </p>
                         </div>
                     ))}
