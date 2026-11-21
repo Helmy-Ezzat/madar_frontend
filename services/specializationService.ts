@@ -5,7 +5,7 @@ export interface SpecializationStat {
 
 export const getSpecializations = async (): Promise<SpecializationStat[]> => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/specializations`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/specializations?summary=1`, {
             next: { revalidate: 3600 }
         });
 
@@ -24,7 +24,7 @@ export const getSpecializations = async (): Promise<SpecializationStat[]> => {
 /** Real count of distinct specializations across all jobs (uncapped, from the backend). */
 export const getSpecializationsTotal = async (): Promise<number> => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/specializations`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/specializations?summary=1`, {
             next: { revalidate: 3600 }
         });
         if (!res.ok) throw new Error(`Failed to fetch specializations: ${res.statusText}`);
