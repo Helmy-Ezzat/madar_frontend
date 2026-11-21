@@ -1,7 +1,8 @@
+import VerifiedTick from "@/components/VerifiedTick";
 import Link from "next/link";
 import { getJobs } from "@/services/jobService";
 import { fromNow } from "@/lib/date-utils";
-import { BadgeCheck, Building2, MapPin, Wallet } from "lucide-react";
+import { Building2, MapPin, Wallet } from "lucide-react";
 import type { Job } from "@/types";
 import { JobCardTitle } from "@/app/jobs/_components/JobCardTitle";
 import MarkerHighlight from "../MarkerHighlight";
@@ -42,7 +43,7 @@ export default async function LatestJobs() {
                                 <span className="text-sm font-semibold text-text-main truncate">
                                     {job.company_name}
                                 </span>
-                                <BadgeCheck className="w-4 h-4 text-primary shrink-0" strokeWidth={3} />
+                                {job.office_verified && <VerifiedTick className="w-4 h-4" />}
                             </div>
 
                             <div className="flex flex-col gap-1.5 text-sm text-text-muted">

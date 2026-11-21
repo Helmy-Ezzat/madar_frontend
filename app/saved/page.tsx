@@ -1,9 +1,10 @@
 "use client";
 
+import VerifiedTick from "@/components/VerifiedTick";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Building2, BadgeCheck, MapPin, Wallet, Heart } from "lucide-react";
+import { Building2, MapPin, Wallet, Heart } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSavedJobs } from "@/contexts/SavedJobsContext";
 import { fetchSavedJobs, type SavedJobEntry } from "@/services/savedJobsService";
@@ -112,7 +113,7 @@ export default function SavedJobsPage() {
                     <strong className="text-base font-bold truncate max-w-[240px] sm:max-w-none">
                       {job.company_name}
                     </strong>
-                    <BadgeCheck className="w-4 h-4 text-primary" strokeWidth={3} />
+                    {job.office_verified && <VerifiedTick className="w-4 h-4" />}
                   </div>
                   <span className="text-[#828A93] text-xs">
                     (ترخيص رقم {job.license_number})
