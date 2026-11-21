@@ -59,7 +59,7 @@ function JobCard({ job }: { job: Job }) {
             )}
             <div className="flex flex-wrap items-center gap-1.5 mt-1">
               {job.office_verified && <OfficeVerifiedBadge />}
-              <JobSourceChip postedBy={job.posted_by} />}
+              <JobSourceChip postedBy={job.posted_by} />
             </div>
           </div>
         </div>
