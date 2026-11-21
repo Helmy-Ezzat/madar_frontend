@@ -1,10 +1,8 @@
-import { PlayCircle } from "lucide-react";
-
 /**
- * VIDEO EMBED SPOT
- * A short infographic/explainer video about Madar will be embedded here later.
- * To add it: replace the placeholder div below with the video <iframe> or
- * <video> element, keeping the `aspect-video` wrapper so the layout holds.
+ * Intro video section.
+ * To swap the video: replace public/videos/madar-hero-promo.mp4 (keeping the
+ * same filename) or update the `src` below. Arabic subtitles are burned into
+ * the video itself, so no caption track is needed.
  */
 export default function VideoSpot() {
     return (
@@ -19,10 +17,18 @@ export default function VideoSpot() {
                     </p>
                 </div>
 
-                {/* VIDEO PLACEHOLDER: swap this div for the video embed when ready */}
-                <div className="aspect-video rounded-2xl border-2 border-dashed border-border bg-white flex flex-col items-center justify-center gap-4 text-text-muted">
-                    <PlayCircle className="w-16 h-16 text-primary/40" strokeWidth={1.2} />
-                    <p className="text-sm md:text-base font-medium">الفيديو التعريفي هيتضاف هنا قريبًا</p>
+                <div className="aspect-video rounded-2xl overflow-hidden border border-border bg-white shadow-lg">
+                    <video
+                        className="w-full h-full object-cover"
+                        src="/videos/madar-hero-promo.mp4"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        controls
+                        preload="metadata"
+                        aria-label="فيديو تعريفي عن منصة مدار"
+                    />
                 </div>
             </div>
         </section>
