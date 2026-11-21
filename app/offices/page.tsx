@@ -14,31 +14,20 @@ export default async function OfficesPage() {
         <main className="min-h-screen py-8 px-4">
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
-                <div className="mb-8 text-center">
-                    <h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-3">
+                <div className="mb-8">
+                    <h1 className="text-2xl md:text-3xl font-bold text-text-main mb-2">
                         المكاتب المتاحة
                     </h1>
-                    <p className="text-slate-600">
+                    <p className="text-text-body text-sm md:text-base mb-1">
                         تصفح جميع مكاتب إلحاق العمالة التي نجمع منها الوظائف
                     </p>
-                </div>
-
-                {/* Stats */}
-                <div className="bg-white border border-border-light shadow-sm rounded-2xl py-4 mb-10 grid grid-cols-2 divide-x divide-x-reverse divide-border-light max-w-md mx-auto">
-                    <div className="text-center">
-                        <p className="text-2xl font-bold text-primary">{offices.length}</p>
-                        <p className="text-slate-500 text-sm">
-                            {pluralAr(offices.length, nouns.office, { alwaysShowNumber: false })}
-                        </p>
-                    </div>
-                    <div className="text-center">
-                        <p className="text-2xl font-bold text-primary">
-                            {totalJobs.toLocaleString("en-US")}
-                        </p>
-                        <p className="text-slate-500 text-sm">
-                            {pluralAr(totalJobs, nouns.job, { alwaysShowNumber: false })} متاحة
-                        </p>
-                    </div>
+                    <p className="text-text-muted text-sm">
+                        <strong className="text-text-main font-bold">{offices.length}</strong>{" "}
+                        {pluralAr(offices.length, nouns.office, { alwaysShowNumber: false })}
+                        <span className="mx-1.5">·</span>
+                        <strong className="text-text-main font-bold">{totalJobs.toLocaleString("en-US")}</strong>{" "}
+                        {pluralAr(totalJobs, nouns.job, { alwaysShowNumber: false })} متاحة
+                    </p>
                 </div>
 
                 <OfficesGrid offices={offices} />
