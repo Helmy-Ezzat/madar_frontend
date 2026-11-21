@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/Toast";
 import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
+import FloatingInput from "@/components/FloatingInput";
 import {
     adminListOffices,
     adminApproveOffice,
@@ -11,10 +12,11 @@ import {
     adminListJobs,
     adminApproveJob,
     adminRejectJob,
+    adminCreateJob,
     type AdminOffice,
     type AdminJob,
 } from "@/services/officeDashboardService";
-import { Briefcase, Building2, Check, Loader2, MapPin, X } from "lucide-react";
+import { Briefcase, Building2, Check, Loader2, MapPin, Plus, X } from "lucide-react";
 
 const ADMIN_EMAILS = ["hellmyezzat@gmail.com", "x26dbl@mail.instinct.com"];
 
@@ -31,6 +33,14 @@ export default function AdminPage() {
     const [status, setStatus] = useState<string>("pending");
     const [offices, setOffices] = useState<AdminOffice[]>([]);
     const [jobs, setJobs] = useState<AdminJob[]>([]);
+    const [showPostForm, setShowPostForm] = useState(false);
+    const [approvedOffices, setApprovedOffices] = useState<AdminOffice[]>([]);
+    const [postOfficeId, setPostOfficeId] = useState("");
+    const [postTitle, setPostTitle] = useState("");
+    const [postLocation, setPostLocation] = useState("");
+    const [postSalary, setPostSalary] = useState("");
+    const [postSummary, setPostSummary] = useState("");
+    const [posting, setPosting] = useState(false);
     const [loadingList, setLoadingList] = useState(false);
     const [acting, setActing] = useState<string | null>(null);
 
@@ -57,6 +67,42 @@ export default function AdminPage() {
     useEffect(() => {
         if (isAdmin) load();
     }, [isAdmin, load]);
+
+    const openPostForm = async () => {
+        setShowPostForm((v) => !v);
+        if (approvedOffices.length === 0) {
+            try {
+                const res = await adminListOffices("approved");
+                setApprovedOffices(res.data ?? []);
+            } catch {
+                setApprovedOffices([]);
+            }
+        }
+    };
+
+    const submitPost = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setPosting(true);
+        try {
+            await adminCreateJob({
+                officeId: postOfficeId,
+                title: postTitle.trim(),
+                location: postLocation.trim(),
+                salary: postSalary.trim() || undefined,
+                summary: postSummary.trim(),
+            });
+            showToast("الوظيفة اتنشرت باسم المكتب ✅");
+            setPostTitle("");
+            setPostLocation("");
+            setPostSalary("");
+            setPostSummary("");
+            setShowPostForm(false);
+        } catch (err) {
+            showToast(err instanceof Error ? err.message : "حصل خطأ، حاول تاني");
+        } finally {
+            setPosting(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -152,7 +198,44 @@ export default function AdminPage() {
                 {loadingList ? (
                     <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
                 ) : section === "jobs" ? (
-                    jobs.length === 0 ? (
+                    <>
+                    <button
+                        type="button"
+                        onClick={openPostForm}
+                        className="inline-flex items-center gap-1.5 self-start bg-primary-deep hover:bg-primary text-white text-sm font-bold px-4 py-2 rounded-lg transition"
+                    >
+                        <Plus className="w-4 h-4" />
+                        انزل وظيفة باسم مكتب
+                    </button>
+                    {showPostForm && (
+                        <form onSubmit={submitPost} className="bg-white border border-border rounded-2xl p-5 flex flex-col gap-4">
+                            <select
+                                value={postOfficeId}
+                                onChange={(e) => setPostOfficeId(e.target.value)}
+                                required
+                                className="border border-border rounded-lg px-3 py-2.5 text-sm text-text-main bg-white"
+                            >
+                                <option value="" disabled>اختار المكتب المعتمد</option>
+                                {approvedOffices.map((office) => (
+                                    <option key={office._id} value={office._id}>
+                                        {office.officeName || office.displayName}
+                                    </option>
+                                ))}
+                            </select>
+                            <FloatingInput id="post-title" type="text" label="المسمى الوظيفي" value={postTitle} onChange={(e) => setPostTitle(e.target.value)} required />
+                            <FloatingInput id="post-location" type="text" label="المدينة / الدولة" value={postLocation} onChange={(e) => setPostLocation(e.target.value)} required />
+                            <FloatingInput id="post-salary" type="text" label="الراتب (اختياري)" value={postSalary} onChange={(e) => setPostSalary(e.target.value)} />
+                            <FloatingInput id="post-summary" type="text" label="تفاصيل الوظيفة" value={postSummary} onChange={(e) => setPostSummary(e.target.value)} required />
+                            <button
+                                type="submit"
+                                disabled={posting}
+                                className="bg-primary hover:bg-primary-hover text-white rounded-lg py-2.5 text-sm font-bold transition disabled:opacity-60"
+                            >
+                                {posting ? "جاري النشر..." : "انشر الوظيفة"}
+                            </button>
+                        </form>
+                    )}
+                    {jobs.length === 0 ? (
                         <p className="text-text-muted text-sm bg-white border border-border rounded-2xl p-6 text-center">
                             مفيش وظايف في القائمة دي دلوقتي.
                         </p>
@@ -199,7 +282,8 @@ export default function AdminPage() {
                                 )}
                             </article>
                         ))
-                    )
+                    )}
+                    </>
                 ) : offices.length === 0 ? (
                     <p className="text-text-muted text-sm bg-white border border-border rounded-2xl p-6 text-center">
                         مفيش مكاتب في القائمة دي دلوقتي.

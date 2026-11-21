@@ -5,6 +5,7 @@ import JobDetailsCloseButton from "./JobDetailsCloseButton";
 import SaveJobButton from "@/components/SaveJobButton";
 import { BadgeCheck, Building2 } from "lucide-react";
 import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
+import JobSourceChip from "@/components/JobSourceChip";
 import ApplyButton from "./ApplyButton";
 import Image from "next/image";
 
@@ -92,6 +93,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                         </div>
                         <span className="text-[#828A93] text-xs">(ترخيص رقم {job.license_number})</span>
                         {job.office_verified && <OfficeVerifiedBadge className="mt-1" />}
+                        <JobSourceChip postedBy={job.posted_by} />
                     </div>
                 </div>
                 <div className="flex flex-col gap-2.5">

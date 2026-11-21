@@ -8,6 +8,7 @@ import { useJobContext } from "../_context/JobContext";
 import { JobCardTitle } from "./JobCardTitle";
 import SaveJobButton from "@/components/SaveJobButton";
 import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
+import JobSourceChip from "@/components/JobSourceChip";
 
 function JobCard({ job }: { job: Job }) {
   const searchParams = useSearchParams();
@@ -55,6 +56,7 @@ function JobCard({ job }: { job: Job }) {
             </div>
             <span className="text-[#828A93] text-xs">(ترخيص رقم {job.license_number})</span>
             {job.office_verified && <OfficeVerifiedBadge className="mt-1" />}
+            <JobSourceChip postedBy={job.posted_by} />
           </div>
         </div>
         {job.job_info.summary && (
