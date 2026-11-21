@@ -246,7 +246,7 @@ export default function Navbar() {
                 >
                     {/* Header: account card when logged in, brand logo otherwise */}
                     {user || loading ? (
-                        <div className="bg-primary text-white p-5">
+                        <div className="bg-primary-deep text-white p-5">
                             <div className="flex items-start justify-between">
                                 {loading ? (
                                     <div className="w-12 h-12 rounded-full bg-white/20 animate-pulse" />
@@ -336,7 +336,7 @@ export default function Navbar() {
 
                     {/* Guest welcome, pinned to the bottom */}
                     {!loading && !user && (
-                        <div className="bg-primary text-white p-5">
+                        <div className="bg-primary-deep text-white p-5">
                             <p className="font-bold">أهلاً بك في مدار</p>
                             <p className="text-xs text-white/70 mt-1">
                                 سجل دخولك لحفظ الوظائف وتفعيل التنبيهات
