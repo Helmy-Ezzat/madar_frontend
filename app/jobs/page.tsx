@@ -83,7 +83,7 @@ export default async function JobsPage({
     It prevents the JobDetails skeleton from shrinking or jumping
     while grid columns are transitioning.
   */}
-        <div className="w-full">
+        <div className="w-full pb-8 lg:pb-12">
           <JobsPageLayout
             serverJobId={jobId}
             details={
