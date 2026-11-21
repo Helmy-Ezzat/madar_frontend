@@ -28,10 +28,7 @@ const topNavItems: NavItem[] = [
     { key: "المكاتب", href: "/offices", icon: Building2 },
 ];
 
-const sidebarNavItems: NavItem[] = [
-    ...topNavItems,
-    { key: "من نحن", href: "/about", icon: Info },
-];
+const sidebarNavItems: NavItem[] = topNavItems;
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -202,6 +199,17 @@ export default function Navbar() {
                                 </Link>
                             </li>
                         )}
+                        {/* من نحن stays last in the sidebar */}
+                        <li>
+                            <Link
+                                href="/about"
+                                onClick={() => setIsOpen(false)}
+                                className="flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 text-text-main hover:bg-surface-hover"
+                            >
+                                <Info className="w-5 h-5 text-slate-400" />
+                                <span>من نحن</span>
+                            </Link>
+                        </li>
                     </ul>
 
                     {/* Logout */}
