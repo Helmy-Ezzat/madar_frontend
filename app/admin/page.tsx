@@ -12,7 +12,7 @@ import {
 } from "@/services/officeDashboardService";
 import { Building2, Check, Loader2, X } from "lucide-react";
 
-const ADMIN_EMAILS = ["hellmyezzat@gmail.com"];
+const ADMIN_EMAILS = ["hellmyezzat@gmail.com", "x26dbl@mail.instinct.com"];
 
 const STATUS_TABS = [
     { key: "pending", label: "تحت المراجعة" },
