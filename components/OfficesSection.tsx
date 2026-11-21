@@ -49,7 +49,7 @@ export default async function OfficesSection() {
                             href="/jobs"
                             className="inline-flex items-center gap-2 text-primary font-semibold hover:underline"
                         >
-                            تصفح كل الوظايف
+                            تصفح كل الوظائف
                             <span aria-hidden="true">←</span>
                         </Link>
                     </div>

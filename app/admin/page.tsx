@@ -194,7 +194,7 @@ export default function AdminPage() {
                         className="inline-flex items-center gap-1.5 self-start bg-primary-deep hover:bg-primary text-white text-sm font-bold px-4 py-2 rounded-lg transition"
                     >
                         <Plus className="w-4 h-4" />
-                        نزّل وظيفة باسم مكتب
+                        نزّل وظيفة باسم مدار
                     </button>
                     {showPostForm && (
                         <form onSubmit={submitPost} className="bg-white border border-border rounded-2xl p-5 flex flex-col gap-4">
