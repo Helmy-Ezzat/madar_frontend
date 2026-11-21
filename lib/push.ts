@@ -92,8 +92,9 @@ export async function registerForPush(
 
     // Foreground messages: show as an in-app toast instead of a system notification
     onMessage(messaging, (payload) => {
-      const title = payload.notification?.title || "مدار";
-      const body = payload.notification?.body || "";
+      const data = (payload.data || {}) as Record<string, string>;
+      const title = payload.notification?.title || data.title || "مدار";
+      const body = payload.notification?.body || data.body || "";
       onForeground(title, body ? `${title} - ${body}` : title);
     });
   } catch (error) {

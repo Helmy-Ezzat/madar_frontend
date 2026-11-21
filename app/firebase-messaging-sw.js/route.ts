@@ -22,10 +22,11 @@ firebase.initializeApp(${JSON.stringify(config)});
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
+  const d = payload.data || {};
   const n = payload.notification || {};
-  const link = (payload.fcmOptions && payload.fcmOptions.link) || (payload.data && payload.data.link) || '/';
-  self.registration.showNotification(n.title || 'مدار', {
-    body: n.body || '',
+  const link = d.link || (payload.fcmOptions && payload.fcmOptions.link) || '/';
+  self.registration.showNotification(d.title || n.title || 'مدار', {
+    body: d.body || n.body || '',
     icon: '/icon-192.png',
     dir: 'rtl',
     lang: 'ar',
