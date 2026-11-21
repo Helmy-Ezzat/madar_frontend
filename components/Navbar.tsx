@@ -131,7 +131,7 @@ export default function Navbar() {
         <>
             <header className={`top-0 left-0 right-0 z-50 py-2 md:py-4 transition-colors duration-300 ${
                 blendTop
-                    ? "sticky bg-transparent text-primary shadow-none md:bg-primary-deep md:text-white md:shadow-sm"
+                    ? "sticky bg-transparent text-primary shadow-none"
                     : "sticky bg-primary-deep text-white shadow-sm"
             }`}>
                 <nav className="px-6 flex items-center justify-between md:justify-around">
@@ -141,14 +141,7 @@ export default function Navbar() {
                         className="flex items-center hover:opacity-90 transition-opacity"
                         aria-label="مدار - بحث الوظائف"
                     >
-                        {blendTop ? (
-                            <>
-                                <span className="md:hidden"><Logo dark /></span>
-                                <span className="hidden md:inline-flex"><Logo /></span>
-                            </>
-                        ) : (
-                            <Logo />
-                        )}
+                        <Logo dark={blendTop} />
                     </Link>
 
                     {/* Desktop essentials */}
