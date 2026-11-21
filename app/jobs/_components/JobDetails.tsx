@@ -3,8 +3,8 @@ import { formatJobText } from "@/utils/textFormatter";
 import { fromNow } from "@/lib/date-utils";
 import JobDetailsCloseButton from "./JobDetailsCloseButton";
 import SaveJobButton from "@/components/SaveJobButton";
-import { BadgeCheck, Building2 } from "lucide-react";
-import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
+import { Building2 } from "lucide-react";
+import VerifiedTick from "@/components/VerifiedTick";
 import JobSourceChip from "@/components/JobSourceChip";
 import ApplyButton from "./ApplyButton";
 import Image from "next/image";
@@ -89,13 +89,12 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                             <strong className="text-base font-bold truncate max-w-[240px] sm:max-w-none">
                                 {job.company_name}
                             </strong>
-                            <BadgeCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" strokeWidth={3} />
+                            {job.office_verified && <VerifiedTick className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />}
                         </div>
                         {job.license_number && (
                             <span className="text-[#828A93] text-xs">(ترخيص رقم {job.license_number})</span>
                         )}
                         <div className="flex flex-wrap items-center gap-1.5 mt-1">
-                            {job.office_verified && <OfficeVerifiedBadge />}
                             <JobSourceChip postedBy={job.posted_by} />
                         </div>
                     </div>

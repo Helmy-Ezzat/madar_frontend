@@ -3,11 +3,11 @@ import { memo, useCallback } from "react";
 import { fromNow } from "@/lib/date-utils";
 import { Job } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
-import { BadgeCheck, Building2, MapPin, ShieldCheck, Wallet } from "lucide-react";
+import { Building2, MapPin, ShieldCheck, Wallet } from "lucide-react";
 import { useJobContext } from "../_context/JobContext";
 import { JobCardTitle } from "./JobCardTitle";
 import SaveJobButton from "@/components/SaveJobButton";
-import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
+import VerifiedTick from "@/components/VerifiedTick";
 import JobSourceChip from "@/components/JobSourceChip";
 
 function JobCard({ job }: { job: Job }) {
@@ -52,13 +52,12 @@ function JobCard({ job }: { job: Job }) {
               <strong className="text-base font-bold truncate max-w-[240px] sm:max-w-none">
                 {job.company_name}
               </strong>
-              <BadgeCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" strokeWidth={3} />
+              {job.office_verified && <VerifiedTick className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />}
             </div>
             {job.license_number && (
               <span className="text-[#828A93] text-xs">(ترخيص رقم {job.license_number})</span>
             )}
             <div className="flex flex-wrap items-center gap-1.5 mt-1">
-              {job.office_verified && <OfficeVerifiedBadge />}
               <JobSourceChip postedBy={job.posted_by} />
             </div>
           </div>

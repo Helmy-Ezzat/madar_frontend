@@ -97,7 +97,7 @@ export default function Navbar() {
                 : "";
             toast(
                 sent > 0
-                    ? `اتبعت الإشعار لـ ${sent} من ${devices} جهاز مسجل 🔔${ages}`
+                    ? `اتبعت الإشعار لـ ${sent} من ${devices} جهاز مسجل${ages}`
                     : devices > 0
                       ? `فيه ${devices} جهاز مسجل بس الإرسال فشل${firstError ? ` (${firstError})` : ""} - جرب تاني${ages}`
                       : `مفيش أجهزة مسجلة - الجهاز ده لسه ما اتسجلش للإشعارات${firstError ? ` (${firstError})` : ""}`

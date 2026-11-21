@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/Toast";
 import FloatingInput from "@/components/FloatingInput";
-import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
+import VerifiedTick from "@/components/VerifiedTick";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import {
     createOfficeJob,
@@ -89,7 +89,7 @@ export default function OfficeDashboardPage() {
         setUpgrading(true);
         try {
             await upgradeToOffice({ officeName: upOfficeName.trim(), licenseNumber: upLicense.trim() || undefined });
-            showToast("طلبك وصل، حسابك بقى تحت المراجعة ✅");
+            showToast("طلبك وصل، حسابك بقى تحت المراجعة");
             window.location.reload();
         } catch (err) {
             showToast(err instanceof Error ? err.message : "حصل خطأ، حاول تاني");
@@ -160,7 +160,7 @@ export default function OfficeDashboardPage() {
         setPosting(true);
         try {
             await createOfficeJob({ title, location, summary, salary: salary || undefined, experience: experience || undefined });
-            showToast("الوظيفة اتنشرت ✅");
+            showToast("الوظيفة اتنشرت");
             setTitle(""); setLocation(""); setSalary(""); setExperience(""); setSummary("");
             await loadJobs();
         } catch (err) {
@@ -213,7 +213,7 @@ export default function OfficeDashboardPage() {
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-3 flex-wrap">
                         <h1 className="text-2xl font-bold text-text-main">{dbUser?.officeName || "لوحة المكتب"}</h1>
-                        <OfficeVerifiedBadge />
+                        {dbUser?.officeStatus === "approved" && <VerifiedTick className="w-6 h-6" />}
                     </div>
                     {dbUser?.licenseNumber && (
                         <p className="text-text-muted text-xs">ترخيص رقم {dbUser.licenseNumber}</p>

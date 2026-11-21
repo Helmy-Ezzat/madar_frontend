@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/Toast";
-import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
+import VerifiedTick from "@/components/VerifiedTick";
 import FloatingInput from "@/components/FloatingInput";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import {
@@ -104,7 +104,7 @@ export default function AdminPage() {
         try {
             const res = await adminApproveAllJobs();
             const n = (res.data as { approved?: number } | undefined)?.approved ?? 0;
-            showToast(n > 0 ? `اتقبلوا كلهم (${n}) ✅` : "مفيش وظايف مستنية موافقة");
+            showToast(n > 0 ? `اتقبلوا كلهم (${n})` : "مفيش وظايف مستنية موافقة");
             await load();
             refreshCounts();
         } catch (err) {
@@ -127,7 +127,7 @@ export default function AdminPage() {
                 salary: postSalary.trim() || undefined,
                 summary: postSummary.trim(),
             });
-            showToast("الوظيفة اتنشرت باسم المكتب ✅");
+            showToast("الوظيفة اتنشرت باسم المكتب");
             setPostTitle("");
             setPostLocation("");
             setPostSalary("");
@@ -162,7 +162,7 @@ export default function AdminPage() {
             if (section === "offices") {
                 if (action === "approve" || action === "unsuspend") {
                     await (action === "approve" ? adminApproveOffice(id) : adminUnsuspendOffice(id));
-                    showToast("المكتب اتفعّل ✅");
+                    showToast("المكتب اتفعّل");
                 } else if (action === "reject") {
                     await adminRejectOffice(id);
                     showToast("المكتب اترفض");
@@ -173,7 +173,7 @@ export default function AdminPage() {
             } else {
                 if (action === "approve") {
                     await adminApproveJob(id);
-                    showToast("الوظيفة اتنشرت ✅");
+                    showToast("الوظيفة اتنشرت");
                 } else if (action === "reject") {
                     await adminRejectJob(id);
                     showToast("الوظيفة اترفضت");
@@ -182,7 +182,7 @@ export default function AdminPage() {
                     showToast("الوظيفة اتوقفت");
                 } else if (action === "unsuspend") {
                     await adminUnsuspendJob(id);
-                    showToast("الوظيفة رجعت منشورة ✅");
+                    showToast("الوظيفة رجعت منشورة");
                 } else if (action === "delete") {
                     await adminDeleteJob(id);
                     showToast("الوظيفة اتحذفت");
@@ -398,7 +398,7 @@ export default function AdminPage() {
                                 <div className="flex flex-col gap-1">
                                     <p className="font-bold text-text-main flex items-center gap-2 flex-wrap">
                                         {office.officeName || office.displayName}
-                                        {office.officeStatus === "approved" && <OfficeVerifiedBadge />}
+                                        {office.officeStatus === "approved" && <VerifiedTick />}
                                     </p>
                                     <p className="text-text-muted text-xs" dir="ltr">{office.email}</p>
                                     {office.licenseNumber && (

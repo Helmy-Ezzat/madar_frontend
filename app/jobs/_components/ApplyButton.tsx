@@ -19,7 +19,7 @@ export default function ApplyButton({ jobId }: { jobId: string }) {
     if (applied) {
         return (
             <span className="inline-flex items-center gap-2 py-2 px-3.5 bg-primary-tint text-primary rounded-lg text-xs font-bold">
-                قدّمت على الوظيفة دي ✅
+                قدّمت على الوظيفة دي
             </span>
         );
     }

@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/Toast";
 import FloatingInput from "@/components/FloatingInput";
-import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
+import VerifiedTick from "@/components/VerifiedTick";
 import JobSourceChip from "@/components/JobSourceChip";
 import { applyToJob, getAppliedState } from "@/services/officeDashboardService";
 import type { Job } from "@/types";
@@ -88,8 +88,9 @@ export default function ApplyPage() {
                         <p className="font-bold text-text-main">{job.job_info?.job_titles?.[0]}</p>
                         <p className="text-text-body text-sm flex items-center gap-2 flex-wrap">
                             {job.company_name}
+                            {job.office_verified && <VerifiedTick />}
                             <div className="flex flex-wrap items-center gap-1.5 mt-1">
-                                {job.office_verified && <OfficeVerifiedBadge />}
+                                
                                 <JobSourceChip postedBy={job.posted_by} />
                             </div>
                         </p>
@@ -103,7 +104,7 @@ export default function ApplyPage() {
                 {done || applied ? (
                     <div className="bg-white border border-border rounded-2xl p-8 flex flex-col items-center gap-3 text-center">
                         <CheckCircle2 className="w-12 h-12 text-primary" />
-                        <h1 className="text-xl font-bold text-text-main">طلبك وصل للمكتب ✅</h1>
+                        <h1 className="text-xl font-bold text-text-main">طلبك وصل للمكتب</h1>
                         <p className="text-text-body text-sm leading-7">
                             المكتب هيشوف بياناتك ويتواصل معاك على رقمك. بالتوفيق!
                         </p>

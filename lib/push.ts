@@ -89,7 +89,7 @@ export async function registerForPush(
 
     if (!localStorage.getItem(REGISTERED_FLAG)) {
       localStorage.setItem(REGISTERED_FLAG, "1");
-      onStatus("الإشعارات اتفعّلت على الجهاز ده ✅");
+      onStatus("الإشعارات اتفعّلت على الجهاز ده");
     }
 
     // Foreground messages: show as an in-app toast instead of a system notification
