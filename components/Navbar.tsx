@@ -132,6 +132,9 @@ export default function Navbar() {
                         ) : user ? (
                             <span className="relative inline-flex">
                                 {avatar}
+                                <span className="md:hidden absolute -bottom-1 -left-1 w-4 h-4 rounded-full bg-white text-primary border border-primary/60 flex items-center justify-center shadow-sm">
+                                    <Menu size={9} strokeWidth={3.5} />
+                                </span>
                                 {savedCount > 0 && (
                                     <span className="absolute -top-1 -left-1 min-w-4.5 h-4.5 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-primary">
                                         {savedCount}
