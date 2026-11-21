@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SavedJobsProvider } from "@/contexts/SavedJobsContext";
 import { ToastProvider } from "@/components/Toast";
+import { Analytics } from "@vercel/analytics/next";
 import PushRegistrar from "@/components/PushRegistrar";
 
 export const vazirMatn = Vazirmatn({
@@ -81,6 +82,7 @@ export default function RootLayout({
           </ToastProvider>
           </SavedJobsProvider>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
