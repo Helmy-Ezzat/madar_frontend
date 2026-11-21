@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import FloatingInput from "@/components/FloatingInput";
+import MarkerHighlight from "@/components/MarkerHighlight";
 
 const GoogleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 48 48">
@@ -58,7 +59,7 @@ export default function LoginPage() {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-border p-8 w-full max-w-md">
       <h1 className="text-2xl font-bold text-text-main text-center mb-6">
-        تسجيل الدخول
+        تسجيل <MarkerHighlight>الدخول</MarkerHighlight>
       </h1>
 
       {error && (

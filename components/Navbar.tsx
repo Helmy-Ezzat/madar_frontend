@@ -95,7 +95,7 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="sticky top-0 left-0 right-0 z-50 bg-primary text-white py-2 md:py-4 shadow-sm">
+            <header className="sticky top-0 left-0 right-0 z-50 bg-primary-deep text-white py-2 md:py-4 shadow-sm">
                 <nav className="px-6 flex items-center justify-between md:justify-around">
                     {/* Logo */}
                     <Link
@@ -142,7 +142,7 @@ export default function Navbar() {
                                     <Menu size={9} strokeWidth={3.5} />
                                 </span>
                                 {savedCount > 0 && (
-                                    <span className="absolute -top-1 -left-1 min-w-4.5 h-4.5 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-primary">
+                                    <span className="absolute -top-1 -left-1 min-w-4.5 h-4.5 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-primary-deep">
                                         {savedCount}
                                     </span>
                                 )}

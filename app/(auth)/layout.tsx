@@ -16,7 +16,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
   if (loading) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-primary/10 via-primary/5 to-background">
         <p className="text-text-muted">جاري التحميل...</p>
       </div>
     );
@@ -27,7 +27,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <div className="min-h-[60vh] flex items-center justify-center px-4 py-12">
+    <div className="min-h-[60vh] flex items-center justify-center px-4 py-12 bg-gradient-to-b from-primary/10 via-primary/5 to-background">
       {children}
     </div>
   );
