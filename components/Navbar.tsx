@@ -230,7 +230,7 @@ export default function Navbar() {
             {/* Sidebar (all screen sizes, slides in from the right) */}
             <div
                 data-state={isOpen ? "open" : "closed"}
-                className="invisible fixed inset-0 z-50 data-[state=open]:visible"
+                className="invisible fixed inset-0 z-50 transition-[visibility] duration-200 data-[state=open]:visible"
                 data-modal="mobile-menu"
             >
                 <div
