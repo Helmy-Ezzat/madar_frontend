@@ -12,6 +12,7 @@ import JobsList from "./_components/JobsList";
 import { Metadata, ResolvingMetadata } from "next";
 import { getJobById } from "@/services/jobService";
 
+const CITY_NAMES = ["الدمام", "الخبر", "جبيل", "الرياض", "جدة"];
 
 type Props = {
   searchParams: Promise<{
@@ -29,12 +30,29 @@ export async function generateMetadata(
   { searchParams }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { jobId } = await searchParams;
+  const { jobId, location } = await searchParams;
 
   if (!jobId) {
+    const loc = location?.trim();
+    const region = loc && /الشرقية/.test(loc);
+    const city = loc && !region ? CITY_NAMES.find((c) => loc.includes(c)) : undefined;
+    if (region) {
+      return {
+        title: { absolute: "وظائف المنطقة الشرقية | مدار" },
+        description: "وظائف جديدة في الدمام والخبر وجبيل وباقي المنطقة الشرقية من مكاتب موثوقة، محدثة يوميا.",
+        alternates: { canonical: "https://madar-jobs.vercel.app/jobs?location=" + encodeURIComponent(loc) },
+      };
+    }
+    if (city) {
+      return {
+        title: { absolute: `وظائف ${city} | مدار` },
+        description: `وظائف جديدة في ${city} من مكاتب موثوقة، محدثة يوميا.`,
+        alternates: { canonical: "https://madar-jobs.vercel.app/jobs?location=" + encodeURIComponent(city) },
+      };
+    }
     return {
-      title: "وظائف السعودية - مدار",
-      description: "تصفح أحدث وظائف مكاتب إلحاق العمالة المصرية للسعودية",
+      title: { absolute: "وظائف السعودية اليوم | مدار" },
+      description: "أحدث وظائف السعودية من مكاتب إلحاق العمالة المصرية الموثوقة. تصفح وقدّم بسهولة.",
       alternates: { canonical: "https://madar-jobs.vercel.app/jobs" },
     };
   }
