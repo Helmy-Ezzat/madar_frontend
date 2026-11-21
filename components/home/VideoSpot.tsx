@@ -76,9 +76,9 @@ export default function VideoSpot() {
                         <button
                             type="button"
                             onClick={playWithSound}
-                            className="absolute bottom-16 inset-x-0 mx-auto w-fit flex items-center gap-2 bg-primary text-white px-6 py-3.5 rounded-full font-bold text-base md:text-lg shadow-2xl hover:bg-primary/90 hover:scale-105 transition-all animate-pulse"
+                            className="absolute top-1/2 -translate-y-1/2 inset-x-0 mx-auto w-fit flex items-center gap-3 bg-primary text-white px-8 py-4 md:px-10 md:py-5 rounded-full font-bold text-lg md:text-2xl shadow-2xl ring-4 ring-white/70 hover:bg-primary/90 hover:scale-105 transition-all animate-pulse"
                         >
-                            <Volume2 className="w-6 h-6" />
+                            <Volume2 className="w-7 h-7 md:w-8 md:h-8" />
                             اسمع الفيديو بصوت
                         </button>
                     )}
