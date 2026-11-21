@@ -260,7 +260,14 @@ export default function Navbar() {
                                         });
                                         const json = await res.json();
                                         const sent = json?.data?.sent ?? 0;
-                                        toast(sent > 0 ? "اتبعت الإشعار التجريبي، استنى ثواني 🔔" : "مفيش أجهزة مسجلة - فعّل الإشعارات الأول");
+                                        const devices = json?.data?.devices ?? 0;
+                                        toast(
+                                            sent > 0
+                                                ? `اتبعت الإشعار لـ ${sent} من ${devices} جهاز مسجل 🔔`
+                                                : devices > 0
+                                                  ? `فيه ${devices} جهاز مسجل بس الإرسال فشل - جرب تاني`
+                                                  : "مفيش أجهزة مسجلة - الجهاز ده لسه ما اتسجلش للإشعارات"
+                                        );
                                     } catch {
                                         toast("حصل خطأ أثناء إرسال الإشعار");
                                     }

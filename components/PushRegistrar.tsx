@@ -14,7 +14,10 @@ export default function PushRegistrar() {
     useEffect(() => {
         if (!user || registeredFor.current === user.uid) return;
         registeredFor.current = user.uid;
-        registerForPush((message) => toast(message));
+        registerForPush(
+            (message) => toast(message),
+            (status) => toast(status)
+        );
     }, [user, toast]);
 
     return null;
