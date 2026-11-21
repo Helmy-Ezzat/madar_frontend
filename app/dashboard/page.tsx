@@ -109,7 +109,7 @@ export default function OfficeDashboardPage() {
             <main className="min-h-[60vh] flex flex-col items-center justify-center gap-4 px-4 py-10 text-center">
                 <p className="text-text-main font-bold text-lg">حوّل حسابك لمكتب إلحاق عمالة</p>
                 <p className="text-text-body text-sm max-w-md">
-                    نفس حسابك الحالي هيبقى حساب مكتب. الإدارة بتراجع الطلب يدويًا، وأول ما يتفعّل هتقدر تنزل وظائف بشارة "إلحاق عمالة معتمد".
+                    نفس حسابك الحالي هيبقى حساب مكتب. الإدارة بتراجع الطلب يدويًا، وأول ما يتفعّل هتقدر تنزل وظائف بشارة "مكتب إلحاق عمالة معتمد".
                 </p>
                 <form onSubmit={submitUpgrade} className="bg-white border border-border rounded-2xl p-5 flex flex-col gap-4 w-full max-w-md text-start">
                     <FloatingInput id="up-office" type="text" label="اسم المكتب" value={upOfficeName} onChange={(e) => setUpOfficeName(e.target.value)} required />
@@ -133,7 +133,7 @@ export default function OfficeDashboardPage() {
                     <Building2 className="w-10 h-10 text-primary" />
                     <p className="text-text-main font-bold text-lg">حسابك تحت المراجعة</p>
                     <p className="text-text-body text-sm leading-relaxed">
-                        طلب تسجيل مكتب <strong>{dbUser.officeName}</strong> وصلنا. الإدارة بتراجع حسابات مكاتب إلحاق العمالة يدويًا، وأول ما يتفعّل هتقدر تنزل وظائف بشارة "إلحاق عمالة معتمد".
+                        طلب تسجيل مكتب <strong>{dbUser.officeName}</strong> وصلنا. الإدارة بتراجع حسابات مكاتب إلحاق العمالة يدويًا، وأول ما يتفعّل هتقدر تنزل وظائف بشارة "مكتب إلحاق عمالة معتمد".
                     </p>
                 </div>
             </main>
