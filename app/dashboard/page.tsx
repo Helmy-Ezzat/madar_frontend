@@ -11,6 +11,7 @@ import {
     createOfficeJob,
     getMyOfficeJobs,
     deleteOfficeJob,
+    closeOfficeJob,
     getOfficeJobApplicants,
     upgradeToOffice,
 } from "@/services/officeDashboardService";
@@ -43,6 +44,7 @@ export default function OfficeDashboardPage() {
     const [upLicense, setUpLicense] = useState("");
     const [upgrading, setUpgrading] = useState(false);
     const [confirmDeleteJob, setConfirmDeleteJob] = useState<string | null>(null);
+    const [confirmCloseJob, setConfirmCloseJob] = useState<string | null>(null);
     const [applicants, setApplicants] = useState<Record<string, Applicant[]>>({});
 
     const isOffice = dbUser?.role === "office";
@@ -178,6 +180,16 @@ export default function OfficeDashboardPage() {
         }
     };
 
+    const closeJob = async (jobId: string) => {
+        try {
+            await closeOfficeJob(jobId, true);
+            setJobs((prev) => prev.map((j) => (j._id === jobId ? { ...j, approval_status: "closed" } : j)));
+            showToast("اتقفل التقديم على الوظيفة");
+        } catch (err) {
+            showToast(err instanceof Error ? err.message : "حصل خطأ، حاول تاني");
+        }
+    };
+
     const toggleApplicants = async (jobId: string) => {
         if (openApplicants === jobId) {
             setOpenApplicants(null);
@@ -256,6 +268,12 @@ export default function OfficeDashboardPage() {
                                             {job.approval_status === "approved" && (
                                                 <span className="rounded-full bg-green-50 text-green-600 text-[11px] font-bold px-2.5 py-0.5">منشورة</span>
                                             )}
+                                            {job.approval_status === "closed" && (
+                                                <span className="rounded-full bg-slate-100 text-slate-500 text-[11px] font-bold px-2.5 py-0.5">انتهى التقديم</span>
+                                            )}
+                                            {job.approval_status === "suspended" && (
+                                                <span className="rounded-full bg-slate-100 text-slate-500 text-[11px] font-bold px-2.5 py-0.5">موقوفة من الإدارة</span>
+                                            )}
                                             {job.approval_status === "rejected" && (
                                                 <span className="rounded-full bg-red-50 text-red-500 text-[11px] font-bold px-2.5 py-0.5">مرفوضة</span>
                                             )}
@@ -268,14 +286,25 @@ export default function OfficeDashboardPage() {
                                             {job.job_info?.location} · {job.job_info?.salary}
                                         </p>
                                     </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => setConfirmDeleteJob(job._id)}
-                                        className="text-red-500 hover:bg-red-50 p-2 rounded-lg transition"
-                                        aria-label="مسح الوظيفة"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
+                                    <div className="flex items-center gap-1">
+                                        {job.approval_status === "approved" && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setConfirmCloseJob(job._id)}
+                                                className="text-amber-600 hover:bg-amber-50 text-xs font-bold px-3 py-2 rounded-lg transition"
+                                            >
+                                                إنهاء التقديم
+                                            </button>
+                                        )}
+                                        <button
+                                            type="button"
+                                            onClick={() => setConfirmDeleteJob(job._id)}
+                                            className="text-red-500 hover:bg-red-50 p-2 rounded-lg transition"
+                                            aria-label="مسح الوظيفة"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    </div>
                                 </div>
                                 <button
                                     type="button"
@@ -306,6 +335,16 @@ export default function OfficeDashboardPage() {
                     )}
                 </section>
             </div>
+            <ConfirmDialog
+                open={confirmCloseJob !== null}
+                title="إنهاء التقديم على الوظيفة دي؟ هتفضل ظاهرة عندك هنا بحالة انتهى التقديم ومحدش هيقدر يقدم عليها تاني."
+                confirmLabel="إنهاء التقديم"
+                onConfirm={() => {
+                    if (confirmCloseJob) closeJob(confirmCloseJob);
+                    setConfirmCloseJob(null);
+                }}
+                onCancel={() => setConfirmCloseJob(null)}
+            />
             <ConfirmDialog
                 open={confirmDeleteJob !== null}
                 title="متأكد إنك عايز تمسح الوظيفة دي؟"

@@ -11,9 +11,14 @@ import {
     adminListOffices,
     adminApproveOffice,
     adminRejectOffice,
+    adminSuspendOffice,
+    adminUnsuspendOffice,
     adminListJobs,
     adminApproveJob,
     adminRejectJob,
+    adminSuspendJob,
+    adminUnsuspendJob,
+    adminDeleteJob,
     adminCreateJob,
     type AdminOffice,
     type AdminJob,
@@ -22,10 +27,18 @@ import { Briefcase, Building2, Check, Loader2, MapPin, Plus, X } from "lucide-re
 
 const ADMIN_EMAILS = ["hellmyezzat@gmail.com", "x26dbl@mail.instinct.com"];
 
-const STATUS_TABS = [
+const OFFICE_TABS = [
     { key: "pending", label: "تحت المراجعة" },
     { key: "approved", label: "معتمد" },
+    { key: "suspended", label: "موقوف" },
     { key: "rejected", label: "مرفوض" },
+] as const;
+
+const JOB_TABS = [
+    { key: "pending", label: "تحت المراجعة" },
+    { key: "approved", label: "منشورة" },
+    { key: "suspended", label: "موقوفة" },
+    { key: "rejected", label: "مرفوضة" },
 ] as const;
 
 export default function AdminPage() {
@@ -43,7 +56,7 @@ export default function AdminPage() {
     const [posting, setPosting] = useState(false);
     const [loadingList, setLoadingList] = useState(false);
     const [acting, setActing] = useState<string | null>(null);
-    const [confirmReject, setConfirmReject] = useState<string | null>(null);
+    const [confirm, setConfirm] = useState<{ id: string; action: "reject" | "suspend" | "delete" } | null>(null);
     const [counts, setCounts] = useState<{ pendingOffices: number; pendingJobs: number } | null>(null);
 
     const refreshCounts = useCallback(async () => {
@@ -124,24 +137,36 @@ export default function AdminPage() {
         );
     }
 
-    const act = async (id: string, action: "approve" | "reject") => {
+    const act = async (id: string, action: "approve" | "reject" | "suspend" | "unsuspend" | "delete") => {
         setActing(id);
         try {
             if (section === "offices") {
-                if (action === "approve") {
-                    await adminApproveOffice(id);
+                if (action === "approve" || action === "unsuspend") {
+                    await (action === "approve" ? adminApproveOffice(id) : adminUnsuspendOffice(id));
                     showToast("المكتب اتفعّل ✅");
-                } else {
+                } else if (action === "reject") {
                     await adminRejectOffice(id);
                     showToast("المكتب اترفض");
+                } else if (action === "suspend") {
+                    await adminSuspendOffice(id);
+                    showToast("المكتب اتوقف");
                 }
             } else {
                 if (action === "approve") {
                     await adminApproveJob(id);
                     showToast("الوظيفة اتنشرت ✅");
-                } else {
+                } else if (action === "reject") {
                     await adminRejectJob(id);
                     showToast("الوظيفة اترفضت");
+                } else if (action === "suspend") {
+                    await adminSuspendJob(id);
+                    showToast("الوظيفة اتوقفت");
+                } else if (action === "unsuspend") {
+                    await adminUnsuspendJob(id);
+                    showToast("الوظيفة رجعت منشورة ✅");
+                } else if (action === "delete") {
+                    await adminDeleteJob(id);
+                    showToast("الوظيفة اتحذفت");
                 }
             }
             await load();
@@ -194,7 +219,7 @@ export default function AdminPage() {
                 </div>
 
                 <div className="flex gap-2">
-                    {STATUS_TABS.map((tab) => (
+                    {(section === "offices" ? OFFICE_TABS : JOB_TABS).map((tab) => (
                         <button
                             key={tab.key}
                             type="button"
@@ -261,6 +286,49 @@ export default function AdminPage() {
                                         )}
                                     </div>
                                 </div>
+                                {job.approval_status === "approved" && (
+                                    <div className="flex gap-2">
+                                        <button
+                                            type="button"
+                                            disabled={acting === job._id}
+                                            onClick={() => setConfirm({ id: job._id, action: "suspend" })}
+                                            className="inline-flex items-center gap-1.5 border border-amber-200 text-amber-600 hover:bg-amber-50 text-sm font-bold px-4 py-2 rounded-lg transition disabled:opacity-60"
+                                        >
+                                            إيقاف
+                                        </button>
+                                        <button
+                                            type="button"
+                                            disabled={acting === job._id}
+                                            onClick={() => setConfirm({ id: job._id, action: "delete" })}
+                                            className="inline-flex items-center gap-1.5 border border-red-200 text-red-500 hover:bg-red-50 text-sm font-bold px-4 py-2 rounded-lg transition disabled:opacity-60"
+                                        >
+                                            <X className="w-4 h-4" />
+                                            حذف
+                                        </button>
+                                    </div>
+                                )}
+                                {job.approval_status === "suspended" && (
+                                    <div className="flex gap-2">
+                                        <button
+                                            type="button"
+                                            disabled={acting === job._id}
+                                            onClick={() => act(job._id, "unsuspend")}
+                                            className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-hover text-white text-sm font-bold px-4 py-2 rounded-lg transition disabled:opacity-60"
+                                        >
+                                            <Check className="w-4 h-4" />
+                                            إعادة نشر
+                                        </button>
+                                        <button
+                                            type="button"
+                                            disabled={acting === job._id}
+                                            onClick={() => setConfirm({ id: job._id, action: "delete" })}
+                                            className="inline-flex items-center gap-1.5 border border-red-200 text-red-500 hover:bg-red-50 text-sm font-bold px-4 py-2 rounded-lg transition disabled:opacity-60"
+                                        >
+                                            <X className="w-4 h-4" />
+                                            حذف
+                                        </button>
+                                    </div>
+                                )}
                                 {job.approval_status === "pending" && (
                                     <div className="flex gap-2">
                                         <button
@@ -275,7 +343,7 @@ export default function AdminPage() {
                                         <button
                                             type="button"
                                             disabled={acting === job._id}
-                                            onClick={() => setConfirmReject(job._id)}
+                                            onClick={() => setConfirm({ id: job._id, action: "reject" })}
                                             className="inline-flex items-center gap-1.5 border border-red-200 text-red-500 hover:bg-red-50 text-sm font-bold px-4 py-2 rounded-lg transition disabled:opacity-60"
                                         >
                                             <X className="w-4 h-4" />
@@ -310,6 +378,31 @@ export default function AdminPage() {
                                     <p className="text-text-muted text-xs">المسؤول: {office.displayName}</p>
                                 </div>
                             </div>
+                            {office.officeStatus === "approved" && (
+                                <div className="flex gap-2">
+                                    <button
+                                        type="button"
+                                        disabled={acting === office._id}
+                                        onClick={() => setConfirm({ id: office._id, action: "suspend" })}
+                                        className="inline-flex items-center gap-1.5 border border-amber-200 text-amber-600 hover:bg-amber-50 text-sm font-bold px-4 py-2 rounded-lg transition disabled:opacity-60"
+                                    >
+                                        إيقاف
+                                    </button>
+                                </div>
+                            )}
+                            {office.officeStatus === "suspended" && (
+                                <div className="flex gap-2">
+                                    <button
+                                        type="button"
+                                        disabled={acting === office._id}
+                                        onClick={() => act(office._id, "unsuspend")}
+                                        className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-hover text-white text-sm font-bold px-4 py-2 rounded-lg transition disabled:opacity-60"
+                                    >
+                                        <Check className="w-4 h-4" />
+                                        إعادة تفعيل
+                                    </button>
+                                </div>
+                            )}
                             {office.officeStatus === "pending" && (
                                 <div className="flex gap-2">
                                     <button
@@ -324,7 +417,7 @@ export default function AdminPage() {
                                     <button
                                         type="button"
                                         disabled={acting === office._id}
-                                        onClick={() => setConfirmReject(office._id)}
+                                        onClick={() => setConfirm({ id: office._id, action: "reject" })}
                                         className="inline-flex items-center gap-1.5 border border-red-200 text-red-500 hover:bg-red-50 text-sm font-bold px-4 py-2 rounded-lg transition disabled:opacity-60"
                                     >
                                         <X className="w-4 h-4" />
@@ -337,14 +430,22 @@ export default function AdminPage() {
                 )}
             </div>
             <ConfirmDialog
-                open={confirmReject !== null}
-                title="متأكد إنك عايز ترفض؟ مفيش تراجع بعدها."
-                confirmLabel="رفض"
+                open={confirm !== null}
+                title={
+                    confirm?.action === "delete"
+                        ? "متأكد إنك عايز تحذف الوظيفة؟ هتتحذف هي وكل التقديمات عليها، ومفيش تراجع."
+                        : confirm?.action === "suspend"
+                          ? section === "offices"
+                              ? "متأكد إنك عايز توقف المكتب؟ مش هيقدر ينزل وظايف لحد ما يتفعل تاني."
+                              : "متأكد إنك عايز توقف الوظيفة؟ هتختفي من الموقع لحد ما ترجعها."
+                          : "متأكد إنك عايز ترفض؟ مفيش تراجع بعدها."
+                }
+                confirmLabel={confirm?.action === "delete" ? "حذف" : confirm?.action === "suspend" ? "إيقاف" : "رفض"}
                 onConfirm={() => {
-                    if (confirmReject) act(confirmReject, "reject");
-                    setConfirmReject(null);
+                    if (confirm) act(confirm.id, confirm.action);
+                    setConfirm(null);
                 }}
-                onCancel={() => setConfirmReject(null)}
+                onCancel={() => setConfirm(null)}
             />
         </main>
     );

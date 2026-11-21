@@ -42,6 +42,8 @@ export async function registerForPush(
       registration = await navigator.serviceWorker.register(
         "/firebase-messaging-sw.js"
       );
+      // Pick up a newer worker immediately (older ones rendered pushes empty)
+      registration.update().catch(() => {});
       // Wait until the worker is actually active - getToken fails against an installing one
       registration = await navigator.serviceWorker.ready;
     } catch (error) {

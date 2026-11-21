@@ -62,7 +62,7 @@ export interface AdminOffice {
   displayName: string;
   officeName: string;
   licenseNumber: string;
-  officeStatus: "pending" | "approved" | "rejected";
+  officeStatus: "pending" | "approved" | "rejected" | "suspended";
   createdAt: string;
 }
 
@@ -121,3 +121,21 @@ export const adminCreateJob = (payload: {
 // Convert the logged-in seeker account into a pending labor-recruitment office account
 export const upgradeToOffice = (payload: { officeName: string; licenseNumber?: string }) =>
     authedFetch("/auth/sync", { method: "POST", body: JSON.stringify({ role: "office", ...payload }) });
+
+export const adminSuspendOffice = (id: string) =>
+  authedFetch(`/admin/offices/${id}/suspend`, { method: "POST" });
+
+export const adminUnsuspendOffice = (id: string) =>
+  authedFetch(`/admin/offices/${id}/unsuspend`, { method: "POST" });
+
+export const adminSuspendJob = (id: string) =>
+  authedFetch(`/admin/jobs/${id}/suspend`, { method: "POST" });
+
+export const adminUnsuspendJob = (id: string) =>
+  authedFetch(`/admin/jobs/${id}/unsuspend`, { method: "POST" });
+
+export const adminDeleteJob = (id: string) =>
+  authedFetch(`/admin/jobs/${id}`, { method: "DELETE" });
+
+export const closeOfficeJob = (id: string, closed: boolean = true) =>
+  authedFetch(`/jobs/mine/${id}/close`, { method: "PATCH", body: JSON.stringify({ closed }) });

@@ -108,7 +108,13 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                         {fromNow(job.published_at)}
                     </time>
                     <div className="flex items-center gap-2 flex-wrap">
-                        {job.posted_by && <ApplyButton jobId={job._id} />}
+                        {job.posted_by && (job.approval_status && job.approval_status !== "approved" ? (
+                            <span className="inline-flex items-center gap-2 py-2 px-3.5 bg-slate-100 text-slate-500 rounded-lg text-xs font-bold">
+                                انتهى التقديم على الوظيفة دي
+                            </span>
+                        ) : (
+                            <ApplyButton jobId={job._id} />
+                        ))}
                         {job.source_link && (
                         <a
                             href={job.source_link}

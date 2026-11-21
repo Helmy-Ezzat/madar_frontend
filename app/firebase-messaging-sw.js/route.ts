@@ -18,6 +18,9 @@ export function GET() {
 importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js');
 
+self.addEventListener('install', () => self.skipWaiting());
+self.addEventListener('activate', (event) => event.waitUntil(clients.claim()));
+
 firebase.initializeApp(${JSON.stringify(config)});
 const messaging = firebase.messaging();
 
