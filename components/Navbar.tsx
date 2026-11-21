@@ -8,6 +8,7 @@ import {
     Briefcase,
     Info,
     Heart,
+    FileText,
     LogOut,
     Bell,
 } from "lucide-react";
@@ -211,6 +212,16 @@ export default function Navbar() {
                                             <p className="text-xs text-text-muted truncate" dir="ltr">{user?.email}</p>
                                         </div>
                                     </div>
+                                    {dbUser?.role !== "office" && (
+                                        <Link
+                                            href="/applications"
+                                            onClick={() => setMenuOpen(false)}
+                                            className="flex items-center gap-3 py-2.5 px-4 hover:bg-surface-hover transition text-sm"
+                                        >
+                                            <FileText className="w-4.5 h-4.5 text-slate-400" />
+                                            <span>طلباتي</span>
+                                        </Link>
+                                    )}
                                     <Link
                                         href="/saved"
                                         onClick={() => setMenuOpen(false)}
@@ -373,6 +384,18 @@ export default function Navbar() {
                                 </Link>
                             </li>
                         ))}
+                        {user && dbUser?.role !== "office" && (
+                            <li>
+                                <Link
+                                    href="/applications"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 text-text-main hover:bg-surface-hover"
+                                >
+                                    <FileText className="w-5 h-5 text-slate-400" />
+                                    <span>طلباتي</span>
+                                </Link>
+                            </li>
+                        )}
                         {user && (
                             <li>
                                 <Link
