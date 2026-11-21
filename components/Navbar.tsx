@@ -28,9 +28,11 @@ interface NavItem {
 const topNavItems: NavItem[] = [
     { key: "الرئيسية", href: "/", icon: Home },
     { key: "الوظائف", href: "/jobs", icon: Briefcase },
+    { key: "من نحن", href: "/about", icon: Info },
 ];
 
-const sidebarNavItems: NavItem[] = topNavItems;
+// من نحن renders separately at the bottom of the sidebar, so keep it out here
+const sidebarNavItems: NavItem[] = topNavItems.filter((i) => i.key !== "من نحن");
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
