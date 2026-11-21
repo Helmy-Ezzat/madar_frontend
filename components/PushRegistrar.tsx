@@ -16,7 +16,11 @@ export default function PushRegistrar() {
         registeredFor.current = user.uid;
         registerForPush(
             (message) => toast(message),
-            () => {} // denied/unsupported: stay silent on automatic registration
+            (status) => {
+                // Automatic registration stays silent when the user denied notifications or the browser can't do them
+                if (status.includes("مرفوضة") || status.includes("مش بيدعم")) return;
+                toast(status);
+            }
         );
     }, [user, toast]);
 
