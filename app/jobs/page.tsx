@@ -35,6 +35,7 @@ export async function generateMetadata(
     return {
       title: "وظائف السعودية - مدار",
       description: "تصفح أحدث وظائف مكاتب إلحاق العمالة المصرية للسعودية",
+      alternates: { canonical: "https://madar-jobs.vercel.app/jobs" },
     };
   }
 
@@ -47,16 +48,25 @@ export async function generateMetadata(
   }
 
   const jobTitle = job.job_info.job_titles[0] || "وظيفة شاغرة";
-  
+  const text = (job.raw_text || job.job_info.summary || "").replace(/\s+/g, " ").trim();
+  const url = `https://madar-jobs.vercel.app/jobs?jobId=${job._id}`;
+
   return {
     title: `${jobTitle}`,
-    description: job.raw_text.substring(0, 160),
-    alternates: {
-      canonical: `https://madar-jobs.vercel.app/jobs?jobId=${job._id}`,
-    },
+    description: text.substring(0, 160),
+    alternates: { canonical: url },
+    robots: job.approval_status === "closed" ? { index: false, follow: true } : undefined,
     openGraph: {
       title: jobTitle,
-      description: job.raw_text.substring(0, 100),
+      description: text.substring(0, 100),
+      url,
+      type: "article",
+      locale: "ar_EG",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: jobTitle,
+      description: text.substring(0, 100),
     },
   };
 }

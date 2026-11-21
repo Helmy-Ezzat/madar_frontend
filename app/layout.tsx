@@ -46,6 +46,7 @@ export const metadata: Metadata = {
     type: 'website',
   },
 
+  twitter: { card: 'summary_large_image', title: 'مدار - كل وظائف الخارج في مكان واحد', images: ['/og.png'] },
   verification: {
     google: "_s_tR8i3t3zsGl551vWxwlCuzI4hSNzGUOIjL9p217w",
   },

@@ -31,22 +31,27 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
         );
     }
 
-    const jsonLd = {
+    const published = new Date(job.published_at);
+    const validThrough = new Date(published);
+    validThrough.setMonth(validThrough.getMonth() + 2);
+    const jsonLd = job.approval_status === "closed" ? null : {
         "@context": "https://schema.org",
         "@type": "JobPosting",
         "title": job.job_info.job_titles[0],
-        "description": job.raw_text,
+        "description": job.raw_text || job.job_info.summary,
         "identifier": {
             "@type": "PropertyValue",
             "name": job.company_name,
             "value": job._id
         },
-        "datePosted": job.published_at,
-        "validThrough": new Date(new Date(job.published_at).setMonth(new Date(job.published_at).getMonth() + 2)).toISOString(),
+        "datePosted": published.toISOString(),
+        "validThrough": validThrough.toISOString(),
+        "directApply": !job.source_link,
+        "url": `https://madar-jobs.vercel.app/jobs?jobId=${job._id}`,
         "hiringOrganization": {
             "@type": "Organization",
             "name": job.company_name,
-            "sameAs": job.source_link
+            ...(job.source_link ? { "sameAs": job.source_link } : {})
         },
         "jobLocation": {
             "@type": "Place",
@@ -64,10 +69,12 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
             className="fixed inset-0 z-50 bg-white lg:border-t-4 lg:border-primary lg:sticky lg:top-24 lg:h-205 lg:rounded-xl lg:shadow-xl lg:inset-auto lg:z-0 flex flex-col overflow-y-hidden"
             aria-label="Job Details"
         >
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
+            {jsonLd && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+                />
+            )}
             {/* Header */}
             <header className="flex flex-col gap-5 border-b border-icon-bg pb-5 p-5">
                 <div className="flex justify-between">
