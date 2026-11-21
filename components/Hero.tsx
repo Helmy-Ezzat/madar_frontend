@@ -2,8 +2,26 @@ import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import SearchInput from "./SearchInput";
+import { getSpecializations } from "@/services/specializationService";
+import { getLocations } from "@/services/locationService";
 
-export default function Hero() {
+export default async function Hero() {
+    const [specializations, locations] = await Promise.all([
+        getSpecializations(),
+        getLocations(),
+    ]);
+
+    const quickChips = [
+        ...locations.slice(0, 3).map((l) => ({
+            label: l.name,
+            href: `/jobs?location=${encodeURIComponent(l.name)}`,
+        })),
+        ...specializations.slice(0, 4).map((s) => ({
+            label: s.name,
+            href: `/jobs?specialization=${encodeURIComponent(s.name)}`,
+        })),
+    ];
+
     return (
         <main className="grid grid-cols-1 lg:grid-cols-2 px-4 sm:px-6 lg:px-8 md:min-h-screen -mt-4 md:mt-0 bg-gradient-to-b from-primary/10 via-primary/5 to-background">
             <div className="flex md:hidden items-center justify-center">
@@ -64,6 +82,21 @@ export default function Hero() {
                         <SearchInput />
                     </Suspense>
                 </div>
+
+                {/* Quick-search chips: top cities + top titles, one tap to search */}
+                {quickChips.length > 0 && (
+                    <div className="flex flex-wrap items-center justify-center gap-2 max-w-xl -mt-2">
+                        {quickChips.map((chip) => (
+                            <Link
+                                key={chip.href}
+                                href={chip.href}
+                                className="text-xs md:text-sm text-text-body bg-white/70 border border-slate-200 rounded-full px-3.5 py-1.5 hover:border-primary hover:text-primary transition-colors"
+                            >
+                                {chip.label}
+                            </Link>
+                        ))}
+                    </div>
+                )}
 
                 <Link
                         href="/jobs"
