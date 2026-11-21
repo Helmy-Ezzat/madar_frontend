@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import FloatingInput from "@/components/FloatingInput";
 
 const GoogleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 48 48">
@@ -79,39 +80,39 @@ export default function RegisterPage() {
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
+        <FloatingInput
+          id="name"
           type="text"
-          placeholder="الاسم"
+          label="الإسم"
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
           required
-          className="w-full rounded-lg border border-border px-4 py-3 text-text-main placeholder:text-text-muted outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
         />
-        <input
+        <FloatingInput
+          id="email"
           type="email"
-          placeholder="البريد الإلكتروني"
+          label="البريد الإلكتروني"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full rounded-lg border border-border px-4 py-3 text-text-main placeholder:text-text-muted outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
         />
-        <input
+        <FloatingInput
+          id="password"
           type="password"
-          placeholder="كلمة المرور"
+          label="كلمة المرور"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength={6}
-          className="w-full rounded-lg border border-border px-4 py-3 text-text-main placeholder:text-text-muted outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
         />
-        <input
+        <FloatingInput
+          id="confirmPassword"
           type="password"
-          placeholder="تأكيد كلمة المرور"
+          label="تأكيد كلمة المرور"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
           minLength={6}
-          className="w-full rounded-lg border border-border px-4 py-3 text-text-main placeholder:text-text-muted outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
         />
         <button
           type="submit"
