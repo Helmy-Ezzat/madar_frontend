@@ -90,6 +90,12 @@ export default function Navbar() {
                                         {user.displayName || dbUser?.displayName || "مستخدم"}
                                     </span>
                                 </div>
+                                <Link
+                                    href="/saved"
+                                    className="text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-md transition"
+                                >
+                                    المحفوظة
+                                </Link>
                                 <button
                                     onClick={() => logout()}
                                     className="text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-md transition cursor-pointer"
@@ -172,6 +178,13 @@ export default function Navbar() {
                                         <p className="text-xs text-text-muted truncate">{user.email}</p>
                                     </div>
                                 </div>
+                                <Link
+                                    href="/saved"
+                                    onClick={() => setIsOpen(false)}
+                                    className="w-full text-center text-primary hover:bg-primary/5 py-2.5 px-4 rounded-xl transition text-sm font-medium"
+                                >
+                                    الوظائف المحفوظة
+                                </Link>
                                 <button
                                     onClick={() => {
                                         logout();

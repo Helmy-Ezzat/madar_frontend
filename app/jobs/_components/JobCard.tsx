@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { BadgeCheck, Building2, MapPin, ShieldCheck, Wallet } from "lucide-react";
 import { useJobContext } from "../_context/JobContext";
 import { JobCardTitle } from "./JobCardTitle";
+import SaveJobButton from "@/components/SaveJobButton";
 
 function JobCard({ job }: { job: Job }) {
   const searchParams = useSearchParams();
@@ -33,6 +34,9 @@ function JobCard({ job }: { job: Job }) {
     `}
       onClick={handleClick}
     >
+      <div className="absolute top-3 left-3 z-20">
+        <SaveJobButton jobId={job._id} />
+      </div>
       <div className="flex flex-col gap-2.5 relative z-10 pointer-events-none">
         <JobCardTitle titles={job.job_info.job_titles?.map((title: any) =>
           typeof title === 'object' ? title.text : title
