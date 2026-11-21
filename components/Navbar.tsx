@@ -9,6 +9,7 @@ import {
     Info,
     Heart,
     LogOut,
+    Bell,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -34,10 +35,35 @@ const sidebarNavItems: NavItem[] = topNavItems;
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
     const { user, dbUser, logout, loading } = useAuth();
     const toast = useToast();
     const { savedIds } = useSavedJobs();
     const savedCount = user ? savedIds.size : 0;
+
+    const sendTestNotification = async () => {
+        try {
+            const { auth } = await import("@/lib/firebase");
+            const idToken = await auth?.currentUser?.getIdToken();
+            const base = process.env.NEXT_PUBLIC_API_URL || "";
+            const res = await fetch(`${base}/notifications/test`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${idToken}` },
+            });
+            const json = await res.json();
+            const sent = json?.data?.sent ?? 0;
+            const devices = json?.data?.devices ?? 0;
+            toast(
+                sent > 0
+                    ? `اتبعت الإشعار لـ ${sent} من ${devices} جهاز مسجل 🔔`
+                    : devices > 0
+                      ? `فيه ${devices} جهاز مسجل بس الإرسال فشل - جرب تاني`
+                      : "مفيش أجهزة مسجلة - الجهاز ده لسه ما اتسجلش للإشعارات"
+            );
+        } catch {
+            toast("حصل خطأ أثناء إرسال الإشعار");
+        }
+    };
 
     const displayName = user?.displayName || dbUser?.displayName || "مستخدم";
     const initial = (user?.displayName || dbUser?.displayName || user?.email || "U")
@@ -86,12 +112,19 @@ export default function Navbar() {
                         ))}
                     </ul>
 
-                    {/* Sidebar trigger: avatar when logged in, menu icon otherwise */}
-                    <button
-                        onClick={() => setIsOpen(true)}
-                        className="flex items-center gap-2 p-2 -m-2 rounded-lg hover:bg-white/10 transition cursor-pointer"
-                        aria-label="فتح القائمة"
-                    >
+                    {/* Trigger: desktop (logged in) opens a dropdown; mobile/guests open the sidebar */}
+                    <div className="relative">
+                        <button
+                            onClick={() => {
+                                if (user && window.matchMedia("(min-width: 768px)").matches) {
+                                    setMenuOpen((v) => !v);
+                                } else {
+                                    setIsOpen(true);
+                                }
+                            }}
+                            className="flex items-center gap-2 p-2 -m-2 rounded-lg hover:bg-white/10 transition cursor-pointer"
+                            aria-label="فتح القائمة"
+                        >
                         {loading ? (
                             <div className="w-9 h-9 rounded-full bg-white/20 animate-pulse" />
                         ) : user ? (
@@ -105,8 +138,63 @@ export default function Navbar() {
                             </span>
                         ) : (
                             <Menu size={22} />
+                            )}
+                        </button>
+
+                        {/* Desktop account dropdown */}
+                        {menuOpen && user && (
+                            <>
+                                <div
+                                    className="fixed inset-0 z-40 hidden md:block"
+                                    onClick={() => setMenuOpen(false)}
+                                />
+                                <div className="absolute end-0 top-full mt-2 z-50 w-64 hidden md:block bg-white text-text-main rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+                                    <div className="flex items-center gap-3 p-4 border-b border-slate-100">
+                                        {avatar}
+                                        <div className="min-w-0">
+                                            <p className="text-sm font-bold truncate">{displayName}</p>
+                                            <p className="text-xs text-text-muted truncate" dir="ltr">{user?.email}</p>
+                                        </div>
+                                    </div>
+                                    <Link
+                                        href="/saved"
+                                        onClick={() => setMenuOpen(false)}
+                                        className="flex items-center gap-3 py-2.5 px-4 hover:bg-surface-hover transition text-sm"
+                                    >
+                                        <Heart className="w-4.5 h-4.5 text-slate-400" />
+                                        <span>المحفوظة</span>
+                                        {savedCount > 0 && (
+                                            <span className="ms-auto min-w-5 h-5 px-1.5 rounded-full bg-red-500 text-white text-[11px] font-bold flex items-center justify-center">
+                                                {savedCount}
+                                            </span>
+                                        )}
+                                    </Link>
+                                    {user?.email === "hellmyezzat@gmail.com" && (
+                                        <button
+                                            onClick={() => {
+                                                setMenuOpen(false);
+                                                sendTestNotification();
+                                            }}
+                                            className="w-full flex items-center gap-3 py-2.5 px-4 hover:bg-surface-hover transition text-sm cursor-pointer text-start"
+                                        >
+                                            <Bell className="w-4.5 h-4.5 text-slate-400" />
+                                            <span>جرّب الإشعارات</span>
+                                        </button>
+                                    )}
+                                    <button
+                                        onClick={() => {
+                                            setMenuOpen(false);
+                                            setShowLogoutConfirm(true);
+                                        }}
+                                        className="w-full flex items-center gap-3 py-2.5 px-4 border-t border-slate-100 text-red-500 hover:bg-red-50 transition text-sm cursor-pointer text-start"
+                                    >
+                                        <LogOut className="w-4.5 h-4.5" />
+                                        <span>تسجيل الخروج</span>
+                                    </button>
+                                </div>
+                            </>
                         )}
-                    </button>
+                    </div>
                 </nav>
             </header>
 
@@ -247,28 +335,9 @@ export default function Navbar() {
                     {user?.email === "hellmyezzat@gmail.com" && (
                         <div className="px-4 pb-2">
                             <button
-                                onClick={async () => {
-                                    try {
-                                        const { auth } = await import("@/lib/firebase");
-                                        const idToken = await auth?.currentUser?.getIdToken();
-                                        const base = process.env.NEXT_PUBLIC_API_URL || "";
-                                        const res = await fetch(`${base}/notifications/test`, {
-                                            method: "POST",
-                                            headers: { Authorization: `Bearer ${idToken}` },
-                                        });
-                                        const json = await res.json();
-                                        const sent = json?.data?.sent ?? 0;
-                                        const devices = json?.data?.devices ?? 0;
-                                        toast(
-                                            sent > 0
-                                                ? `اتبعت الإشعار لـ ${sent} من ${devices} جهاز مسجل 🔔`
-                                                : devices > 0
-                                                  ? `فيه ${devices} جهاز مسجل بس الإرسال فشل - جرب تاني`
-                                                  : "مفيش أجهزة مسجلة - الجهاز ده لسه ما اتسجلش للإشعارات"
-                                        );
-                                    } catch {
-                                        toast("حصل خطأ أثناء إرسال الإشعار");
-                                    }
+                                onClick={() => {
+                                    setIsOpen(false);
+                                    sendTestNotification();
                                 }}
                                 className="w-full flex items-center justify-center gap-2 border border-primary/30 text-primary hover:bg-primary/5 py-2 px-4 rounded-xl transition text-sm font-medium cursor-pointer"
                             >
