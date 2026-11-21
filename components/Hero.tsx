@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import SearchInput from "./SearchInput";
 
 export default function Hero() {
     return (
@@ -47,12 +49,19 @@ export default function Hero() {
                     <strong className="font-semibold text-text-main"> مدار</strong> جمعلك كل الوظائف المتاحة في مكان واحد.
                 </p>
 
+                {/* Search */}
+                <div className="w-full max-w-xl">
+                    <Suspense fallback={<div className="h-[45px] w-full rounded-lg bg-surface-hover animate-pulse" />}>
+                        <SearchInput />
+                    </Suspense>
+                </div>
+
                 <Link
                         href="/jobs"
-                        className="group bg-primary text-white px-10 py-5 rounded-2xl font-bold text-xl hover:bg-primary/90 transition-all hover:shadow-2xl hover:scale-105 inline-flex items-center gap-3"
+                        className="group border-2 border-primary text-primary px-8 py-3.5 rounded-2xl font-bold text-lg hover:bg-primary hover:text-white transition-all inline-flex items-center gap-3"
                     >
                         <span>عرض جميع الوظائف</span>
-                        <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
                     </Link>
