@@ -66,6 +66,16 @@ export interface AdminOffice {
   createdAt: string;
 }
 
+
+export interface AdminCounts {
+  pendingOffices: number;
+  pendingJobs: number;
+  newApplications: number;
+}
+
+export const adminGetCounts = (): Promise<{ data?: AdminCounts }> =>
+  authedFetch("/admin/counts");
+
 export const adminListOffices = (status: string = "pending") =>
   authedFetch(`/admin/offices?status=${status}`);
 

@@ -7,6 +7,7 @@ import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
 import FloatingInput from "@/components/FloatingInput";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import {
+    adminGetCounts,
     adminListOffices,
     adminApproveOffice,
     adminRejectOffice,
@@ -43,8 +44,22 @@ export default function AdminPage() {
     const [loadingList, setLoadingList] = useState(false);
     const [acting, setActing] = useState<string | null>(null);
     const [confirmReject, setConfirmReject] = useState<string | null>(null);
+    const [counts, setCounts] = useState<{ pendingOffices: number; pendingJobs: number } | null>(null);
+
+    const refreshCounts = useCallback(async () => {
+        try {
+            const res = await adminGetCounts();
+            if (res.data) setCounts(res.data);
+        } catch {
+            // badge failure should never block the dashboard
+        }
+    }, []);
+
 
     const isAdmin = !!user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase());
+    useEffect(() => {
+        if (isAdmin) refreshCounts();
+    }, [isAdmin, refreshCounts]);
 
     const load = useCallback(async () => {
         setLoadingList(true);
@@ -130,6 +145,7 @@ export default function AdminPage() {
                 }
             }
             await load();
+            refreshCounts();
         } catch (err) {
             showToast(err instanceof Error ? err.message : "حصل خطأ، حاول تاني");
         } finally {
@@ -153,6 +169,11 @@ export default function AdminPage() {
                         }`}
                     >
                         المكاتب
+                        {counts && counts.pendingOffices > 0 && (
+                            <span className="ms-1.5 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold leading-none">
+                                {counts.pendingOffices}
+                            </span>
+                        )}
                     </button>
                     <button
                         type="button"
@@ -164,6 +185,11 @@ export default function AdminPage() {
                         }`}
                     >
                         الوظائف
+                        {counts && counts.pendingJobs > 0 && (
+                            <span className="ms-1.5 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold leading-none">
+                                {counts.pendingJobs}
+                            </span>
+                        )}
                     </button>
                 </div>
 

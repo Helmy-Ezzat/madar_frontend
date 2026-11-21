@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Menu,
     X,
@@ -44,6 +44,26 @@ export default function Navbar() {
     const toast = useToast();
     const { savedIds } = useSavedJobs();
     const savedCount = user ? savedIds.size : 0;
+
+    const isAdminEmail = user?.email === "hellmyezzat@gmail.com";
+    const [adminPending, setAdminPending] = useState(0);
+    useEffect(() => {
+        if (!isAdminEmail) return;
+        let alive = true;
+        const load = async () => {
+            try {
+                const { adminGetCounts } = await import("@/services/officeDashboardService");
+                const res = await adminGetCounts();
+                const d = res?.data;
+                if (alive && d) setAdminPending((d.pendingOffices ?? 0) + (d.pendingJobs ?? 0));
+            } catch {
+                // badge failure should never break the nav
+            }
+        };
+        load();
+        const t = setInterval(load, 60000);
+        return () => { alive = false; clearInterval(t); };
+    }, [isAdminEmail]);
 
     const sendTestNotification = async () => {
         try {
@@ -199,6 +219,11 @@ export default function Navbar() {
                                         >
                                             <ShieldCheck className="w-4.5 h-4.5 text-slate-400" />
                                             <span>الإدارة</span>
+                                            {adminPending > 0 && (
+                                                <span className="ms-auto inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold leading-none">
+                                                    {adminPending}
+                                                </span>
+                                            )}
                                         </Link>
                                     )}
                                     {user?.email === "hellmyezzat@gmail.com" && (
@@ -363,6 +388,11 @@ export default function Navbar() {
                                 >
                                     <ShieldCheck className="w-5 h-5 text-slate-400" />
                                     <span>الإدارة</span>
+                                    {adminPending > 0 && (
+                                        <span className="ms-auto inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold leading-none">
+                                            {adminPending}
+                                        </span>
+                                    )}
                                 </Link>
                             </li>
                         )}
