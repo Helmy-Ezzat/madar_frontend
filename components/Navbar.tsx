@@ -150,7 +150,7 @@ export default function Navbar() {
                             <li key={item.key}>
                                 <Link
                                     href={item.href}
-                                    className="text-sm transition-colors hover:underline"
+                                    className="text-sm font-bold transition-colors hover:underline"
                                 >
                                     {item.key}
                                 </Link>
