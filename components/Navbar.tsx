@@ -55,12 +55,13 @@ export default function Navbar() {
             const json = await res.json();
             const sent = json?.data?.sent ?? 0;
             const devices = json?.data?.devices ?? 0;
+            const firstError = json?.data?.firstError;
             toast(
                 sent > 0
                     ? `اتبعت الإشعار لـ ${sent} من ${devices} جهاز مسجل 🔔`
                     : devices > 0
-                      ? `فيه ${devices} جهاز مسجل بس الإرسال فشل - جرب تاني`
-                      : "مفيش أجهزة مسجلة - الجهاز ده لسه ما اتسجلش للإشعارات"
+                      ? `فيه ${devices} جهاز مسجل بس الإرسال فشل${firstError ? ` (${firstError})` : ""} - جرب تاني`
+                      : `مفيش أجهزة مسجلة - الجهاز ده لسه ما اتسجلش للإشعارات${firstError ? ` (${firstError})` : ""}`
             );
         } catch {
             toast("حصل خطأ أثناء إرسال الإشعار");
