@@ -74,3 +74,27 @@ export const adminApproveOffice = (id: string) =>
 
 export const adminRejectOffice = (id: string) =>
   authedFetch(`/admin/offices/${id}/reject`, { method: "POST" });
+
+export interface AdminJob {
+    _id: string;
+    company_name: string;
+    license_number?: string;
+    approval_status: string;
+    published_at?: string;
+    job_info?: {
+        job_titles?: string[];
+        location?: string;
+        salary?: string;
+        experience?: string;
+        summary?: string;
+    };
+}
+
+export const adminListJobs = (status: string = "pending") =>
+    authedFetch(`/admin/jobs?status=${encodeURIComponent(status)}`);
+
+export const adminApproveJob = (id: string) =>
+    authedFetch(`/admin/jobs/${id}/approve`, { method: "POST" });
+
+export const adminRejectJob = (id: string) =>
+    authedFetch(`/admin/jobs/${id}/reject`, { method: "POST" });

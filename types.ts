@@ -21,6 +21,7 @@ export interface Job {
     company_description?: string;
     posted_by?: string;
     office_verified?: boolean;
+    approval_status?: string;
 }
 
 export interface PaginationMetadata {

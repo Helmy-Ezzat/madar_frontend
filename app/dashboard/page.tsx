@@ -211,7 +211,18 @@ export default function OfficeDashboardPage() {
                             <article key={job._id} className="bg-white border border-border rounded-2xl p-5 flex flex-col gap-3">
                                 <div className="flex items-start justify-between gap-3">
                                     <div className="flex flex-col gap-1">
-                                        <p className="font-bold text-text-main">{job.job_info?.job_titles?.[0]}</p>
+                                        <p className="font-bold text-text-main flex items-center gap-2 flex-wrap">
+                                            {job.job_info?.job_titles?.[0]}
+                                            {job.approval_status === "approved" && (
+                                                <span className="rounded-full bg-green-50 text-green-600 text-[11px] font-bold px-2.5 py-0.5">منشورة</span>
+                                            )}
+                                            {job.approval_status === "rejected" && (
+                                                <span className="rounded-full bg-red-50 text-red-500 text-[11px] font-bold px-2.5 py-0.5">مرفوضة</span>
+                                            )}
+                                            {(!job.approval_status || job.approval_status === "pending") && (
+                                                <span className="rounded-full bg-amber-50 text-amber-600 text-[11px] font-bold px-2.5 py-0.5">تحت المراجعة</span>
+                                            )}
+                                        </p>
                                         <p className="text-text-muted text-xs flex items-center gap-1">
                                             <MapPin className="w-3.5 h-3.5" />
                                             {job.job_info?.location} · {job.job_info?.salary}
