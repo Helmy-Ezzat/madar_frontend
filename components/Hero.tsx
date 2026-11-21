@@ -5,7 +5,7 @@ import SearchInput from "./SearchInput";
 
 export default function Hero() {
     return (
-        <main className="grid grid-cols-1 lg:grid-cols-2 px-4 sm:px-6 lg:px-8 md:min-h-screen bg-gradient-to-b from-primary/10 via-primary/5 to-background">
+        <main className="grid grid-cols-1 lg:grid-cols-2 px-4 sm:px-6 lg:px-8 md:min-h-screen -mt-4 md:mt-0 bg-gradient-to-b from-primary/10 via-primary/5 to-background">
             <div className="flex md:hidden items-center justify-center">
                 <Image
                     src="/undraw_searching-everywhere_tffi.svg"
