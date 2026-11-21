@@ -41,7 +41,7 @@ export default async function BrowseSections() {
                                     <Tags className="w-5 h-5" strokeWidth={1.8} />
                                 </div>
                                 <div className="flex flex-col min-w-0">
-                                    <span className="font-semibold text-text-main text-sm md:text-base truncate">
+                                    <span className="font-semibold text-text-main text-sm md:text-base leading-snug line-clamp-2">
                                         {spec.name}
                                     </span>
                                     <span className="text-xs text-text-muted">
