@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { LayoutDashboard, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSavedJobs } from "@/contexts/SavedJobsContext";
@@ -44,6 +45,17 @@ export default function Navbar() {
     const toast = useToast();
     const { savedIds } = useSavedJobs();
     const savedCount = user ? savedIds.size : 0;
+
+    // Mobile home: nav blends into the hero at the top, navy appears on scroll
+    const pathname = usePathname();
+    const [scrolled, setScrolled] = useState(false);
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 24);
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+    const blendTop = pathname === "/" && !scrolled;
 
     const isAdminEmail = user?.email === "hellmyezzat@gmail.com";
     const [adminPending, setAdminPending] = useState(0);
@@ -116,7 +128,11 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="sticky top-0 left-0 right-0 z-50 bg-primary-deep text-white py-2 md:py-4 shadow-sm">
+            <header className={`top-0 left-0 right-0 z-50 py-2 md:py-4 transition-colors duration-300 ${
+                blendTop
+                    ? "sticky bg-transparent text-primary shadow-none md:bg-primary-deep md:text-white md:shadow-sm"
+                    : "sticky bg-primary-deep text-white shadow-sm"
+            }`}>
                 <nav className="px-6 flex items-center justify-between md:justify-around">
                     {/* Logo */}
                     <Link
@@ -124,7 +140,14 @@ export default function Navbar() {
                         className="flex items-center hover:opacity-90 transition-opacity"
                         aria-label="مدار - بحث الوظائف"
                     >
-                        <Logo />
+                        {blendTop ? (
+                            <>
+                                <span className="md:hidden"><Logo dark /></span>
+                                <span className="hidden md:inline-flex"><Logo /></span>
+                            </>
+                        ) : (
+                            <Logo />
+                        )}
                     </Link>
 
                     {/* Desktop essentials */}
@@ -151,7 +174,7 @@ export default function Navbar() {
                                     setIsOpen(true);
                                 }
                             }}
-                            className="flex items-center gap-2 p-2 -m-2 rounded-lg hover:bg-white/10 transition cursor-pointer"
+                            className={`flex items-center gap-2 p-2 -m-2 rounded-lg transition cursor-pointer ${blendTop ? "hover:bg-primary/10" : "hover:bg-white/10"}`}
                             aria-label="فتح القائمة"
                         >
                         {loading ? (
