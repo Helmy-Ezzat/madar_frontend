@@ -74,7 +74,7 @@ export default function RootLayout({
           <ToastProvider>
             <PushRegistrar />
             <Navbar />
-            <div className="flex-1 mb-4 mt-4 md:mt-0">
+            <div className="flex-1">
               {children}
             </div>
             <Footer />
