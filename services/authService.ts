@@ -27,7 +27,7 @@ export interface OfficeProfile {
 }
 
 export async function syncUserWithBackend(user: User, officeProfile?: OfficeProfile) {
-  const token = await user.getIdToken();
+  const token = await user.getIdToken(true);
   const res = await fetch(`${API_BASE_URL}/auth/sync`, {
     method: "POST",
     headers: {
