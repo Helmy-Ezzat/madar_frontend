@@ -12,11 +12,24 @@ export default async function Hero() {
         getLocations(),
     ]);
 
+    // Cities only for the chips: drop country-level buckets, shorten
+    // "الرياض، المملكة العربية السعودية" to "الرياض", and dedupe by short name.
+    const countryNames = new Set([
+        "المملكة العربية السعودية", "السعودية", "مصر", "سلطنة عمان", "سلطنه عمان", "عمان",
+        "الإمارات", "الإمارات العربية المتحدة", "الكويت", "قطر", "البحرين", "الأردن", "ليبيا", "العراق",
+    ]);
+    const cityChips: { label: string; href: string }[] = [];
+    const seenCities = new Set<string>();
+    for (const l of locations) {
+        const short = l.name.split("،")[0].trim();
+        if (countryNames.has(l.name.trim()) || countryNames.has(short) || seenCities.has(short)) continue;
+        seenCities.add(short);
+        cityChips.push({ label: short, href: `/jobs?location=${encodeURIComponent(l.name)}` });
+        if (cityChips.length === 3) break;
+    }
+
     const quickChips = [
-        ...locations.slice(0, 3).map((l) => ({
-            label: l.name,
-            href: `/jobs?location=${encodeURIComponent(l.name)}`,
-        })),
+        ...cityChips,
         ...specializations.slice(0, 4).map((s) => ({
             label: s.name,
             href: `/jobs?specialization=${encodeURIComponent(s.name)}`,
