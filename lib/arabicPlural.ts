@@ -38,7 +38,15 @@ export const nouns = {
 
 export type UnitName = keyof typeof units;
 
-const rules = new Intl.PluralRules("ar");
+// القاعدة المتفق عليها: 1 مفرد، 2 مثنى، 3-10 جمع، 11-99 مفرد منصوب، 100+ مفرد.
+// (أبسط من قواعد CLDR التي تعيد 110 و4110 إلى الجمع بسبب الباقي من 100)
+function categoryOf(count: number): keyof PluralForms {
+  if (count === 1) return "one";
+  if (count === 2) return "two";
+  if (count >= 3 && count <= 10) return "few";
+  if (count >= 11 && count <= 99) return "many";
+  return "other";
+}
 
 type Options = {
   /** أرقام لاتينية (3) بدل الهندية (٣). الافتراضي: لاتينية */
@@ -52,8 +60,8 @@ export function pluralAr(
   forms: PluralForms,
   { latinDigits = true, alwaysShowNumber = false }: Options = {}
 ): string {
-  const category = rules.select(count) as keyof PluralForms | "zero";
-  const word = category === "zero" ? forms.other : forms[category] ?? forms.other;
+  const category = categoryOf(count);
+  const word = forms[category] ?? forms.other;
 
   if (!alwaysShowNumber && (category === "one" || category === "two")) {
     return word;
