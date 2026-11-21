@@ -88,8 +88,10 @@ export default function ApplyPage() {
                         <p className="font-bold text-text-main">{job.job_info?.job_titles?.[0]}</p>
                         <p className="text-text-body text-sm flex items-center gap-2 flex-wrap">
                             {job.company_name}
-                            {job.office_verified && <OfficeVerifiedBadge />}
-                            <JobSourceChip postedBy={job.posted_by} />
+                            <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                                {job.office_verified && <OfficeVerifiedBadge />}
+                                <JobSourceChip postedBy={job.posted_by} />
+                            </div>
                         </p>
                         <p className="text-text-muted text-xs flex items-center gap-1">
                             <MapPin className="w-3.5 h-3.5" />

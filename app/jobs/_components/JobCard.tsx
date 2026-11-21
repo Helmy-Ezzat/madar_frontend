@@ -57,8 +57,10 @@ function JobCard({ job }: { job: Job }) {
             {job.license_number && (
               <span className="text-[#828A93] text-xs">(ترخيص رقم {job.license_number})</span>
             )}
-            {job.office_verified && <OfficeVerifiedBadge className="mt-1" />}
-            <JobSourceChip postedBy={job.posted_by} />
+            <div className="flex flex-wrap items-center gap-1.5 mt-1">
+              {job.office_verified && <OfficeVerifiedBadge />}
+              <JobSourceChip postedBy={job.posted_by} />}
+            </div>
           </div>
         </div>
         {job.job_info.summary && (
