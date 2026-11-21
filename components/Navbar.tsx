@@ -14,6 +14,8 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/components/Toast";
+import Logo from "@/components/Logo";
 
 interface NavItem {
     key: string;
@@ -33,6 +35,7 @@ const sidebarNavItems: NavItem[] = topNavItems;
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const { user, dbUser, logout, loading } = useAuth();
+    const toast = useToast();
 
     const displayName = user?.displayName || dbUser?.displayName || "مستخدم";
     const initial = (user?.displayName || dbUser?.displayName || user?.email || "U")
@@ -61,17 +64,10 @@ export default function Navbar() {
                     {/* Logo */}
                     <Link
                         href="/"
-                        className="text-xl font-bold gradient-text flex items-center gap-2 hover:opacity-90 transition-opacity"
+                        className="flex items-center hover:opacity-90 transition-opacity"
+                        aria-label="مدار - بحث الوظائف"
                     >
-                        <Image
-                            src="/undraw_searching-everywhere_tffi.svg"
-                            alt="مدار - بحث الوظائف"
-                            className="drop-shadow-xl "
-                            width={40}
-                            height={40}
-                            priority
-                        />
-                        <span className="gradient-text">مدار</span>
+                        <Logo />
                     </Link>
 
                     {/* Desktop essentials */}
@@ -122,56 +118,51 @@ export default function Navbar() {
                     className="fixed top-0 right-0 h-[100dvh] w-[300px] max-w-[85vw] bg-white shadow-2xl flex flex-col translate-x-full data-[state=open]:translate-x-0 duration-200 transition-transform overflow-y-auto overscroll-contain"
                     aria-label="القائمة الجانبية"
                 >
-                    {/* Account section */}
-                    <div className="bg-primary text-white p-5">
-                        <div className="flex items-start justify-between">
-                            {loading ? (
-                                <div className="w-12 h-12 rounded-full bg-white/20 animate-pulse" />
-                            ) : user ? (
-                                <div className="flex items-center gap-3">
-                                    <div className="[&>div]:w-12 [&>div]:h-12 [&>div]:text-lg [&_img]:w-12 [&_img]:h-12">
-                                        {avatar}
+                    {/* Header: account card when logged in, brand logo otherwise */}
+                    {user || loading ? (
+                        <div className="bg-primary text-white p-5">
+                            <div className="flex items-start justify-between">
+                                {loading ? (
+                                    <div className="w-12 h-12 rounded-full bg-white/20 animate-pulse" />
+                                ) : (
+                                    <div className="flex items-center gap-3">
+                                        <div className="[&>div]:w-12 [&>div]:h-12 [&>div]:text-lg [&_img]:w-12 [&_img]:h-12">
+                                            {avatar}
+                                        </div>
+                                        <div className="truncate max-w-[170px]">
+                                            <p className="text-sm font-bold truncate">{displayName}</p>
+                                            <p className="text-xs text-white/70 truncate">{user?.email}</p>
+                                        </div>
                                     </div>
-                                    <div className="truncate max-w-[170px]">
-                                        <p className="text-sm font-bold truncate">{displayName}</p>
-                                        <p className="text-xs text-white/70 truncate">{user.email}</p>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div>
-                                    <p className="font-bold">أهلاً بك في مدار</p>
-                                    <p className="text-xs text-white/70 mt-1">
-                                        سجل دخولك لحفظ الوظائف وتفعيل التنبيهات
-                                    </p>
-                                </div>
-                            )}
+                                )}
+                                <button
+                                    onClick={() => setIsOpen(false)}
+                                    className="p-1.5 rounded-lg hover:bg-white/10 transition cursor-pointer"
+                                    aria-label="إغلاق القائمة"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex items-center justify-between p-5 border-b border-slate-100">
+                            <Link
+                                href="/"
+                                onClick={() => setIsOpen(false)}
+                                className="hover:opacity-80 transition-opacity"
+                                aria-label="مدار - الرئيسية"
+                            >
+                                <Logo dark />
+                            </Link>
                             <button
                                 onClick={() => setIsOpen(false)}
-                                className="p-1.5 rounded-lg hover:bg-white/10 transition cursor-pointer"
+                                className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 transition cursor-pointer"
                                 aria-label="إغلاق القائمة"
                             >
                                 <X size={20} />
                             </button>
                         </div>
-                        {!loading && !user && (
-                            <div className="flex items-center gap-2 mt-4">
-                                <Link
-                                    href="/register"
-                                    onClick={() => setIsOpen(false)}
-                                    className="flex-1 text-center bg-white text-primary font-semibold py-2 px-4 rounded-lg transition shadow-sm text-sm"
-                                >
-                                    تسجيل
-                                </Link>
-                                <Link
-                                    href="/login"
-                                    onClick={() => setIsOpen(false)}
-                                    className="flex-1 text-center border border-white/50 text-white font-medium py-2 px-4 rounded-lg transition hover:bg-white/10 text-sm"
-                                >
-                                    دخول
-                                </Link>
-                            </div>
-                        )}
-                    </div>
+                    )}
 
                     {/* Links */}
                     <ul className="flex flex-col gap-1 p-4 flex-1">
@@ -212,6 +203,32 @@ export default function Navbar() {
                         </li>
                     </ul>
 
+                    {/* Guest welcome, pinned to the bottom */}
+                    {!loading && !user && (
+                        <div className="bg-primary text-white p-5">
+                            <p className="font-bold">أهلاً بك في مدار</p>
+                            <p className="text-xs text-white/70 mt-1">
+                                سجل دخولك لحفظ الوظائف وتفعيل التنبيهات
+                            </p>
+                            <div className="flex items-center gap-2 mt-4">
+                                <Link
+                                    href="/register"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex-1 text-center bg-white text-primary font-semibold py-2 px-4 rounded-lg transition shadow-sm text-sm"
+                                >
+                                    تسجيل
+                                </Link>
+                                <Link
+                                    href="/login"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex-1 text-center border border-white/50 text-white font-medium py-2 px-4 rounded-lg transition hover:bg-white/10 text-sm"
+                                >
+                                    دخول
+                                </Link>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Logout */}
                     {user && (
                         <div className="p-4 border-t border-slate-100">
@@ -219,6 +236,7 @@ export default function Navbar() {
                                 onClick={() => {
                                     logout();
                                     setIsOpen(false);
+                                    toast("تم تسجيل الخروج بنجاح");
                                 }}
                                 className="w-full flex items-center justify-center gap-2 text-red-500 hover:bg-red-50 py-2.5 px-4 rounded-xl transition text-sm font-medium cursor-pointer"
                             >

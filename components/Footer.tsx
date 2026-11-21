@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "@/components/Logo";
 
 const navItems = [
     { key: "الرئيسية", href: "/" },
@@ -16,8 +17,8 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {/* Logo & Description */}
                     <div className="flex flex-col gap-4">
-                        <Link href="/" className="text-2xl font-bold text-primary">
-                            مدار
+                        <Link href="/" aria-label="مدار - الرئيسية" className="hover:opacity-80 transition-opacity w-fit">
+                            <Logo dark />
                         </Link>
                         <p className="text-text-muted text-sm leading-relaxed">
                             منصة تجمع لك كل وظائف مكاتب إلحاق العمالة المصرية بالخارج في مكان واحد.
