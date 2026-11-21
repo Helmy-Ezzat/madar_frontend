@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSavedJobs } from "@/contexts/SavedJobsContext";
 import { useToast } from "@/components/Toast";
 import Logo from "@/components/Logo";
 
@@ -36,6 +37,8 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const { user, dbUser, logout, loading } = useAuth();
     const toast = useToast();
+    const { savedIds } = useSavedJobs();
+    const savedCount = user ? savedIds.size : 0;
 
     const displayName = user?.displayName || dbUser?.displayName || "مستخدم";
     const initial = (user?.displayName || dbUser?.displayName || user?.email || "U")
@@ -93,7 +96,14 @@ export default function Navbar() {
                         {loading ? (
                             <div className="w-9 h-9 rounded-full bg-white/20 animate-pulse" />
                         ) : user ? (
-                            avatar
+                            <span className="relative inline-flex">
+                                {avatar}
+                                {savedCount > 0 && (
+                                    <span className="absolute -top-1 -left-1 min-w-4.5 h-4.5 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-primary">
+                                        {savedCount}
+                                    </span>
+                                )}
+                            </span>
                         ) : (
                             <Menu size={22} />
                         )}
@@ -187,6 +197,11 @@ export default function Navbar() {
                                 >
                                     <Heart className="w-5 h-5 text-slate-400" />
                                     <span>المحفوظة</span>
+                                    {savedCount > 0 && (
+                                        <span className="ms-auto min-w-5 h-5 px-1.5 rounded-full bg-red-500 text-white text-[11px] font-bold flex items-center justify-center">
+                                            {savedCount}
+                                        </span>
+                                    )}
                                 </Link>
                             </li>
                         )}
