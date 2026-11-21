@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
@@ -18,6 +18,9 @@ const GoogleIcon = () => (
 
 export default function RegisterPage() {
   const [accountType, setAccountType] = useState<"seeker" | "office">("seeker");
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("type") === "office") setAccountType("office");
+  }, []);
   const [displayName, setDisplayName] = useState("");
   const [officeName, setOfficeName] = useState("");
   const [licenseNumber, setLicenseNumber] = useState("");

@@ -67,8 +67,8 @@ export default async function Hero() {
 
                 {/* Description */}
                 <p className="text-text-body text-base sm:text-lg md:text-xl text-center font-normal max-w-2xl px-2">
-                    خلاص مش محتاج تتابع 50 قناة على تليجرام وفيسبوك,
-                    <strong className="font-semibold text-text-main"> مدار</strong> جمعلك كل الوظائف المتاحة في مكان واحد.
+                    مش محتاج تتابع 50 قناة على تليجرام وفيسبوك.
+                    <strong className="font-semibold text-text-main"> مدار</strong> بيجمعلك وظايف القنوات، وكمان المكاتب بتنزل وظايفها عندنا مباشرة.
                 </p>
 
                 {/* Search */}
@@ -102,6 +102,12 @@ export default async function Hero() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
                     </Link>
+                <Link
+                    href="/register?type=office"
+                    className="text-sm md:text-base font-semibold text-primary hover:underline -mt-2"
+                >
+                    للمكاتب: انشر وظايفك مجاناً لفترة محدودة
+                </Link>
             </section>
             <div className="hidden lg:flex items-center justify-center">
                 <Image
