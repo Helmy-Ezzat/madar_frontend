@@ -7,6 +7,7 @@ import { BadgeCheck, Building2, MapPin, ShieldCheck, Wallet } from "lucide-react
 import { useJobContext } from "../_context/JobContext";
 import { JobCardTitle } from "./JobCardTitle";
 import SaveJobButton from "@/components/SaveJobButton";
+import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
 
 function JobCard({ job }: { job: Job }) {
   const searchParams = useSearchParams();
@@ -53,6 +54,7 @@ function JobCard({ job }: { job: Job }) {
               <BadgeCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" strokeWidth={3} />
             </div>
             <span className="text-[#828A93] text-xs">(ترخيص رقم {job.license_number})</span>
+            {job.office_verified && <OfficeVerifiedBadge className="mt-1" />}
           </div>
         </div>
         {job.job_info.summary && (

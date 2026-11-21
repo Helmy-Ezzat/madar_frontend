@@ -17,7 +17,10 @@ const GoogleIcon = () => (
 );
 
 export default function RegisterPage() {
+  const [accountType, setAccountType] = useState<"seeker" | "office">("seeker");
   const [displayName, setDisplayName] = useState("");
+  const [officeName, setOfficeName] = useState("");
+  const [licenseNumber, setLicenseNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -42,7 +45,14 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      await register(email, password, displayName);
+      await register(
+        email,
+        password,
+        displayName,
+        accountType === "office"
+          ? { officeName: officeName.trim(), licenseNumber: licenseNumber.trim() || undefined }
+          : undefined
+      );
       router.push("/");
     } catch (err: unknown) {
       const message =
@@ -81,14 +91,65 @@ export default function RegisterPage() {
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {/* Account type: job seeker or labor-recruitment office */}
+        <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="نوع الحساب">
+          <button
+            type="button"
+            onClick={() => setAccountType("seeker")}
+            aria-pressed={accountType === "seeker"}
+            className={`rounded-xl border-2 py-2.5 text-sm font-bold transition ${
+              accountType === "seeker"
+                ? "border-primary bg-primary-tint text-primary"
+                : "border-border text-text-body hover:border-primary/40"
+            }`}
+          >
+            باحث عن عمل
+          </button>
+          <button
+            type="button"
+            onClick={() => setAccountType("office")}
+            aria-pressed={accountType === "office"}
+            className={`rounded-xl border-2 py-2.5 text-sm font-bold transition ${
+              accountType === "office"
+                ? "border-primary bg-primary-tint text-primary"
+                : "border-border text-text-body hover:border-primary/40"
+            }`}
+          >
+            مكتب إلحاق عمالة
+          </button>
+        </div>
+
         <FloatingInput
           id="name"
           type="text"
-          label="الإسم"
+          label={accountType === "office" ? "اسم المسؤول" : "الإسم"}
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
           required
         />
+
+        {accountType === "office" && (
+          <>
+            <FloatingInput
+              id="officeName"
+              type="text"
+              label="اسم المكتب"
+              value={officeName}
+              onChange={(e) => setOfficeName(e.target.value)}
+              required
+            />
+            <FloatingInput
+              id="licenseNumber"
+              type="text"
+              label="رقم الترخيص (اختياري)"
+              value={licenseNumber}
+              onChange={(e) => setLicenseNumber(e.target.value)}
+            />
+            <p className="text-xs text-text-muted -mt-2">
+              حسابات مكاتب إلحاق العمالة بتتفعّل بعد مراجعة الإدارة، وبعدها بتقدر تنزل وظايف بشارة "إلحاق عمالة معتمد".
+            </p>
+          </>
+        )}
         <FloatingInput
           id="email"
           type="email"

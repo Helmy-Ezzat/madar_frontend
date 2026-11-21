@@ -11,6 +11,7 @@ import {
     LogOut,
     Bell,
 } from "lucide-react";
+import { LayoutDashboard, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
@@ -180,6 +181,26 @@ export default function Navbar() {
                                             </span>
                                         )}
                                     </Link>
+                                    {dbUser?.role === "office" && (
+                                        <Link
+                                            href="/dashboard"
+                                            onClick={() => setMenuOpen(false)}
+                                            className="flex items-center gap-3 py-2.5 px-4 hover:bg-surface-hover transition text-sm"
+                                        >
+                                            <LayoutDashboard className="w-4.5 h-4.5 text-slate-400" />
+                                            <span>لوحة المكتب</span>
+                                        </Link>
+                                    )}
+                                    {user?.email === "hellmyezzat@gmail.com" && (
+                                        <Link
+                                            href="/admin"
+                                            onClick={() => setMenuOpen(false)}
+                                            className="flex items-center gap-3 py-2.5 px-4 hover:bg-surface-hover transition text-sm"
+                                        >
+                                            <ShieldCheck className="w-4.5 h-4.5 text-slate-400" />
+                                            <span>الإدارة</span>
+                                        </Link>
+                                    )}
                                     {user?.email === "hellmyezzat@gmail.com" && (
                                         <button
                                             onClick={() => {
@@ -318,6 +339,30 @@ export default function Navbar() {
                                             {savedCount}
                                         </span>
                                     )}
+                                </Link>
+                            </li>
+                        )}
+                        {dbUser?.role === "office" && (
+                            <li>
+                                <Link
+                                    href="/dashboard"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 text-text-main hover:bg-surface-hover"
+                                >
+                                    <LayoutDashboard className="w-5 h-5 text-slate-400" />
+                                    <span>لوحة المكتب</span>
+                                </Link>
+                            </li>
+                        )}
+                        {user?.email === "hellmyezzat@gmail.com" && (
+                            <li>
+                                <Link
+                                    href="/admin"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 text-text-main hover:bg-surface-hover"
+                                >
+                                    <ShieldCheck className="w-5 h-5 text-slate-400" />
+                                    <span>الإدارة</span>
                                 </Link>
                             </li>
                         )}

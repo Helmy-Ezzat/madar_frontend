@@ -21,7 +21,12 @@ function getFirebaseAuth() {
   return auth;
 }
 
-export async function syncUserWithBackend(user: User) {
+export interface OfficeProfile {
+  officeName: string;
+  licenseNumber?: string;
+}
+
+export async function syncUserWithBackend(user: User, officeProfile?: OfficeProfile) {
   const token = await user.getIdToken();
   const res = await fetch(`${API_BASE_URL}/auth/sync`, {
     method: "POST",
@@ -29,6 +34,9 @@ export async function syncUserWithBackend(user: User) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
+    body: officeProfile
+      ? JSON.stringify({ role: "office", ...officeProfile })
+      : undefined,
   });
   if (!res.ok) {
     throw new Error("فشل مزامنة المستخدم مع السيرفر");
@@ -39,12 +47,13 @@ export async function syncUserWithBackend(user: User) {
 export async function registerWithEmail(
   email: string,
   password: string,
-  displayName: string
+  displayName: string,
+  officeProfile?: OfficeProfile
 ) {
   const firebaseAuth = getFirebaseAuth();
   const credential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
   await updateProfile(credential.user, { displayName });
-  const dbUser = await syncUserWithBackend(credential.user);
+  const dbUser = await syncUserWithBackend(credential.user, officeProfile);
   return { user: credential.user, dbUser };
 }
 

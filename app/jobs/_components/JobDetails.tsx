@@ -4,6 +4,8 @@ import { fromNow } from "@/lib/date-utils";
 import JobDetailsCloseButton from "./JobDetailsCloseButton";
 import SaveJobButton from "@/components/SaveJobButton";
 import { BadgeCheck, Building2 } from "lucide-react";
+import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
+import ApplyButton from "./ApplyButton";
 import Image from "next/image";
 
 export default async function JobDetails({ jobId }: { jobId: string }) {
@@ -89,6 +91,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                             <BadgeCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" strokeWidth={3} />
                         </div>
                         <span className="text-[#828A93] text-xs">(ترخيص رقم {job.license_number})</span>
+                        {job.office_verified && <OfficeVerifiedBadge className="mt-1" />}
                     </div>
                 </div>
                 <div className="flex flex-col gap-2.5">
@@ -98,7 +101,9 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                     >
                         {fromNow(job.published_at)}
                     </time>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                        {job.office_verified && <ApplyButton jobId={job._id} />}
+                        {job.source_link && (
                         <a
                             href={job.source_link}
                             target="_blank"
@@ -110,6 +115,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                         </svg>
                             <span className="hidden sm:inline">عرض في</span> تليجرام
                         </a>
+                        )}
                         <SaveJobButton jobId={job._id} variant="labeled" />
                     </div>
                 </div>

@@ -19,6 +19,8 @@ export interface Job {
     created_at: string;
     published_at: string;
     company_description?: string;
+    posted_by?: string;
+    office_verified?: boolean;
 }
 
 export interface PaginationMetadata {

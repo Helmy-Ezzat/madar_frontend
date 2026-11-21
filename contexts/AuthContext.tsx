@@ -25,6 +25,9 @@ interface DbUser {
   photoURL: string;
   provider: string;
   role: string;
+  officeStatus: "pending" | "approved" | "rejected" | null;
+  officeName: string;
+  licenseNumber: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -34,7 +37,7 @@ interface AuthContextValue {
   dbUser: DbUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, displayName: string) => Promise<void>;
+  register: (email: string, password: string, displayName: string, officeProfile?: { officeName: string; licenseNumber?: string }) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -75,8 +78,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setDbUser(result.dbUser?.user ?? result.dbUser);
   }
 
-  async function register(email: string, password: string, displayName: string) {
-    const result = await _registerWithEmail(email, password, displayName);
+  async function register(email: string, password: string, displayName: string, officeProfile?: { officeName: string; licenseNumber?: string }) {
+    const result = await _registerWithEmail(email, password, displayName, officeProfile);
     setUser(result.user);
     setDbUser(result.dbUser?.user ?? result.dbUser);
   }
