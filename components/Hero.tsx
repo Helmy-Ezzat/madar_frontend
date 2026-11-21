@@ -24,7 +24,7 @@ export default async function Hero() {
         const short = l.name.split("،")[0].trim();
         if (countryNames.has(l.name.trim()) || countryNames.has(short) || seenCities.has(short)) continue;
         seenCities.add(short);
-        cityChips.push({ label: short, href: `/jobs?location=${encodeURIComponent(l.name)}` });
+        cityChips.push({ label: short, href: `/jobs?location=${encodeURIComponent(short)}` });
         if (cityChips.length === 3) break;
     }
 
