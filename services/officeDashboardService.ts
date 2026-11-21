@@ -100,7 +100,6 @@ export const adminRejectJob = (id: string) =>
     authedFetch(`/admin/jobs/${id}/reject`, { method: "POST" });
 
 export const adminCreateJob = (payload: {
-    officeId: string;
     title: string;
     location: string;
     salary?: string;

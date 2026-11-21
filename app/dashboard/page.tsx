@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/Toast";
 import FloatingInput from "@/components/FloatingInput";
 import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import {
     createOfficeJob,
     getMyOfficeJobs,
@@ -41,6 +42,7 @@ export default function OfficeDashboardPage() {
     const [upOfficeName, setUpOfficeName] = useState("");
     const [upLicense, setUpLicense] = useState("");
     const [upgrading, setUpgrading] = useState(false);
+    const [confirmDeleteJob, setConfirmDeleteJob] = useState<string | null>(null);
     const [applicants, setApplicants] = useState<Record<string, Applicant[]>>({});
 
     const isOffice = dbUser?.role === "office";
@@ -268,7 +270,7 @@ export default function OfficeDashboardPage() {
                                     </div>
                                     <button
                                         type="button"
-                                        onClick={() => removeJob(job._id)}
+                                        onClick={() => setConfirmDeleteJob(job._id)}
                                         className="text-red-500 hover:bg-red-50 p-2 rounded-lg transition"
                                         aria-label="مسح الوظيفة"
                                     >
@@ -304,6 +306,16 @@ export default function OfficeDashboardPage() {
                     )}
                 </section>
             </div>
+            <ConfirmDialog
+                open={confirmDeleteJob !== null}
+                title="متأكد إنك عايز تمسح الوظيفة دي؟"
+                confirmLabel="امسح الوظيفة"
+                onConfirm={() => {
+                    if (confirmDeleteJob) removeJob(confirmDeleteJob);
+                    setConfirmDeleteJob(null);
+                }}
+                onCancel={() => setConfirmDeleteJob(null)}
+            />
         </main>
     );
 }

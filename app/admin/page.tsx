@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/Toast";
 import OfficeVerifiedBadge from "@/components/OfficeVerifiedBadge";
 import FloatingInput from "@/components/FloatingInput";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import {
     adminListOffices,
     adminApproveOffice,
@@ -34,8 +35,6 @@ export default function AdminPage() {
     const [offices, setOffices] = useState<AdminOffice[]>([]);
     const [jobs, setJobs] = useState<AdminJob[]>([]);
     const [showPostForm, setShowPostForm] = useState(false);
-    const [approvedOffices, setApprovedOffices] = useState<AdminOffice[]>([]);
-    const [postOfficeId, setPostOfficeId] = useState("");
     const [postTitle, setPostTitle] = useState("");
     const [postLocation, setPostLocation] = useState("");
     const [postSalary, setPostSalary] = useState("");
@@ -43,6 +42,7 @@ export default function AdminPage() {
     const [posting, setPosting] = useState(false);
     const [loadingList, setLoadingList] = useState(false);
     const [acting, setActing] = useState<string | null>(null);
+    const [confirmReject, setConfirmReject] = useState<string | null>(null);
 
     const isAdmin = !!user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase());
 
@@ -68,24 +68,13 @@ export default function AdminPage() {
         if (isAdmin) load();
     }, [isAdmin, load]);
 
-    const openPostForm = async () => {
-        setShowPostForm((v) => !v);
-        if (approvedOffices.length === 0) {
-            try {
-                const res = await adminListOffices("approved");
-                setApprovedOffices(res.data ?? []);
-            } catch {
-                setApprovedOffices([]);
-            }
-        }
-    };
+    const openPostForm = () => setShowPostForm((v) => !v);
 
     const submitPost = async (e: React.FormEvent) => {
         e.preventDefault();
         setPosting(true);
         try {
             await adminCreateJob({
-                officeId: postOfficeId,
                 title: postTitle.trim(),
                 location: postLocation.trim(),
                 salary: postSalary.trim() || undefined,
@@ -209,19 +198,7 @@ export default function AdminPage() {
                     </button>
                     {showPostForm && (
                         <form onSubmit={submitPost} className="bg-white border border-border rounded-2xl p-5 flex flex-col gap-4">
-                            <select
-                                value={postOfficeId}
-                                onChange={(e) => setPostOfficeId(e.target.value)}
-                                required
-                                className="border border-border rounded-lg px-3 py-2.5 text-sm text-text-main bg-white"
-                            >
-                                <option value="" disabled>اختار المكتب المعتمد</option>
-                                {approvedOffices.map((office) => (
-                                    <option key={office._id} value={office._id}>
-                                        {office.officeName || office.displayName}
-                                    </option>
-                                ))}
-                            </select>
+                            <p className="text-text-muted text-xs">الوظيفة هتظهر باسم مدار نفسها، مش باسم أي مكتب.</p>
                             <FloatingInput id="post-title" type="text" label="المسمى الوظيفي" value={postTitle} onChange={(e) => setPostTitle(e.target.value)} required />
                             <FloatingInput id="post-location" type="text" label="المدينة / الدولة" value={postLocation} onChange={(e) => setPostLocation(e.target.value)} required />
                             <FloatingInput id="post-salary" type="text" label="الراتب (اختياري)" value={postSalary} onChange={(e) => setPostSalary(e.target.value)} />
@@ -272,7 +249,7 @@ export default function AdminPage() {
                                         <button
                                             type="button"
                                             disabled={acting === job._id}
-                                            onClick={() => act(job._id, "reject")}
+                                            onClick={() => setConfirmReject(job._id)}
                                             className="inline-flex items-center gap-1.5 border border-red-200 text-red-500 hover:bg-red-50 text-sm font-bold px-4 py-2 rounded-lg transition disabled:opacity-60"
                                         >
                                             <X className="w-4 h-4" />
@@ -321,7 +298,7 @@ export default function AdminPage() {
                                     <button
                                         type="button"
                                         disabled={acting === office._id}
-                                        onClick={() => act(office._id, "reject")}
+                                        onClick={() => setConfirmReject(office._id)}
                                         className="inline-flex items-center gap-1.5 border border-red-200 text-red-500 hover:bg-red-50 text-sm font-bold px-4 py-2 rounded-lg transition disabled:opacity-60"
                                     >
                                         <X className="w-4 h-4" />
@@ -333,6 +310,16 @@ export default function AdminPage() {
                     ))
                 )}
             </div>
+            <ConfirmDialog
+                open={confirmReject !== null}
+                title="متأكد إنك عايز ترفض؟ مفيش تراجع بعدها."
+                confirmLabel="رفض"
+                onConfirm={() => {
+                    if (confirmReject) act(confirmReject, "reject");
+                    setConfirmReject(null);
+                }}
+                onCancel={() => setConfirmReject(null)}
+            />
         </main>
     );
 }

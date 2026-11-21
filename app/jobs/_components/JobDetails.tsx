@@ -91,7 +91,9 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                             </strong>
                             <BadgeCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" strokeWidth={3} />
                         </div>
-                        <span className="text-[#828A93] text-xs">(ترخيص رقم {job.license_number})</span>
+                        {job.license_number && (
+                            <span className="text-[#828A93] text-xs">(ترخيص رقم {job.license_number})</span>
+                        )}
                         {job.office_verified && <OfficeVerifiedBadge className="mt-1" />}
                         <JobSourceChip postedBy={job.posted_by} />
                     </div>
@@ -104,7 +106,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                         {fromNow(job.published_at)}
                     </time>
                     <div className="flex items-center gap-2 flex-wrap">
-                        {job.office_verified && <ApplyButton jobId={job._id} />}
+                        {job.posted_by && <ApplyButton jobId={job._id} />}
                         {job.source_link && (
                         <a
                             href={job.source_link}
