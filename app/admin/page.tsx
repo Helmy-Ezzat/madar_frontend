@@ -12,7 +12,7 @@ import {
 } from "@/services/officeDashboardService";
 import { Building2, Check, Loader2, X } from "lucide-react";
 
-const ADMIN_EMAIL = "hellmyezzat@gmail.com";
+const ADMIN_EMAILS = ["hellmyezzat@gmail.com", "x26dbl@mail.instinct.com"];
 
 const STATUS_TABS = [
     { key: "pending", label: "تحت المراجعة" },
@@ -28,7 +28,7 @@ export default function AdminPage() {
     const [loadingList, setLoadingList] = useState(false);
     const [acting, setActing] = useState<string | null>(null);
 
-    const isAdmin = user?.email?.toLowerCase() === ADMIN_EMAIL;
+    const isAdmin = !!user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase());
 
     const load = useCallback(async () => {
         setLoadingList(true);
