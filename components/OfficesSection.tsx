@@ -26,9 +26,10 @@ export default async function OfficesSection() {
                 {/* Offices Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                     {displayedOffices.map((office) => (
-                        <div
+                        <Link
                             key={office.name}
-                            className="bg-surface border border-border rounded-xl p-5 text-center hover:border-primary hover:shadow-md transition-all duration-200"
+                            href={`/jobs?company=${encodeURIComponent(office.name)}`}
+                            className="block bg-surface border border-border rounded-xl p-5 text-center hover:border-primary hover:shadow-md transition-all duration-200"
                         >
                             <h3 className="font-semibold text-text-main text-sm md:text-base mb-2 line-clamp-2">
                                 {office.name}
@@ -36,7 +37,7 @@ export default async function OfficesSection() {
                             <p className="text-xs md:text-sm text-text-muted">
                                 {pluralAr(office.jobCount, nouns.job)}
                             </p>
-                        </div>
+                        </Link>
                     ))}
                 </div>
 
@@ -44,10 +45,10 @@ export default async function OfficesSection() {
                 {offices.length > 8 && (
                     <div className="text-center">
                         <Link
-                            href="/offices"
+                            href="/jobs"
                             className="inline-flex items-center gap-2 text-primary font-semibold hover:underline"
                         >
-                            عرض جميع المكاتب ({offices.length})
+                            تصفح كل الوظايف
                             <span aria-hidden="true">←</span>
                         </Link>
                     </div>

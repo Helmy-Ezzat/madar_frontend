@@ -5,7 +5,6 @@ import Logo from "@/components/Logo";
 const navItems = [
     { key: "الرئيسية", href: "/" },
     { key: "الوظائف", href: "/jobs" },
-    { key: "المكاتب", href: "/offices" },
     { key: "المحفوظة", href: "/saved" },
     { key: "من نحن", href: "/about" },
 ];

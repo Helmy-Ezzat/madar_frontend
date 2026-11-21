@@ -6,7 +6,6 @@ import {
     X,
     Home,
     Briefcase,
-    Building2,
     Info,
     Heart,
     LogOut,
@@ -28,7 +27,6 @@ interface NavItem {
 const topNavItems: NavItem[] = [
     { key: "الرئيسية", href: "/", icon: Home },
     { key: "الوظائف", href: "/jobs", icon: Briefcase },
-    { key: "المكاتب", href: "/offices", icon: Building2 },
 ];
 
 const sidebarNavItems: NavItem[] = topNavItems;
