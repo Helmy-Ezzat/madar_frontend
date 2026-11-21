@@ -119,10 +119,10 @@ export default function Navbar() {
             width={36}
             height={36}
             referrerPolicy="no-referrer"
-            className="w-9 h-9 rounded-full border border-white/30 object-cover"
+            className={`w-9 h-9 rounded-full border object-cover ${blendTop ? "border-primary/40" : "border-white/30"}`}
         />
     ) : (
-        <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm">
+        <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm ${blendTop ? "bg-primary/10 text-primary" : "bg-white/20"}`}>
             {initial}
         </div>
     );
