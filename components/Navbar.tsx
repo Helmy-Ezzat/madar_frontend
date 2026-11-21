@@ -35,6 +35,7 @@ const sidebarNavItems: NavItem[] = topNavItems;
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const { user, dbUser, logout, loading } = useAuth();
     const toast = useToast();
     const { savedIds } = useSavedJobs();
@@ -248,11 +249,7 @@ export default function Navbar() {
                     {user && (
                         <div className="p-4 border-t border-slate-100">
                             <button
-                                onClick={() => {
-                                    logout();
-                                    setIsOpen(false);
-                                    toast("تم تسجيل الخروج بنجاح");
-                                }}
+                                onClick={() => setShowLogoutConfirm(true)}
                                 className="w-full flex items-center justify-center gap-2 text-red-500 hover:bg-red-50 py-2.5 px-4 rounded-xl transition text-sm font-medium cursor-pointer"
                             >
                                 <LogOut className="w-4 h-4" />
@@ -262,6 +259,44 @@ export default function Navbar() {
                     )}
                 </aside>
             </div>
+
+            {/* Logout confirmation */}
+            {showLogoutConfirm && (
+                <div
+                    className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 px-6"
+                    onClick={() => setShowLogoutConfirm(false)}
+                >
+                    <div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="تأكيد تسجيل الخروج"
+                        className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-[320px] flex flex-col gap-4 text-center"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <LogOut className="w-10 h-10 text-red-500 mx-auto" strokeWidth={1.8} />
+                        <p className="font-bold text-text-main">متأكد إنك عايز تسجل خروج؟</p>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => {
+                                    setShowLogoutConfirm(false);
+                                    setIsOpen(false);
+                                    logout();
+                                    toast("تم تسجيل الخروج بنجاح");
+                                }}
+                                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 px-4 rounded-xl transition text-sm cursor-pointer"
+                            >
+                                تسجيل خروج
+                            </button>
+                            <button
+                                onClick={() => setShowLogoutConfirm(false)}
+                                className="flex-1 border border-slate-200 text-slate-600 font-medium py-2.5 px-4 rounded-xl transition hover:bg-slate-50 text-sm cursor-pointer"
+                            >
+                                إلغاء
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
