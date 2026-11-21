@@ -26,7 +26,7 @@ import {
 } from "@/services/officeDashboardService";
 import { Briefcase, Building2, Check, Loader2, MapPin, Plus, X } from "lucide-react";
 
-const ADMIN_EMAILS = ["hellmyezzat@gmail.com", "x26dbl@mail.instinct.com"];
+const ADMIN_EMAILS = ["hellmyezzat@gmail.com"];
 
 const OFFICE_TABS = [
     { key: "pending", label: "تحت المراجعة" },
