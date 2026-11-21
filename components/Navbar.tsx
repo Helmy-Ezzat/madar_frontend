@@ -115,8 +115,8 @@ export default function Navbar() {
                         ))}
                     </ul>
 
-                    {/* Trigger: desktop (logged in) opens a dropdown; mobile/guests open the sidebar */}
-                    <div className="relative">
+                    {/* Trigger: desktop (logged in) opens a dropdown; mobile opens the sidebar. Guests on desktop get auth buttons instead. */}
+                    <div className={`relative ${user ? "" : "md:hidden"}`}>
                         <button
                             onClick={() => {
                                 if (user && window.matchMedia("(min-width: 768px)").matches) {
@@ -201,6 +201,24 @@ export default function Navbar() {
                             </>
                         )}
                     </div>
+
+                    {/* Guest actions on desktop: login/signup instead of the sidebar */}
+                    {!loading && !user && (
+                        <div className="hidden md:flex items-center gap-4">
+                            <Link
+                                href="/login"
+                                className="text-sm transition-colors hover:underline"
+                            >
+                                دخول
+                            </Link>
+                            <Link
+                                href="/register"
+                                className="bg-white text-primary text-sm font-semibold py-1.5 px-4 rounded-lg hover:bg-white/90 transition"
+                            >
+                                تسجيل
+                            </Link>
+                        </div>
+                    )}
                 </nav>
             </header>
 
