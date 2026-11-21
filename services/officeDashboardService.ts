@@ -108,3 +108,7 @@ export const adminCreateJob = (payload: {
     summary: string;
 }) =>
     authedFetch("/admin/jobs", { method: "POST", body: JSON.stringify(payload) });
+
+// Convert the logged-in seeker account into a pending labor-recruitment office account
+export const upgradeToOffice = (payload: { officeName: string; licenseNumber?: string }) =>
+    authedFetch("/auth/sync", { method: "POST", body: JSON.stringify({ role: "office", ...payload }) });

@@ -154,7 +154,7 @@ export default function RegisterPage() {
               onChange={(e) => setLicenseNumber(e.target.value)}
             />
             <p className="text-xs text-text-muted -mt-2">
-              حسابات مكاتب إلحاق العمالة بتتفعّل بعد مراجعة الإدارة، وبعدها بتقدر تنزل وظايف بشارة "إلحاق عمالة معتمد".
+              حسابات مكاتب إلحاق العمالة بتتفعّل بعد مراجعة الإدارة، وبعدها بتقدر تنزل وظائف بشارة "إلحاق عمالة معتمد".
             </p>
           </>
         )}

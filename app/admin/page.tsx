@@ -174,7 +174,7 @@ export default function AdminPage() {
                                 : "bg-white border border-border text-text-body hover:border-primary"
                         }`}
                     >
-                        الوظايف
+                        الوظائف
                     </button>
                 </div>
 
@@ -205,7 +205,7 @@ export default function AdminPage() {
                         className="inline-flex items-center gap-1.5 self-start bg-primary-deep hover:bg-primary text-white text-sm font-bold px-4 py-2 rounded-lg transition"
                     >
                         <Plus className="w-4 h-4" />
-                        انزل وظيفة باسم مكتب
+                        نزّل وظيفة باسم مكتب
                     </button>
                     {showPostForm && (
                         <form onSubmit={submitPost} className="bg-white border border-border rounded-2xl p-5 flex flex-col gap-4">
@@ -237,7 +237,7 @@ export default function AdminPage() {
                     )}
                     {jobs.length === 0 ? (
                         <p className="text-text-muted text-sm bg-white border border-border rounded-2xl p-6 text-center">
-                            مفيش وظايف في القائمة دي دلوقتي.
+                            مفيش وظائف في القائمة دي دلوقتي.
                         </p>
                     ) : (
                         jobs.map((job) => (

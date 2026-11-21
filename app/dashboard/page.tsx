@@ -11,6 +11,7 @@ import {
     getMyOfficeJobs,
     deleteOfficeJob,
     getOfficeJobApplicants,
+    upgradeToOffice,
 } from "@/services/officeDashboardService";
 import type { Job } from "@/types";
 import { Building2, ChevronDown, Loader2, MapPin, Trash2, Users } from "lucide-react";
@@ -37,6 +38,9 @@ export default function OfficeDashboardPage() {
     const [experience, setExperience] = useState("");
     const [summary, setSummary] = useState("");
     const [openApplicants, setOpenApplicants] = useState<string | null>(null);
+    const [upOfficeName, setUpOfficeName] = useState("");
+    const [upLicense, setUpLicense] = useState("");
+    const [upgrading, setUpgrading] = useState(false);
     const [applicants, setApplicants] = useState<Record<string, Applicant[]>>({});
 
     const isOffice = dbUser?.role === "office";
@@ -76,14 +80,48 @@ export default function OfficeDashboardPage() {
         );
     }
 
+    const submitUpgrade = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setUpgrading(true);
+        try {
+            await upgradeToOffice({ officeName: upOfficeName.trim(), licenseNumber: upLicense.trim() || undefined });
+            showToast("طلبك وصل، حسابك بقى تحت المراجعة ✅");
+            window.location.reload();
+        } catch (err) {
+            showToast(err instanceof Error ? err.message : "حصل خطأ، حاول تاني");
+            setUpgrading(false);
+        }
+    };
+
     if (!isOffice) {
+        if (!user) {
+            return (
+                <main className="min-h-[60vh] flex flex-col items-center justify-center gap-4 px-4 text-center">
+                    <p className="text-text-main font-bold text-lg">اللوحة دي لحسابات مكاتب إلحاق العمالة</p>
+                    <p className="text-text-body text-sm max-w-md">
+                        عندك مكتب إلحاق عمالة؟ أنشئ حساب مكتب من صفحة التسجيل وهيتفعّل بعد مراجعة الإدارة.
+                    </p>
+                    <Link href="/register" className="bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-bold">إنشاء حساب مكتب</Link>
+                </main>
+            );
+        }
         return (
-            <main className="min-h-[60vh] flex flex-col items-center justify-center gap-4 px-4 text-center">
-                <p className="text-text-main font-bold text-lg">اللوحة دي لحسابات مكاتب إلحاق العمالة</p>
+            <main className="min-h-[60vh] flex flex-col items-center justify-center gap-4 px-4 py-10 text-center">
+                <p className="text-text-main font-bold text-lg">حوّل حسابك لمكتب إلحاق عمالة</p>
                 <p className="text-text-body text-sm max-w-md">
-                    عندك مكتب إلحاق عمالة؟ أنشئ حساب مكتب من صفحة التسجيل وهيتفعّل بعد مراجعة الإدارة.
+                    نفس حسابك الحالي هيبقى حساب مكتب. الإدارة بتراجع الطلب يدويًا، وأول ما يتفعّل هتقدر تنزل وظائف بشارة "إلحاق عمالة معتمد".
                 </p>
-                <Link href="/register" className="bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-bold">إنشاء حساب مكتب</Link>
+                <form onSubmit={submitUpgrade} className="bg-white border border-border rounded-2xl p-5 flex flex-col gap-4 w-full max-w-md text-start">
+                    <FloatingInput id="up-office" type="text" label="اسم المكتب" value={upOfficeName} onChange={(e) => setUpOfficeName(e.target.value)} required />
+                    <FloatingInput id="up-license" type="text" label="رقم الترخيص (اختياري)" value={upLicense} onChange={(e) => setUpLicense(e.target.value)} />
+                    <button
+                        type="submit"
+                        disabled={upgrading}
+                        className="bg-primary hover:bg-primary-hover text-white rounded-lg py-2.5 text-sm font-bold transition disabled:opacity-60"
+                    >
+                        {upgrading ? "جاري الإرسال..." : "قدّم طلب تحويل الحساب"}
+                    </button>
+                </form>
             </main>
         );
     }
@@ -95,7 +133,7 @@ export default function OfficeDashboardPage() {
                     <Building2 className="w-10 h-10 text-primary" />
                     <p className="text-text-main font-bold text-lg">حسابك تحت المراجعة</p>
                     <p className="text-text-body text-sm leading-relaxed">
-                        طلب تسجيل مكتب <strong>{dbUser.officeName}</strong> وصلنا. الإدارة بتراجع حسابات مكاتب إلحاق العمالة يدويًا، وأول ما يتفعّل هتقدر تنزل وظايف بشارة "إلحاق عمالة معتمد".
+                        طلب تسجيل مكتب <strong>{dbUser.officeName}</strong> وصلنا. الإدارة بتراجع حسابات مكاتب إلحاق العمالة يدويًا، وأول ما يتفعّل هتقدر تنزل وظائف بشارة "إلحاق عمالة معتمد".
                     </p>
                 </div>
             </main>
@@ -170,7 +208,7 @@ export default function OfficeDashboardPage() {
 
                 {/* Post a job */}
                 <section className="bg-white border border-border rounded-2xl p-6 flex flex-col gap-4">
-                    <h2 className="text-lg font-bold text-text-main">انزل وظيفة جديدة</h2>
+                    <h2 className="text-lg font-bold text-text-main">نزّل وظيفة جديدة</h2>
                     <form onSubmit={submitJob} className="flex flex-col gap-4">
                         <FloatingInput id="job-title" type="text" label="المسمى الوظيفي" value={title} onChange={(e) => setTitle(e.target.value)} required />
                         <FloatingInput id="job-location" type="text" label="المدينة / الدولة" value={location} onChange={(e) => setLocation(e.target.value)} required />
@@ -201,11 +239,11 @@ export default function OfficeDashboardPage() {
 
                 {/* My postings */}
                 <section className="flex flex-col gap-3">
-                    <h2 className="text-lg font-bold text-text-main">وظايفي ({jobs.length})</h2>
+                    <h2 className="text-lg font-bold text-text-main">وظائفي ({jobs.length})</h2>
                     {loadingJobs ? (
                         <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
                     ) : jobs.length === 0 ? (
-                        <p className="text-text-muted text-sm bg-white border border-border rounded-2xl p-6 text-center">لسه منزلتش وظايف. انزل أول وظيفة من الفورم اللي فوق.</p>
+                        <p className="text-text-muted text-sm bg-white border border-border rounded-2xl p-6 text-center">لسه منزلتش وظائف. نزّل أول وظيفة من الفورم اللي فوق.</p>
                     ) : (
                         jobs.map((job) => (
                             <article key={job._id} className="bg-white border border-border rounded-2xl p-5 flex flex-col gap-3">
