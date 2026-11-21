@@ -24,7 +24,11 @@ export default function SearchInput(props: React.ComponentProps<typeof Input> & 
     const inputId = useId();
     const listboxId = useId();
 
-    const initialQuery = searchParams.get("q")?.toString() || "";
+    const qParam = searchParams.get("q") || "";
+    const specParam = searchParams.get("specialization") || "";
+    const locParam = searchParams.get("location") || "";
+    // When a suggestion/chip filter is active (no q), show its value in the box.
+    const initialQuery = qParam || specParam || locParam;
     const [term, setTerm] = useState(initialQuery);
     const [suggestions, setSuggestions] = useState<Suggestions>(EMPTY);
     const [open, setOpen] = useState(false);
@@ -32,19 +36,17 @@ export default function SearchInput(props: React.ComponentProps<typeof Input> & 
     const containerRef = useRef<HTMLDivElement>(null);
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const requestIdRef = useRef(0);
-    // True when the current specialization/location filter came from picking a
-    // suggestion (so a manual search/clear may drop it); skipSyncRef keeps the
-    // picked text in the box after navigation resets the q param.
-    const filterFromPickRef = useRef(false);
-    const skipSyncRef = useRef(false);
 
     useEffect(() => {
-        if (skipSyncRef.current) {
-            skipSyncRef.current = false;
-            return;
-        }
         setTerm(initialQuery);
     }, [initialQuery]);
+
+    // True when the box is just mirroring an active suggestion/chip filter — a
+    // manual search or clear then replaces that filter instead of stacking on it.
+    const mirrorsPickedFilter = () => {
+        const clean = term.trim();
+        return !qParam && clean !== "" && (clean === specParam || clean === locParam);
+    };
 
     // Debounced autocomplete fetch
     useEffect(() => {
@@ -119,8 +121,6 @@ export default function SearchInput(props: React.ComponentProps<typeof Input> & 
             params.delete("specialization");
             params.set("location", item.name);
         }
-        filterFromPickRef.current = true;
-        skipSyncRef.current = true;
         setTerm(item.name);
         setOpen(false);
         setActiveIndex(-1);
@@ -138,11 +138,10 @@ export default function SearchInput(props: React.ComponentProps<typeof Input> & 
         const params = new URLSearchParams(searchParams);
         const cleanTerm = term.trim();
 
-        // A manual text search replaces a filter that came from a suggestion pick
-        if (filterFromPickRef.current) {
+        // A manual text search replaces a mirrored suggestion/chip filter
+        if (mirrorsPickedFilter()) {
             params.delete("specialization");
             params.delete("location");
-            filterFromPickRef.current = false;
         }
 
         if (cleanTerm) {
@@ -178,10 +177,9 @@ export default function SearchInput(props: React.ComponentProps<typeof Input> & 
         setActiveIndex(-1);
         const params = new URLSearchParams(searchParams);
         params.delete("q");
-        if (filterFromPickRef.current) {
+        if (mirrorsPickedFilter()) {
             params.delete("specialization");
             params.delete("location");
-            filterFromPickRef.current = false;
         }
         params.set("page", "1");
 
