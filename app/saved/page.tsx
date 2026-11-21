@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Building2, BadgeCheck, MapPin, Wallet, Heart } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSavedJobs } from "@/contexts/SavedJobsContext";
 import { fetchSavedJobs, type SavedJobEntry } from "@/services/savedJobsService";
 import { fromNow } from "@/lib/date-utils";
 import { JobCardTitle } from "@/app/jobs/_components/JobCardTitle";
@@ -12,6 +13,7 @@ import SaveJobButton from "@/components/SaveJobButton";
 
 export default function SavedJobsPage() {
   const { user, loading: authLoading } = useAuth();
+  const { savedIds } = useSavedJobs();
   const router = useRouter();
   const [entries, setEntries] = useState<SavedJobEntry[] | null>(null);
   const [error, setError] = useState(false);
@@ -63,13 +65,16 @@ export default function SavedJobsPage() {
     );
   }
 
+  // Unsaving updates savedIds optimistically, so the card disappears instantly.
+  const visible = entries?.filter(({ job }) => savedIds.has(job._id));
+
   return (
     <main className="max-w-4xl mx-auto px-4 py-10">
       <h1 className="text-2xl font-bold mb-6">الوظائف المحفوظة</h1>
       {error && (
         <p className="text-red-500">حصل خطأ أثناء تحميل الوظائف المحفوظة. جرب تاني.</p>
       )}
-      {entries && entries.length === 0 && !error && (
+      {visible && visible.length === 0 && !error && (
         <div className="flex flex-col items-center text-center gap-3 py-10">
           <Heart className="w-12 h-12 text-slate-300" />
           <p className="text-slate-500">لسه مفيش وظائف محفوظة.</p>
@@ -82,7 +87,7 @@ export default function SavedJobsPage() {
         </div>
       )}
       <div className="flex flex-col gap-3">
-        {entries?.map(({ job }) => (
+        {visible?.map(({ job }) => (
           <article
             key={job._id}
             className="relative px-5 py-4 flex flex-col gap-2.5 bg-white shadow-sm rounded-2xl transition-all duration-200 hover:shadow-md"

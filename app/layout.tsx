@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SavedJobsProvider } from "@/contexts/SavedJobsContext";
+import { ToastProvider } from "@/components/Toast";
 
 export const vazirMatn = Vazirmatn({
   subsets: ['arabic', 'latin', 'latin-ext'],
@@ -69,11 +70,13 @@ export default function RootLayout({
       >
         <AuthProvider>
           <SavedJobsProvider>
+          <ToastProvider>
             <Navbar />
             <div className="flex-1 mb-4 mt-4 md:mt-0">
               {children}
             </div>
             <Footer />
+          </ToastProvider>
           </SavedJobsProvider>
         </AuthProvider>
       </body>

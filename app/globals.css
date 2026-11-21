@@ -49,3 +49,21 @@
     white-space: nowrap;
     border-width: 0;
 }
+@keyframes heart-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.45); }
+    100% { transform: scale(1); }
+}
+
+.heart-pop {
+    animation: heart-pop 0.35s ease;
+}
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.toast-in {
+    animation: toast-in 0.25s ease-out;
+}
