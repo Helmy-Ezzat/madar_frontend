@@ -18,7 +18,7 @@ export const getJobs = async (args: GetJobsArgs): Promise<JobsResponse> => {
         if (args.date_posted) params.set("date_posted", args.date_posted);
 
         const res = await fetch(`${API_BASE_URL}/jobs?${params.toString()}`, {
-            next: { revalidate: 60 }, // Revalidate every 60 seconds
+            next: { revalidate: 15 }, // Revalidate every 15 seconds
             signal: controller.signal,
             headers: {
                 "Accept": "application/json",
