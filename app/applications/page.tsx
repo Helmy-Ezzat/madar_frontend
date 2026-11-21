@@ -100,7 +100,7 @@ export default function MyApplicationsPage() {
             </div>
           );
           return open ? (
-            <Link key={a.id} href={`/jobs/${a.jobId}`}>{card}</Link>
+            <Link key={a.id} href={`/jobs?jobId=${a.jobId}`}>{card}</Link>
           ) : (
             <div key={a.id}>{card}</div>
           );
