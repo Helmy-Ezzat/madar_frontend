@@ -1,14 +1,14 @@
 import { getJobs } from "@/services/jobService";
 import { getOffices } from "@/services/officeService";
-import { getSpecializations } from "@/services/specializationService";
+import { getSpecializationsTotal } from "@/services/specializationService";
 import { pluralAr, nouns } from "@/lib/arabicPlural";
 import { Briefcase, Building2, Tags } from "lucide-react";
 
 export default async function StatsStrip() {
-    const [jobsResponse, offices, specializations] = await Promise.all([
+    const [jobsResponse, offices, specializationsTotal] = await Promise.all([
         getJobs({ limit: 1 }),
         getOffices(),
-        getSpecializations(),
+        getSpecializationsTotal(),
     ]);
 
     const stats = [
@@ -24,7 +24,7 @@ export default async function StatsStrip() {
         },
         {
             icon: Tags,
-            value: pluralAr(specializations.length, nouns.specialization),
+            value: pluralAr(specializationsTotal, nouns.specialization),
             label: "وظيفي على المنصة",
         },
     ];
