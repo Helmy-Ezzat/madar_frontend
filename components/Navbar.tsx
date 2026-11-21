@@ -109,7 +109,7 @@ export default function Navbar() {
             <div
                 data-state={isOpen ? "open" : "closed"}
                 className="invisible fixed inset-0 z-50 data-[state=open]:visible"
-                data-modal="sidebar-menu"
+                data-modal="mobile-menu"
             >
                 <div
                     data-state={isOpen ? "open" : "closed"}
