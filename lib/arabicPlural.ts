@@ -32,6 +32,7 @@ export const nouns = {
   job: { one: "وظيفة", two: "وظيفتان", few: "وظائف", many: "وظيفة", other: "وظيفة" },
   jobGenitive: { one: "وظيفة", two: "وظيفتين", few: "وظائف", many: "وظيفة", other: "وظيفة" },
   office: { one: "مكتب", two: "مكتبان", few: "مكاتب", many: "مكتبًا", other: "مكتب" },
+  specialization: { one: "تخصص", two: "تخصصان", few: "تخصصات", many: "تخصصًا", other: "تخصص" },
   officeGenitive: { one: "مكتب", two: "مكتبين", few: "مكاتب", many: "مكتبًا", other: "مكتب" },
 } satisfies Record<string, PluralForms>;
 

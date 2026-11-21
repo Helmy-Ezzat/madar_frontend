@@ -1,6 +1,7 @@
 import { getJobs } from "@/services/jobService";
 import { getOffices } from "@/services/officeService";
 import { getSpecializations } from "@/services/specializationService";
+import { pluralAr, nouns } from "@/lib/arabicPlural";
 import { Briefcase, Building2, Tags } from "lucide-react";
 
 export default async function StatsStrip() {
@@ -13,18 +14,18 @@ export default async function StatsStrip() {
     const stats = [
         {
             icon: Briefcase,
-            value: jobsResponse.metadata.total_count,
-            label: "وظيفة متاحة",
+            value: pluralAr(jobsResponse.metadata.total_count, nouns.job),
+            label: "متاحة للتقديم",
         },
         {
             icon: Building2,
-            value: offices.length,
-            label: "مكتب إلحاق مرخص",
+            value: pluralAr(offices.length, nouns.office),
+            label: "إلحاق مرخصة",
         },
         {
             icon: Tags,
-            value: specializations.length,
-            label: "تخصص وظيفي",
+            value: pluralAr(specializations.length, nouns.specialization),
+            label: "وظيفي على المنصة",
         },
     ];
 
@@ -38,7 +39,7 @@ export default async function StatsStrip() {
                         </div>
                         <div className="flex flex-col">
                             <span className="text-2xl md:text-3xl font-bold text-text-main">
-                                {stat.value.toLocaleString("en-US")}
+                                {stat.value}
                             </span>
                             <span className="text-sm text-text-muted">{stat.label}</span>
                         </div>

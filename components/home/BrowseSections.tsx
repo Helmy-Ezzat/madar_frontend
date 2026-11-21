@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { pluralAr, nouns } from "@/lib/arabicPlural";
 import { getSpecializations } from "@/services/specializationService";
 import { MapPin, Tags } from "lucide-react";
 
@@ -45,7 +46,7 @@ export default async function BrowseSections() {
                                         {spec.name}
                                     </span>
                                     <span className="text-xs text-text-muted">
-                                        {spec.count.toLocaleString("en-US")} وظيفة
+                                        {pluralAr(spec.count, nouns.job)}
                                     </span>
                                 </div>
                             </Link>

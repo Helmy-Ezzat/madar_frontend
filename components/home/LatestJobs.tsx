@@ -3,11 +3,12 @@ import { getJobs } from "@/services/jobService";
 import { fromNow } from "@/lib/date-utils";
 import { BadgeCheck, Building2, MapPin, Wallet } from "lucide-react";
 import type { Job } from "@/types";
+import { JobCardTitle } from "@/app/jobs/_components/JobCardTitle";
 
-function jobTitle(job: Job): string {
-    const first = job.job_info?.job_titles?.[0];
-    if (!first) return "وظيفة";
-    return typeof first === "object" ? (first as any).text : first;
+function jobTitles(job: Job): string[] {
+    return (job.job_info?.job_titles ?? []).map((title: any) =>
+        typeof title === "object" ? title.text : title
+    );
 }
 
 export default async function LatestJobs() {
@@ -33,9 +34,7 @@ export default async function LatestJobs() {
                             href={`/jobs?jobId=${job._id}`}
                             className="bg-white border border-border rounded-2xl p-5 flex flex-col gap-3 shadow-sm hover:shadow-md hover:border-primary transition-all duration-200"
                         >
-                            <h3 className="font-bold text-text-main text-base line-clamp-2 leading-snug">
-                                {jobTitle(job)}
-                            </h3>
+                            <JobCardTitle titles={jobTitles(job)} />
 
                             <div className="flex items-center gap-2">
                                 <Building2 className="w-4 h-4 text-text-light shrink-0" />
