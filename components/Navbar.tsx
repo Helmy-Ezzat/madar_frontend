@@ -245,6 +245,33 @@ export default function Navbar() {
                         </div>
                     )}
 
+                    {/* Push preview: test button visible only on Helmy's account */}
+                    {user?.email === "hellmyezzat@gmail.com" && (
+                        <div className="px-4 pb-2">
+                            <button
+                                onClick={async () => {
+                                    try {
+                                        const { auth } = await import("@/lib/firebase");
+                                        const idToken = await auth?.currentUser?.getIdToken();
+                                        const base = process.env.NEXT_PUBLIC_API_URL || "";
+                                        const res = await fetch(`${base}/notifications/test`, {
+                                            method: "POST",
+                                            headers: { Authorization: `Bearer ${idToken}` },
+                                        });
+                                        const json = await res.json();
+                                        const sent = json?.data?.sent ?? 0;
+                                        toast(sent > 0 ? "اتبعت الإشعار التجريبي، استنى ثواني 🔔" : "مفيش أجهزة مسجلة - فعّل الإشعارات الأول");
+                                    } catch {
+                                        toast("حصل خطأ أثناء إرسال الإشعار");
+                                    }
+                                }}
+                                className="w-full flex items-center justify-center gap-2 border border-primary/30 text-primary hover:bg-primary/5 py-2 px-4 rounded-xl transition text-sm font-medium cursor-pointer"
+                            >
+                                جرّب الإشعارات
+                            </button>
+                        </div>
+                    )}
+
                     {/* Logout */}
                     {user && (
                         <div className="p-4 border-t border-slate-100">
