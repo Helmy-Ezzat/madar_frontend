@@ -16,7 +16,7 @@ export default function PushRegistrar() {
         registeredFor.current = user.uid;
         registerForPush(
             (message) => toast(message),
-            (status) => toast(status)
+            () => {} // denied/unsupported: stay silent on automatic registration
         );
     }, [user, toast]);
 
