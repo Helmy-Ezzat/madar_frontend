@@ -38,7 +38,7 @@ interface AuthContextValue {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, displayName: string, officeProfile?: { officeName: string; licenseNumber?: string }) => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
+  loginWithGoogle: (officeProfile?: { officeName: string; licenseNumber?: string }) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -84,8 +84,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setDbUser(result.dbUser?.data ?? result.dbUser?.user ?? result.dbUser);
   }
 
-  async function handleLoginWithGoogle() {
-    const result = await _loginWithGoogle();
+  async function handleLoginWithGoogle(officeProfile?: { officeName: string; licenseNumber?: string }) {
+    const result = await _loginWithGoogle(officeProfile);
     setUser(result.user);
     setDbUser(result.dbUser?.data ?? result.dbUser?.user ?? result.dbUser);
   }

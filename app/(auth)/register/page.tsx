@@ -65,9 +65,17 @@ export default function RegisterPage() {
 
   async function handleGoogle() {
     setError("");
+    if (accountType === "office" && !officeName.trim()) {
+      setError("اكتب اسم المكتب الأول");
+      return;
+    }
     setGoogleLoading(true);
     try {
-      await loginWithGoogle();
+      await loginWithGoogle(
+        accountType === "office"
+          ? { officeName: officeName.trim(), licenseNumber: licenseNumber.trim() || undefined }
+          : undefined
+      );
       router.push("/");
     } catch (err: unknown) {
       const message =

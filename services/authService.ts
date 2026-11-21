@@ -64,11 +64,11 @@ export async function loginWithEmail(email: string, password: string) {
   return { user: credential.user, dbUser };
 }
 
-export async function loginWithGoogle() {
+export async function loginWithGoogle(officeProfile?: OfficeProfile) {
   const firebaseAuth = getFirebaseAuth();
   const provider = new GoogleAuthProvider();
   const credential = await signInWithPopup(firebaseAuth, provider);
-  const dbUser = await syncUserWithBackend(credential.user);
+  const dbUser = await syncUserWithBackend(credential.user, officeProfile);
   return { user: credential.user, dbUser };
 }
 
