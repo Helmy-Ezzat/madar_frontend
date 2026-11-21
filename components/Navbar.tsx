@@ -17,6 +17,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useSavedJobs } from "@/contexts/SavedJobsContext";
 import { useToast } from "@/components/Toast";
 import Logo from "@/components/Logo";
+import { fromNow } from "@/lib/date-utils";
 
 interface NavItem {
     key: string;
@@ -56,11 +57,15 @@ export default function Navbar() {
             const sent = json?.data?.sent ?? 0;
             const devices = json?.data?.devices ?? 0;
             const firstError = json?.data?.firstError;
+            const tokenInfo = json?.data?.tokenInfo as { updatedAt: string }[] | undefined;
+            const ages = tokenInfo?.length
+                ? ` [${tokenInfo.map((t) => fromNow(t.updatedAt)).join("، ")}]`
+                : "";
             toast(
                 sent > 0
-                    ? `اتبعت الإشعار لـ ${sent} من ${devices} جهاز مسجل 🔔`
+                    ? `اتبعت الإشعار لـ ${sent} من ${devices} جهاز مسجل 🔔${ages}`
                     : devices > 0
-                      ? `فيه ${devices} جهاز مسجل بس الإرسال فشل${firstError ? ` (${firstError})` : ""} - جرب تاني`
+                      ? `فيه ${devices} جهاز مسجل بس الإرسال فشل${firstError ? ` (${firstError})` : ""} - جرب تاني${ages}`
                       : `مفيش أجهزة مسجلة - الجهاز ده لسه ما اتسجلش للإشعارات${firstError ? ` (${firstError})` : ""}`
             );
         } catch {
