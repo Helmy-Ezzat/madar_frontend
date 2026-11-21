@@ -36,6 +36,7 @@ export default function SearchInput(props: React.ComponentProps<typeof Input> & 
     const containerRef = useRef<HTMLDivElement>(null);
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const requestIdRef = useRef(0);
+    const userTypedRef = useRef(false); // autocomplete only after the user types, not when the URL prefills the box
 
     useEffect(() => {
         setTerm(initialQuery);
@@ -53,7 +54,7 @@ export default function SearchInput(props: React.ComponentProps<typeof Input> & 
         const cleanTerm = term.trim();
         if (debounceRef.current) clearTimeout(debounceRef.current);
 
-        if (cleanTerm.length < 2) {
+        if (cleanTerm.length < 2 || !userTypedRef.current) {
             setSuggestions(EMPTY);
             setOpen(false);
             setActiveIndex(-1);
@@ -224,7 +225,10 @@ export default function SearchInput(props: React.ComponentProps<typeof Input> & 
                     {...props}
                     id={inputId}
                     value={term}
-                    onChange={(e) => setTerm(e.target.value)}
+                    onChange={(e) => {
+                        userTypedRef.current = true;
+                        setTerm(e.target.value);
+                    }}
                     onKeyDown={handleKeyDown}
                     onFocus={() => {
                         if (flatItems.length > 0) setOpen(true);
