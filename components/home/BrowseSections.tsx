@@ -2,6 +2,7 @@ import Link from "next/link";
 import { pluralAr, nouns } from "@/lib/arabicPlural";
 import { getSpecializations } from "@/services/specializationService";
 import { MapPin, Tags } from "lucide-react";
+import MarkerHighlight from "../MarkerHighlight";
 
 const countries = [
     "السعودية",
@@ -18,13 +19,13 @@ export default async function BrowseSections() {
     const specializations = (await getSpecializations()).slice(0, 8);
 
     return (
-        <section className="py-16 px-4 bg-surface" aria-labelledby="browse-heading">
+        <section className="py-16 px-4 bg-background" aria-labelledby="browse-heading">
             <div className="max-w-6xl mx-auto flex flex-col gap-14">
                 {/* Specializations */}
                 <div>
                     <div className="text-center mb-10">
                         <h2 id="browse-heading" className="text-2xl md:text-4xl font-bold text-text-main mb-4">
-                            تصفح حسب <span className="text-primary">التخصص</span>
+                            تصفح حسب <MarkerHighlight>التخصص</MarkerHighlight>
                         </h2>
                         <p className="text-text-body text-lg max-w-2xl mx-auto">
                             اختار مجالك وشوف كل الفرص المتاحة فيه
@@ -36,7 +37,7 @@ export default async function BrowseSections() {
                             <Link
                                 key={spec.name}
                                 href={`/jobs?specialization=${encodeURIComponent(spec.name)}`}
-                                className="bg-white border border-border rounded-xl p-5 flex items-center gap-3 hover:border-primary hover:shadow-md transition-all duration-200"
+                                className="bg-surface border border-border rounded-xl p-5 flex items-center gap-3 hover:border-primary hover:shadow-md transition-all duration-200"
                             >
                                 <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                                     <Tags className="w-5 h-5" strokeWidth={1.8} />
@@ -70,7 +71,7 @@ export default async function BrowseSections() {
                             <Link
                                 key={country}
                                 href={`/jobs?location=${encodeURIComponent(country)}`}
-                                className="inline-flex items-center gap-2 bg-white border border-border rounded-full px-5 py-3 text-sm md:text-base font-semibold text-text-main hover:border-primary hover:text-primary hover:shadow-md transition-all duration-200"
+                                className="inline-flex items-center gap-2 bg-surface border border-border rounded-full px-5 py-3 text-sm md:text-base font-semibold text-text-main hover:border-primary hover:text-primary hover:shadow-md transition-all duration-200"
                             >
                                 <MapPin className="w-4 h-4" />
                                 {country}

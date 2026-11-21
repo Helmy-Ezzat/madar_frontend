@@ -1,4 +1,5 @@
 import { BadgeDollarSign, ShieldCheck, RefreshCw, SlidersHorizontal } from "lucide-react";
+import MarkerHighlight from "../MarkerHighlight";
 
 const features = [
     {
@@ -25,11 +26,11 @@ const features = [
 
 export default function WhyMadar() {
     return (
-        <section className="py-16 px-4 bg-background" aria-labelledby="why-madar-heading">
+        <section className="py-16 px-4 bg-primary-tint" aria-labelledby="why-madar-heading">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-12">
                     <h2 id="why-madar-heading" className="text-2xl md:text-4xl font-bold text-text-main mb-4">
-                        ليه تختار <span className="text-primary">مدار</span>؟
+                        ليه تختار <MarkerHighlight>مدار</MarkerHighlight>؟
                     </h2>
                     <p className="text-text-body text-lg max-w-2xl mx-auto">
                         مش مجرد موقع وظائف، ده فلتر ذكي بيوفر عليك وقت ومجهود المتابعة
@@ -40,7 +41,7 @@ export default function WhyMadar() {
                     {features.map((feature) => (
                         <div
                             key={feature.title}
-                            className="bg-surface border border-border rounded-2xl p-6 flex flex-col gap-4 hover:border-primary hover:shadow-md transition-all duration-200"
+                            className="bg-white border border-border rounded-2xl p-6 flex flex-col gap-4 hover:border-primary hover:shadow-md transition-all duration-200"
                         >
                             <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
                                 <feature.icon className="w-6 h-6" strokeWidth={1.8} />

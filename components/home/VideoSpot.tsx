@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Volume2 } from "lucide-react";
+import MarkerHighlight from "../MarkerHighlight";
 
 /**
  * Intro video section.
@@ -47,11 +48,11 @@ export default function VideoSpot() {
     };
 
     return (
-        <section className="py-16 px-4 bg-surface" aria-labelledby="video-heading">
-            <div className="max-w-4xl mx-auto">
+        <section className="py-16 px-4 bg-background" aria-labelledby="video-heading">
+            <div className="max-w-4xl mx-auto bg-primary-tint rounded-3xl px-4 py-10 md:px-10 md:py-12">
                 <div className="text-center mb-10">
                     <h2 id="video-heading" className="text-2xl md:text-4xl font-bold text-text-main mb-4">
-                        شوف <span className="text-primary">مدار</span> في دقيقة
+                        شوف <MarkerHighlight>مدار</MarkerHighlight> في دقيقة
                     </h2>
                     <p className="text-text-body text-lg max-w-2xl mx-auto">
                         فيديو قصير بيشرح إزاي تلاقي فرصتك على المنصة

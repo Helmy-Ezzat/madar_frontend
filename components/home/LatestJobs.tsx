@@ -4,6 +4,7 @@ import { fromNow } from "@/lib/date-utils";
 import { BadgeCheck, Building2, MapPin, Wallet } from "lucide-react";
 import type { Job } from "@/types";
 import { JobCardTitle } from "@/app/jobs/_components/JobCardTitle";
+import MarkerHighlight from "../MarkerHighlight";
 
 function jobTitles(job: Job): string[] {
     return (job.job_info?.job_titles ?? []).map((title: any) =>
@@ -16,11 +17,11 @@ export default async function LatestJobs() {
     if (!jobs.length) return null;
 
     return (
-        <section className="py-16 px-4 bg-surface" aria-labelledby="latest-jobs-heading">
+        <section className="py-16 px-4 bg-background" aria-labelledby="latest-jobs-heading">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-12">
                     <h2 id="latest-jobs-heading" className="text-2xl md:text-4xl font-bold text-text-main mb-4">
-                        أحدث الوظائف على <span className="text-primary">مدار</span>
+                        أحدث الوظائف على <MarkerHighlight>مدار</MarkerHighlight>
                     </h2>
                     <p className="text-text-body text-lg max-w-2xl mx-auto">
                         وظائف جديدة بتتضاف كل يوم من مكاتب الإلحاق المرخصة
@@ -32,7 +33,7 @@ export default async function LatestJobs() {
                         <Link
                             key={job._id}
                             href={`/jobs?jobId=${job._id}`}
-                            className="bg-white border border-border rounded-2xl p-5 flex flex-col gap-3 shadow-sm hover:shadow-md hover:border-primary transition-all duration-200"
+                            className="bg-surface border border-border rounded-2xl p-5 flex flex-col gap-3 shadow-sm hover:shadow-md hover:border-primary transition-all duration-200"
                         >
                             <JobCardTitle titles={jobTitles(job)} />
 

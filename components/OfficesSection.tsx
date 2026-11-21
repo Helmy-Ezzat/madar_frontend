@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getOffices } from "@/services/officeService";
 import { pluralAr, nouns } from "@/lib/arabicPlural";
+import MarkerHighlight from "./MarkerHighlight";
 
 export default async function OfficesSection() {
     const offices = await getOffices();
@@ -16,7 +17,7 @@ export default async function OfficesSection() {
                         className="text-2xl md:text-4xl font-bold text-text-main mb-4"
                     >
                         من هي المكاتب التي توظف على{" "}
-                        <span className="text-primary">مدار</span>؟
+                        <MarkerHighlight>مدار</MarkerHighlight>؟
                     </h2>
                     <p className="text-text-body text-lg max-w-2xl mx-auto">
                         نجمع لك وظائف من أفضل مكاتب إلحاق العمالة المعتمدة والموثوقة

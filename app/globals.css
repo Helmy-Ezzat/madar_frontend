@@ -4,6 +4,8 @@
     /* --- Primary Colors --- */
     --color-primary: #2352FF;
     --color-primary-hover: #1c42cc;
+    --color-primary-tint: #EDF2FF;
+    --color-primary-deep: #0E1E63;
     
     /* --- Background & Surfaces --- */
     --color-background: #FFFFFF;

@@ -1,4 +1,5 @@
 import { Radar, Sparkles, MousePointerClick } from "lucide-react";
+import MarkerHighlight from "../MarkerHighlight";
 
 const steps = [
     {
@@ -20,11 +21,11 @@ const steps = [
 
 export default function HowItWorks() {
     return (
-        <section className="py-16 px-4 bg-background" aria-labelledby="how-it-works-heading">
+        <section className="py-16 px-4 bg-primary-tint" aria-labelledby="how-it-works-heading">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-12">
                     <h2 id="how-it-works-heading" className="text-2xl md:text-4xl font-bold text-text-main mb-4">
-                        إزاي <span className="text-primary">مدار</span> بيشتغل؟
+                        إزاي <MarkerHighlight>مدار</MarkerHighlight> بيشتغل؟
                     </h2>
                     <p className="text-text-body text-lg max-w-2xl mx-auto">
                         من قناة تليجرام مزدحمة لفرصة واضحة قدامك، في ثلاث خطوات
@@ -35,7 +36,7 @@ export default function HowItWorks() {
                     {steps.map((step, index) => (
                         <div
                             key={step.title}
-                            className="relative bg-surface border border-border rounded-2xl p-6 flex flex-col gap-4 hover:border-primary hover:shadow-md transition-all duration-200"
+                            className="relative bg-white border border-border rounded-2xl p-6 flex flex-col gap-4 hover:border-primary hover:shadow-md transition-all duration-200"
                         >
                             <span className="absolute top-4 left-4 text-4xl font-black text-primary/10 select-none" aria-hidden="true">
                                 {index + 1}
