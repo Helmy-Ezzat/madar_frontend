@@ -106,6 +106,9 @@ export const adminListJobs = (status: string = "pending") =>
 export const adminApproveJob = (id: string) =>
     authedFetch(`/admin/jobs/${id}/approve`, { method: "POST" });
 
+export const adminApproveAllJobs = () =>
+    authedFetch(`/admin/jobs/approve-all`, { method: "POST" });
+
 export const adminRejectJob = (id: string) =>
     authedFetch(`/admin/jobs/${id}/reject`, { method: "POST" });
 

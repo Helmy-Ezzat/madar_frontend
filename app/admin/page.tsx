@@ -20,6 +20,7 @@ import {
     adminUnsuspendJob,
     adminDeleteJob,
     adminCreateJob,
+    adminApproveAllJobs,
     type AdminOffice,
     type AdminJob,
 } from "@/services/officeDashboardService";
@@ -57,6 +58,8 @@ export default function AdminPage() {
     const [loadingList, setLoadingList] = useState(false);
     const [acting, setActing] = useState<string | null>(null);
     const [confirm, setConfirm] = useState<{ id: string; action: "reject" | "suspend" | "delete" } | null>(null);
+    const [confirmAll, setConfirmAll] = useState(false);
+    const [approvingAll, setApprovingAll] = useState(false);
     const [counts, setCounts] = useState<{ pendingOffices: number; pendingJobs: number } | null>(null);
 
     const refreshCounts = useCallback(async () => {
@@ -95,6 +98,22 @@ export default function AdminPage() {
     useEffect(() => {
         if (isAdmin) load();
     }, [isAdmin, load]);
+
+    const approveAll = async () => {
+        setApprovingAll(true);
+        try {
+            const res = await adminApproveAllJobs();
+            const n = (res.data as { approved?: number } | undefined)?.approved ?? 0;
+            showToast(n > 0 ? `اتقبلوا كلهم (${n}) ✅` : "مفيش وظايف مستنية موافقة");
+            await load();
+            refreshCounts();
+        } catch (err) {
+            showToast(err instanceof Error ? err.message : "حصل خطأ، حاول تاني");
+        } finally {
+            setApprovingAll(false);
+            setConfirmAll(false);
+        }
+    };
 
     const openPostForm = () => setShowPostForm((v) => !v);
 
@@ -262,6 +281,16 @@ export default function AdminPage() {
                                 {posting ? "جاري النشر..." : "انشر الوظيفة"}
                             </button>
                         </form>
+                    )}
+                    {status === "pending" && jobs.length > 0 && (
+                        <button
+                            type="button"
+                            disabled={approvingAll}
+                            onClick={() => setConfirmAll(true)}
+                            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 rounded-xl transition text-sm disabled:opacity-60"
+                        >
+                            {approvingAll ? "جاري الموافقة..." : `موافقة على الكل (${jobs.length})`}
+                        </button>
                     )}
                     {jobs.length === 0 ? (
                         <p className="text-text-muted text-sm bg-white border border-border rounded-2xl p-6 text-center">
@@ -446,6 +475,13 @@ export default function AdminPage() {
                     setConfirm(null);
                 }}
                 onCancel={() => setConfirm(null)}
+            />
+            <ConfirmDialog
+                open={confirmAll}
+                title="هتوافق على كل الوظايف المستنية دفعة واحدة. متأكد؟"
+                confirmLabel="موافقة على الكل"
+                onConfirm={approveAll}
+                onCancel={() => setConfirmAll(false)}
             />
         </main>
     );
