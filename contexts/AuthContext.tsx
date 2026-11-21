@@ -60,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (firebaseUser) {
         try {
           const data = await syncUserWithBackend(firebaseUser);
-          setDbUser(data.user ?? data);
+          setDbUser(data.data ?? data.user ?? data);
         } catch {
           setDbUser(null);
         }
@@ -75,19 +75,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function login(email: string, password: string) {
     const result = await _loginWithEmail(email, password);
     setUser(result.user);
-    setDbUser(result.dbUser?.user ?? result.dbUser);
+    setDbUser(result.dbUser?.data ?? result.dbUser?.user ?? result.dbUser);
   }
 
   async function register(email: string, password: string, displayName: string, officeProfile?: { officeName: string; licenseNumber?: string }) {
     const result = await _registerWithEmail(email, password, displayName, officeProfile);
     setUser(result.user);
-    setDbUser(result.dbUser?.user ?? result.dbUser);
+    setDbUser(result.dbUser?.data ?? result.dbUser?.user ?? result.dbUser);
   }
 
   async function handleLoginWithGoogle() {
     const result = await _loginWithGoogle();
     setUser(result.user);
-    setDbUser(result.dbUser?.user ?? result.dbUser);
+    setDbUser(result.dbUser?.data ?? result.dbUser?.user ?? result.dbUser);
   }
 
   async function handleLogout() {
