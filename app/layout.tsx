@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SavedJobsProvider } from "@/contexts/SavedJobsContext";
 import { ToastProvider } from "@/components/Toast";
+import PushRegistrar from "@/components/PushRegistrar";
 
 export const vazirMatn = Vazirmatn({
   subsets: ['arabic', 'latin', 'latin-ext'],
@@ -71,6 +72,7 @@ export default function RootLayout({
         <AuthProvider>
           <SavedJobsProvider>
           <ToastProvider>
+            <PushRegistrar />
             <Navbar />
             <div className="flex-1 mb-4 mt-4 md:mt-0">
               {children}
