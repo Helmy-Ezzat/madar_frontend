@@ -69,3 +69,12 @@
 .toast-in {
     animation: toast-in 0.25s ease-out;
 }
+
+/* --- App font: IBM Plex Sans Arabic (Arabic) with IBM Plex Sans / system fallback (Latin) --- */
+@theme {
+    --font-sans: var(--font-plex-arabic), var(--font-plex-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+body {
+    font-family: var(--font-plex-arabic), var(--font-plex-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
+}

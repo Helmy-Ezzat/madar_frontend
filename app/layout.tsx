@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Vazirmatn } from "next/font/google";
+import { IBM_Plex_Sans_Arabic, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -9,9 +9,18 @@ import { ToastProvider } from "@/components/Toast";
 import { Analytics } from "@vercel/analytics/next";
 import PushRegistrar from "@/components/PushRegistrar";
 
-export const vazirMatn = Vazirmatn({
-  subsets: ['arabic', 'latin', 'latin-ext'],
+const plexSansArabic = IBM_Plex_Sans_Arabic({
+  subsets: ['arabic'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
+  variable: '--font-plex-arabic',
+});
+
+const plexSans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-plex-sans',
 });
 
 export const viewport: Viewport = {
@@ -69,7 +78,7 @@ export default function RootLayout({
   return (
     <html lang="ar">
       <body
-        className={`${vazirMatn.className} antialiased bg-slate-50 flex flex-col`} dir="rtl"
+        className={`${plexSansArabic.variable} ${plexSans.variable} antialiased bg-slate-50 flex flex-col`} dir="rtl"
       >
         <AuthProvider>
           <SavedJobsProvider>
