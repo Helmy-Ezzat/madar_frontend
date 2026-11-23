@@ -8,15 +8,22 @@ import FilterSkeleton from "@/app/jobs/_components/skeleton/FilterSkeleton";
 
 /**
  * Shared layout for the jobs listing routes (/jobs and /jobs/[id]).
- * The search bar, filters and the grid shell stay mounted while
- * navigating between the list and a job's details, so filter state
- * and list scroll are preserved. The apply page lives outside this
- * route group on purpose: it renders standalone.
+ *
+ * Parallel routes: the @list slot only matches /jobs, so when the user
+ * opens or closes a job, Next.js preserves the slot's already-rendered
+ * list instead of re-rendering it - no skeleton flash, no refetch, no
+ * lost scroll position or client state. The @details slot mounts only on
+ * /jobs/[id] and is the only region that shows a skeleton on navigation.
+ * The apply page lives outside this route group and stays standalone.
  */
 export default function JobsListingLayout({
   children,
+  list,
+  details,
 }: {
   children: React.ReactNode;
+  list: React.ReactNode;
+  details: React.ReactNode;
 }) {
   return (
     <JobProvider>
@@ -41,7 +48,9 @@ export default function JobsListingLayout({
                 <Filters />
               </Suspense>
             }
+            details={details}
           >
+            {list}
             {children}
           </JobsPageShell>
         </div>
