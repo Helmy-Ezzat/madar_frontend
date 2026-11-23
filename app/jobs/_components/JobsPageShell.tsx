@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useJobContext } from "../_context/JobContext";
 import JobDetailsSkeleton from "./skeleton/JobDetailsSkeleton";
 import JobDetailsOptimistic from "./JobDetailsOptimistic";
-import BodyScrollLock from "./BodyScrollLock";
 
 interface JobsPageShellProps {
   children: ReactNode; // @list slot (+ null children pages)
@@ -64,7 +63,6 @@ export default function JobsPageShell({ children, filters, details }: JobsPageSh
           {details}
         </Suspense>
       )}
-      {showDetails && <BodyScrollLock />}
     </div>
   );
 }

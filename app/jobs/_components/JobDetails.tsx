@@ -61,7 +61,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
     return (
         <aside
             data-modal="job-details"
-            className="details-enter fixed inset-0 z-50 bg-white lg:border-t-4 lg:border-primary lg:sticky lg:top-24 lg:h-205 lg:rounded-xl lg:shadow-xl lg:inset-auto lg:z-0 flex flex-col overflow-y-hidden"
+            className="details-enter overscroll-contain fixed inset-0 z-50 bg-white lg:border-t-4 lg:border-primary lg:sticky lg:top-24 lg:h-205 lg:rounded-xl lg:shadow-xl lg:inset-auto lg:z-0 flex flex-col overflow-y-hidden"
             aria-label="Job Details"
         >
             {jsonLd && (
