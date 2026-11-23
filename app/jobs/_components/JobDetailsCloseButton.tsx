@@ -1,42 +1,26 @@
 "use client";
 
-import { memo, useMemo, useCallback } from "react";
+import { memo, useMemo } from "react";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useJobContext } from "../_context/JobContext";
 
 function JobDetailsCloseButtonComponent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const { setActiveJobId } = useJobContext();
 
-  // Memoize the href calculation
+  // Back to the list with the active filters preserved.
   const href = useMemo(() => {
-    const queryParams = new URLSearchParams(searchParams.toString());
-    queryParams.delete("jobId");
-
-    return queryParams.toString() ? `/jobs?${queryParams.toString()}` : "/jobs";
+    const query = searchParams.toString();
+    return query ? `/jobs?${query}` : "/jobs";
   }, [searchParams]);
 
-  const handleClick = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-
-    // Clear optimistic state immediately
-    setActiveJobId(null);
-
-    // Save scroll position
-    const scrollY = window.scrollY;
-    sessionStorage.setItem('jobs-scroll-position', scrollY.toString());
-
-    // Navigate
-    router.push(href);
-  }, [href, router, setActiveJobId]);
   return (
     <Link
       href={href}
-      onClick={handleClick}
       scroll={false}
       replace
+      onClick={() => setActiveJobId(null)}
       className="text-[#828A93] hover:bg-gray-100 rounded-full transition-colors"
       aria-label="إغلاق"
     >

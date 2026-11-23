@@ -33,7 +33,7 @@ export default async function LatestJobs() {
                     {jobs.map((job) => (
                         <Link
                             key={job._id}
-                            href={`/jobs?jobId=${job._id}`}
+                            href={`/jobs/${job._id}`}
                             className="bg-surface border border-border rounded-2xl p-5 flex flex-col gap-3 shadow-sm hover:shadow-md hover:border-primary transition-all duration-200"
                         >
                             <JobCardTitle titles={jobTitles(job)} />

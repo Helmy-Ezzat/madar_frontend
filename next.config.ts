@@ -30,6 +30,17 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Legacy shared links: /jobs?jobId=X -> /jobs/X
+      {
+        source: "/jobs",
+        has: [{ type: "query", key: "jobId", value: "(?<id>.+)" }],
+        destination: "/jobs/:id",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

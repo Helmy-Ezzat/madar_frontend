@@ -19,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/jobs`, lastModified: new Date(), changeFrequency: 'hourly', priority: 0.9 },
     { url: `${baseUrl}/about`, changeFrequency: 'monthly', priority: 0.4 },
     ...jobs.map((j) => ({
-      url: `${baseUrl}/jobs?jobId=${j._id}`,
+      url: `${baseUrl}/jobs/${j._id}`,
       lastModified: new Date(j.published_at),
       changeFrequency: 'weekly' as const,
       priority: 0.7,

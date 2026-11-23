@@ -47,7 +47,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
         "datePosted": published.toISOString(),
         "validThrough": validThrough.toISOString(),
         "directApply": !job.source_link,
-        "url": `https://madar-jobs.vercel.app/jobs?jobId=${job._id}`,
+        "url": `https://madar-jobs.vercel.app/jobs/${job._id}`,
         "hiringOrganization": {
             "@type": "Organization",
             "name": job.company_name,

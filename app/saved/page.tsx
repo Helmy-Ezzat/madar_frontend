@@ -96,7 +96,7 @@ export default function SavedJobsPage() {
             <div className="absolute top-4 left-4 z-10">
               <SaveJobButton jobId={job._id} />
             </div>
-            <Link href={`/jobs?jobId=${job._id}`} className="flex flex-col gap-2.5">
+            <Link href={`/jobs/${job._id}`} className="flex flex-col gap-2.5">
               <JobCardTitle
                 titles={
                   job.job_info.job_titles?.map((title: any) =>
