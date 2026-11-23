@@ -8,7 +8,7 @@ import { JobCardTitle } from "@/app/jobs/_components/JobCardTitle";
 import MarkerHighlight from "../MarkerHighlight";
 
 function jobTitles(job: Job): string[] {
-    return (job.job_info?.job_titles ?? []).map((title: any) =>
+    return (job.job_info?.job_titles ?? []).map((title: string | { text: string }) =>
         typeof title === "object" ? title.text : title
     );
 }

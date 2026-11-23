@@ -42,7 +42,7 @@ function JobCard({ job }: { job: Job }) {
           <SaveJobButton jobId={job._id} />
         </div>
         <div className="flex flex-col gap-2.5 relative z-10 pointer-events-none">
-          <JobCardTitle titles={job.job_info.job_titles?.map((title: any) =>
+          <JobCardTitle titles={job.job_info.job_titles?.map((title: string | { text: string }) =>
             typeof title === 'object' ? title.text : title
           )} />
           <div className="flex items-center gap-1">
@@ -67,7 +67,7 @@ function JobCard({ job }: { job: Job }) {
           {job.job_info.summary && (
             <p className="text-sm text-slate-600 line-clamp-3">
               {typeof job.job_info.summary === 'object'
-                ? (job.job_info.summary as any).text
+                ? (job.job_info.summary as unknown as { text: string }).text
                 : job.job_info.summary}
             </p>
           )}
