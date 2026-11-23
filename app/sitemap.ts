@@ -14,7 +14,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // The backend rate-limits, so pages are fetched in small sequential batches
   // instead of one big fan-out.
   const first = await getJobs({ page: 1, limit: PAGE_SIZE });
-  const totalPages = Math.min(first.metadata.total_pages || 1, 200);
+  // The API caps at 50 jobs per request and rate-limits around ~100 requests
+  // per window, so a single sitemap generation cannot enumerate every job.
+  // Cover the newest ~100 pages deterministically instead of failing half
+  // way through a larger attempt (jobs are returned newest-first).
+  const totalPages = Math.min(first.metadata.total_pages || 1, 100);
   const pages = [first];
   const BATCH = 4;
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
