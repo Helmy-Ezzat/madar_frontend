@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import MarkerHighlight from "@/components/MarkerHighlight";
+
+export const metadata: Metadata = {
+    title: "من نحن",
+    description: "مدار منصة تجمع وظائف مكاتب إلحاق العمالة المصرية بالخارج في مكان واحد، لتوفير وقت البحث وسهولة الوصول للفرص الموثوقة.",
+    alternates: { canonical: "https://madar-jobs.vercel.app/about" },
+};
 
 export default function AboutPage() {
     return (

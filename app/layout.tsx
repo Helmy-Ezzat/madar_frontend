@@ -32,7 +32,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "مدار",
+    default: "مدار | كل وظائف الخارج في مكان واحد",
     template: "مدار |  %s"
   },
   description: "المنصة الأولى لتجميع وظائف مكاتب إلحاق العمالة المصرية بالخارج. ابحث عن فرصتك في دول الخليج وأوروبا بكل سهولة.",
@@ -93,6 +93,36 @@ export default function RootLayout({
           </SavedJobsProvider>
         </AuthProvider>
         <Analytics />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "name": "مدار",
+                "url": "https://madar-jobs.vercel.app",
+                "logo": "https://madar-jobs.vercel.app/icon-192.png",
+                "description": "المنصة الأولى لتجميع وظائف مكاتب إلحاق العمالة المصرية بالخارج.",
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "مدار",
+                "url": "https://madar-jobs.vercel.app",
+                "inLanguage": "ar",
+                "potentialAction": {
+                  "@type": "SearchAction",
+                  "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://madar-jobs.vercel.app/jobs?q={search_term_string}",
+                  },
+                  "query-input": "required name=search_term_string",
+                },
+              },
+            ]).replace(/</g, "\\u003c"),
+          }}
+        />
       </body>
     </html>
   );
