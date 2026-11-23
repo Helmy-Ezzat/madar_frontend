@@ -4,7 +4,7 @@ import { getJobs } from '@/services/jobService'
 const baseUrl = 'https://madar-jobs.vercel.app';
 const PAGE_SIZE = 50; // API caps limit at 50 per page
 
-export const revalidate = 3600;
+export const revalidate = 21600; // regenerate at most every 6h
 // Generate on first request, never at build time: a deploy must not bake in a
 // sitemap built while the backend is rate-limiting.
 export const dynamic = 'force-dynamic';
@@ -35,9 +35,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
     await sleep(500);
   }
-  for (const pageNum of failed) {
-    await sleep(1500);
-    pages[pageNum - 1] = await getJobs({ page: pageNum, limit: PAGE_SIZE });
+  // Two retry passes for failed pages, with a pause between passes so a
+  // short-lived rate-limit window can clear before we accept a partial map.
+  for (let pass = 0; pass < 2 && failed.length > 0; pass++) {
+    await sleep(3000);
+    for (const pageNum of [...failed]) {
+      const p = await getJobs({ page: pageNum, limit: PAGE_SIZE });
+      if (p.jobs.length > 0) {
+        pages[pageNum - 1] = p;
+        failed.splice(failed.indexOf(pageNum), 1);
+      }
+      await sleep(400);
+    }
   }
   const jobs = pages
     .flatMap((p) => p.jobs)
