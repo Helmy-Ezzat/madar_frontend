@@ -9,7 +9,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
 
     if (!job) {
         return (
-            <aside data-modal="job-details" className="fixed inset-0 z-50 bg-white lg:border-t-4 lg:border-primary lg:sticky lg:top-24 lg:h-205 lg:rounded-xl lg:shadow-xl lg:inset-auto lg:z-0 flex flex-col items-center justify-center p-5">
+            <div className="relative flex flex-col items-center justify-center p-5 h-full min-h-105">
                 <div className="absolute top-5 left-5">
                     <JobDetailsCloseButton />
                 </div>
@@ -22,7 +22,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                 />
                 <h2 className="text-xl font-bold text-slate-800 mb-2">عذراً، الوظيفة غير متاحة</h2>
                 <p className="text-slate-500">ربما تم حذفها أو انتهت صلاحيتها</p>
-            </aside>
+            </div>
         );
     }
 
@@ -59,11 +59,7 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
     };
 
     return (
-        <aside
-            data-modal="job-details"
-            className="details-enter overscroll-contain fixed inset-0 z-50 bg-white lg:border-t-4 lg:border-primary lg:sticky lg:top-24 lg:h-205 lg:rounded-xl lg:shadow-xl lg:inset-auto lg:z-0 flex flex-col overflow-y-hidden"
-            aria-label="Job Details"
-        >
+        <>
             {jsonLd && (
                 <script
                     type="application/ld+json"
@@ -78,6 +74,6 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                     {formatJobText(job.raw_text)}
                 </div>
             </article>
-        </aside>
+        </>
     );
 }

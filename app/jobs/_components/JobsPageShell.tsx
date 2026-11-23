@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useJobContext } from "../_context/JobContext";
 import JobDetailsSkeleton from "./skeleton/JobDetailsSkeleton";
 import JobDetailsOptimistic from "./JobDetailsOptimistic";
+import JobDetailsFrame from "./JobDetailsFrame";
 
 interface JobsPageShellProps {
   children: ReactNode; // @list slot (+ null children pages)
@@ -15,11 +16,13 @@ interface JobsPageShellProps {
 /**
  * Client grid shell shared by /jobs and /jobs/[id].
  *
- * When a card is clicked, it renders JobDetailsOptimistic instantly from
- * the card's data. The @details slot is wrapped in a Suspense boundary
- * whose fallback is that same optimistic panel (or a skeleton on direct
- * loads), so the streamed JobDetails swaps in without a skeleton flash
- * or layout jump.
+ * The details panel renders inside JobDetailsFrame, one stable container
+ * keyed by job id that owns the enter animation. Its content starts as
+ * JobDetailsOptimistic (real data from the clicked card) and the @details
+ * slot's streamed JobDetails replaces it through a Suspense boundary whose
+ * fallback is that same optimistic content, so the swap never remounts the
+ * frame, re-runs the animation, or shifts the layout. A skeleton only
+ * appears on direct loads, where no card data exists.
  */
 export default function JobsPageShell({ children, filters, details }: JobsPageShellProps) {
   const pathname = usePathname();
@@ -43,7 +46,7 @@ export default function JobsPageShell({ children, filters, details }: JobsPageSh
   const showOptimistic = Boolean(activeJob) && activeJob!._id !== routeJobId;
 
   // While the real details for the clicked job stream in, keep showing
-  // the same optimistic panel so the swap is invisible.
+  // the same optimistic content so the swap is invisible.
   const detailsFallback =
     activeJob && activeJob._id === routeJobId ? (
       <JobDetailsOptimistic job={activeJob} />
@@ -57,11 +60,16 @@ export default function JobsPageShell({ children, filters, details }: JobsPageSh
       {children}
       {/* The router preserves unmatched slots, so on /jobs the details
           slot would linger in the DOM; only render it on /jobs/[id]. */}
-      {showOptimistic && <JobDetailsOptimistic job={activeJob!} />}
-      {routeJobId && (
-        <Suspense key={routeJobId} fallback={detailsFallback}>
-          {details}
-        </Suspense>
+      {showOptimistic ? (
+        <JobDetailsFrame key={activeJob!._id}>
+          <JobDetailsOptimistic job={activeJob!} />
+        </JobDetailsFrame>
+      ) : (
+        routeJobId && (
+          <JobDetailsFrame key={routeJobId}>
+            <Suspense fallback={detailsFallback}>{details}</Suspense>
+          </JobDetailsFrame>
+        )
       )}
     </div>
   );

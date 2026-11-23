@@ -5,19 +5,14 @@ import { formatJobText } from "@/utils/textFormatter";
 import JobDetailsHeader from "./JobDetailsHeader";
 
 /**
- * Instant details panel rendered from the clicked card's data while the
- * server-rendered JobDetails streams in. The header (and the description,
- * when the list payload already carries it) shows real content immediately,
- * so opening a job never flashes a gray skeleton. A small pulse placeholder
- * covers only the part still loading.
+ * Instant details content rendered from the clicked card's data while the
+ * server-rendered JobDetails streams in. Renders inside JobDetailsFrame,
+ * which stays mounted through the swap, so the panel opens with real
+ * content and never flashes or re-animates.
  */
 export default function JobDetailsOptimistic({ job }: { job: Job }) {
     return (
-        <aside
-            data-modal="job-details"
-            className="details-enter overscroll-contain fixed inset-0 z-50 bg-white lg:border-t-4 lg:border-primary lg:sticky lg:top-24 lg:h-205 lg:rounded-xl lg:shadow-xl lg:inset-auto lg:z-0 flex flex-col overflow-y-hidden"
-            aria-label="Job Details"
-        >
+        <>
             <JobDetailsHeader job={job} />
             {job.raw_text ? (
                 <article className="overflow-y-auto min-h-0 py-6">
@@ -33,6 +28,6 @@ export default function JobDetailsOptimistic({ job }: { job: Job }) {
                     <div className="h-4 bg-gray-100 rounded-md w-3/4" />
                 </div>
             )}
-        </aside>
+        </>
     );
 }
