@@ -47,7 +47,7 @@ export default function Pagination({ metadata }: PaginationProps) {
     <nav
       data-pending={isPending ? "" : undefined}
       // if there is a loading (Pending), reduce the opacity to make the user feel that there is an action happening
-      className={`flex flex-col items-center gap-3 py-6 px-4 transition-opacity duration-300 data-[pending=true]:opacity-50 data-[pending=true]:pointer-events-none data-[pending=false]:opacity-100`}
+      className={`flex flex-col items-center gap-3 py-6 px-1 lg:px-4 transition-opacity duration-300 data-[pending=true]:opacity-50 data-[pending=true]:pointer-events-none data-[pending=false]:opacity-100`}
       aria-label="التنقل بين صفحات الوظائف"
     >
       {/* Page Info (Mobile) */}
@@ -56,7 +56,7 @@ export default function Pagination({ metadata }: PaginationProps) {
       </p>
 
       {/* Pagination Controls */}
-      <ul className="flex items-center justify-center gap-1 lg:gap-2" dir="ltr">
+      <ul className="flex items-center justify-center gap-0.5 lg:gap-2" dir="ltr">
         
         {/* Previous Button (Desktop Only) */}
         {currentPage === 1 ? (
@@ -92,7 +92,7 @@ export default function Pagination({ metadata }: PaginationProps) {
               </button>
             </li>
             {metadata.page - 2 > 2 && (
-              <li className="flex items-center justify-center w-6 h-8 lg:w-8 lg:h-10 text-gray-400 text-xs">
+              <li className="flex items-center justify-center w-4 h-8 lg:w-8 lg:h-10 text-gray-400 text-xs">
                 <span aria-hidden="true">...</span>
               </li>
             )}
@@ -131,7 +131,7 @@ export default function Pagination({ metadata }: PaginationProps) {
         {totalPages > 5 && currentPage <= totalPages / 2 && (
           <>
             {totalPages > 6 && (
-              <li className="flex items-center justify-center w-6 h-8 lg:w-8 lg:h-10 text-gray-400 text-xs">
+              <li className="flex items-center justify-center w-4 h-8 lg:w-8 lg:h-10 text-gray-400 text-xs">
                 <span aria-hidden="true">...</span>
               </li>
             )}
