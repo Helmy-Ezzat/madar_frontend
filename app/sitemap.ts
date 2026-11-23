@@ -8,12 +8,22 @@ export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // First page tells us the total, then fetch the rest (page 1 is reused).
+  // The backend rate-limits, so pages are fetched in small sequential batches
+  // instead of one big fan-out.
   const first = await getJobs({ page: 1, limit: PAGE_SIZE });
   const totalPages = first.metadata.total_pages || 1;
-  const rest = await Promise.all(
-    Array.from({ length: totalPages - 1 }, (_, i) => getJobs({ page: i + 2, limit: PAGE_SIZE }))
-  );
-  const jobs = [first, ...rest]
+  const pages = [first];
+  const BATCH = 5;
+  for (let start = 2; start <= totalPages; start += BATCH) {
+    const batch = await Promise.all(
+      Array.from(
+        { length: Math.min(BATCH, totalPages - start + 1) },
+        (_, i) => getJobs({ page: start + i, limit: PAGE_SIZE })
+      )
+    );
+    pages.push(...batch);
+  }
+  const jobs = pages
     .flatMap((p) => p.jobs)
     .filter((j) => j.approval_status !== 'closed');
 

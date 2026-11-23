@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getJobById } from "@/services/jobService";
 
 type Props = {
@@ -9,10 +10,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const job = await getJobById(id);
 
+  // A missing job must 404 from the top of the request (generateMetadata runs
+  // before streaming starts), not as a soft-404 panel inside a slot.
   if (!job) {
-    return {
-      title: "وظيفة غير متاحة",
-    };
+    notFound();
   }
 
   const jobTitle = job.job_info.job_titles[0] || "وظيفة شاغرة";
