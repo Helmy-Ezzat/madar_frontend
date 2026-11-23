@@ -15,16 +15,39 @@ import ApplyButton from "./ApplyButton";
  * the swap between them is visually seamless.
  */
 export default function JobDetailsHeader({ job }: { job: Job }) {
+    // Many source posts bundle several roles in one ad; the primary role
+    // leads (wrapped, never under the close button) and the rest read as
+    // chips instead of one chopped line.
+    const [primaryTitle, ...otherTitles] = job.job_info.job_titles;
+
     return (
         <header className="flex flex-col gap-5 border-b border-icon-bg pb-5 p-5">
-            <div className="flex justify-between">
+            <div className="flex justify-between items-start gap-3">
                 {/* Job Title */}
-                <h2 className="text-lg font-bold line-clamp-1">
-                    {job.job_info.job_titles.join(" - ")}
+                <h2 className="text-lg font-bold line-clamp-2 min-w-0">
+                    {primaryTitle || "وظيفة شاغرة"}
                 </h2>
                 {/* Close Button */}
-                <JobDetailsCloseButton />
+                <div className="shrink-0">
+                    <JobDetailsCloseButton />
+                </div>
             </div>
+            {otherTitles.length > 0 && (
+                <ul
+                    aria-label="وظائف أخرى ضمن نفس الإعلان"
+                    className="flex flex-wrap items-center gap-1.5 -mt-2"
+                >
+                    <li className="text-xs text-[#828A93]">يشمل الإعلان أيضًا:</li>
+                    {otherTitles.map((title) => (
+                        <li
+                            key={title}
+                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary"
+                        >
+                            {title}
+                        </li>
+                    ))}
+                </ul>
+            )}
             {/* Channel Info */}
 
             <div className="flex items-center gap-2.5">

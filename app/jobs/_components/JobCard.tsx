@@ -38,13 +38,17 @@ function JobCard({ job }: { job: Job }) {
         ${isActive ? "lg:border-r-4 lg:border-r-primary bg-[#F5F6F7] shadow-md" : ""}
       `}
       >
-        <div className="absolute top-3 left-3 z-20">
+        <div className="absolute top-3 end-3 z-20">
           <SaveJobButton jobId={job._id} />
         </div>
         <div className="flex flex-col gap-2.5 relative z-10 pointer-events-none">
-          <JobCardTitle titles={job.job_info.job_titles?.map((title: string | { text: string }) =>
-            typeof title === 'object' ? title.text : title
-          )} />
+          {/* Reserve the inline-end gutter so a long title never runs
+              under the floating save button. */}
+          <div className="pe-12">
+            <JobCardTitle titles={job.job_info.job_titles?.map((title: string | { text: string }) =>
+              typeof title === 'object' ? title.text : title
+            )} />
+          </div>
           <div className="flex items-center gap-1">
             <div className="w-14 aspect-square shrink-0 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100">
               <Building2 size={24} strokeWidth={1.5} />

@@ -4,21 +4,25 @@ interface JobTitleProps {
   titles: string[];
 }
 
+/**
+ * Card title for a job ad. Many source posts bundle several roles in one
+ * ad, so only the primary role is shown (full words, up to two lines) and
+ * the rest collapse into a count chip instead of being chopped mid-word.
+ */
 export const JobCardTitle: React.FC<JobTitleProps> = ({ titles }) => {
-  const MAX_VISIBLE_TITLES = 2;
+  const [primaryTitle, ...otherTitles] = titles;
 
-  const visibleTitles = titles.slice(0, MAX_VISIBLE_TITLES);
-  const hiddenCount = titles.length - MAX_VISIBLE_TITLES;
+  if (!primaryTitle) return null;
 
   return (
-    <div className="flex flex-wrap gap-2">
-      <h1 className="text-lg font-bold text-primary leading-snug line-clamp-2">
-        {visibleTitles.join(' - ')} {hiddenCount > 0 ? '...' : ''}
-      </h1>
+    <div className="flex flex-wrap items-center gap-2">
+      <h2 className="text-lg font-bold text-primary leading-snug line-clamp-2">
+        {primaryTitle}
+      </h2>
 
-      {hiddenCount > 0 && (
+      {otherTitles.length > 0 && (
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary w-fit">
-          + {hiddenCount} وظائف أخرى
+          + {otherTitles.length} وظائف أخرى ضمن نفس الإعلان
         </span>
       )}
     </div>

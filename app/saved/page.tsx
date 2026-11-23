@@ -93,17 +93,19 @@ export default function SavedJobsPage() {
             key={job._id}
             className="relative px-5 py-4 flex flex-col gap-2.5 bg-white shadow-sm rounded-2xl transition-all duration-200 hover:shadow-md"
           >
-            <div className="absolute top-4 left-4 z-10">
+            <div className="absolute top-4 end-4 z-10">
               <SaveJobButton jobId={job._id} />
             </div>
             <Link href={`/jobs/${job._id}`} className="flex flex-col gap-2.5">
-              <JobCardTitle
-                titles={
-                  job.job_info.job_titles?.map((title: any) =>
-                    typeof title === "object" ? title.text : title
-                  ) ?? []
-                }
-              />
+              <div className="pe-12">
+                <JobCardTitle
+                  titles={
+                    job.job_info.job_titles?.map((title: string | { text: string }) =>
+                      typeof title === "object" ? title.text : title
+                    ) ?? []
+                  }
+                />
+              </div>
               <div className="flex items-center gap-1">
                 <div className="w-12 aspect-square shrink-0 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100">
                   <Building2 size={20} strokeWidth={1.5} />
