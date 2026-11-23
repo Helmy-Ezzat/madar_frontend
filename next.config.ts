@@ -33,10 +33,13 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       // Legacy shared links: /jobs?jobId=X -> /jobs/X
+      // The capture is named after the query key on purpose: params used in
+      // the destination are consumed, so the stale ?jobId= is dropped from
+      // the redirected URL instead of being forwarded.
       {
         source: "/jobs",
-        has: [{ type: "query", key: "jobId", value: "(?<id>.+)" }],
-        destination: "/jobs/:id",
+        has: [{ type: "query", key: "jobId", value: "(?<jobId>.+)" }],
+        destination: "/jobs/:jobId",
         permanent: true,
       },
     ];
