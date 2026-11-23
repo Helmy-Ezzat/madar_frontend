@@ -41,7 +41,9 @@ export default function JobsPageShell({ children, filters, details }: JobsPageSh
     <div className={`grid grid-cols-1 ${gridConfig} gap-4 max-w-screen-2xl mx-auto transition-[grid-template-columns] duration-500 ease-in-out`}>
       {filters}
       {children}
-      {details}
+      {/* The router preserves unmatched slots, so on /jobs the details
+          slot would linger in the DOM; only render it on /jobs/[id]. */}
+      {routeJobId && details}
       {isOptimisticLoading && <JobDetailsSkeleton />}
     </div>
   );
