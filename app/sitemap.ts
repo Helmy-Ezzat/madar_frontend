@@ -14,6 +14,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const totalPages = first.metadata.total_pages || 1;
   const pages = [first];
   const BATCH = 5;
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  // getJobs swallows errors into an empty page; an empty page beyond the
+  // first while jobs exist means the fetch failed (rate limit / cold start),
+  // so those pages get one retry pass before we accept a partial sitemap.
+  const failed: number[] = [];
   for (let start = 2; start <= totalPages; start += BATCH) {
     const batch = await Promise.all(
       Array.from(
@@ -21,7 +26,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         (_, i) => getJobs({ page: start + i, limit: PAGE_SIZE })
       )
     );
-    pages.push(...batch);
+    batch.forEach((p, i) => {
+      pages[start - 1 + i] = p;
+      if (p.jobs.length === 0) failed.push(start + i);
+    });
+    await sleep(400);
+  }
+  for (const pageNum of failed) {
+    await sleep(1500);
+    pages[pageNum - 1] = await getJobs({ page: pageNum, limit: PAGE_SIZE });
   }
   const jobs = pages
     .flatMap((p) => p.jobs)
