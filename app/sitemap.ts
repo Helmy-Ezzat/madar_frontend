@@ -5,15 +5,18 @@ const baseUrl = 'https://madar-jobs.vercel.app';
 const PAGE_SIZE = 50; // API caps limit at 50 per page
 
 export const revalidate = 3600;
+// Generate on first request, never at build time: a deploy must not bake in a
+// sitemap built while the backend is rate-limiting.
+export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // First page tells us the total, then fetch the rest (page 1 is reused).
   // The backend rate-limits, so pages are fetched in small sequential batches
   // instead of one big fan-out.
   const first = await getJobs({ page: 1, limit: PAGE_SIZE });
-  const totalPages = first.metadata.total_pages || 1;
+  const totalPages = Math.min(first.metadata.total_pages || 1, 200);
   const pages = [first];
-  const BATCH = 5;
+  const BATCH = 4;
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
   // getJobs swallows errors into an empty page; an empty page beyond the
   // first while jobs exist means the fetch failed (rate limit / cold start),
@@ -30,7 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       pages[start - 1 + i] = p;
       if (p.jobs.length === 0) failed.push(start + i);
     });
-    await sleep(400);
+    await sleep(500);
   }
   for (const pageNum of failed) {
     await sleep(1500);
@@ -39,6 +42,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const jobs = pages
     .flatMap((p) => p.jobs)
     .filter((j) => j.approval_status !== 'closed');
+
+  // Degrade gracefully: a partial sitemap (some pages rate-limited) is fine,
+  // but never serve or cache a sitemap with zero jobs. Throwing makes ISR
+  // keep the last good copy, or answer 500 instead of a wrong empty sitemap.
+  if (jobs.length === 0) {
+    throw new Error('sitemap: no jobs fetched (backend rate limit or outage)');
+  }
 
   return [
     { url: `${baseUrl}/`, lastModified: new Date(), changeFrequency: 'daily', priority: 1 },
