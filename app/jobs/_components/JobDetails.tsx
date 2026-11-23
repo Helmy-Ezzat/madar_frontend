@@ -1,34 +1,30 @@
+import { notFound } from "next/navigation";
 import { getJobById } from "@/services/jobService";
 import { formatJobText } from "@/utils/textFormatter";
 import JobDetailsHeader from "./JobDetailsHeader";
-import JobDetailsCloseButton from "./JobDetailsCloseButton";
-import Image from "next/image";
 
 export default async function JobDetails({ jobId }: { jobId: string }) {
     const job = await getJobById(jobId);
 
+    // A missing job must be a real 404 so search engines drop the URL
+    // instead of indexing a soft-404 panel.
     if (!job) {
-        return (
-            <div className="relative flex flex-col items-center justify-center p-5 h-full min-h-105">
-                <div className="absolute top-5 left-5">
-                    <JobDetailsCloseButton />
-                </div>
-                <Image
-                    src="/undraw_server-down_lxs9.svg"
-                    alt="لا توجد نتائج"
-                    width={256}
-                    height={192}
-                    className="w-64 mb-6 opacity-80"
-                />
-                <h2 className="text-xl font-bold text-slate-800 mb-2">عذراً، الوظيفة غير متاحة</h2>
-                <p className="text-slate-500">ربما تم حذفها أو انتهت صلاحيتها</p>
-            </div>
-        );
+        notFound();
     }
 
     const published = new Date(job.published_at);
     const validThrough = new Date(published);
     validThrough.setMonth(validThrough.getMonth() + 2);
+    const jobUrl = `https://madar-jobs.vercel.app/jobs/${job._id}`;
+    const breadcrumbLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "الرئيسية", "item": "https://madar-jobs.vercel.app" },
+            { "@type": "ListItem", "position": 2, "name": "الوظائف", "item": "https://madar-jobs.vercel.app/jobs" },
+            { "@type": "ListItem", "position": 3, "name": job.job_info.job_titles[0], "item": jobUrl }
+        ]
+    };
     const jsonLd = job.approval_status === "closed" ? null : {
         "@context": "https://schema.org",
         "@type": "JobPosting",
@@ -66,6 +62,10 @@ export default async function JobDetails({ jobId }: { jobId: string }) {
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
                 />
             )}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd).replace(/</g, "\\u003c") }}
+            />
             {/* Header */}
             <JobDetailsHeader job={job} />
             {/* Job Description */}

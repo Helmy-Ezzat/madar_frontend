@@ -67,7 +67,9 @@ export const getJobById = async (jobId: string): Promise<Job | null> => {
         const json = await res.json();
         return json.data;
     } catch (error) {
+        // Network/backend failures are not 404s: rethrow so the route's
+        // error boundary handles them instead of rendering not-found.
         console.error("Fetch Error (getJobById):", error);
-        return null;
+        throw error;
     }
 };
