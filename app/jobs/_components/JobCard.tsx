@@ -13,7 +13,7 @@ import JobSourceChip from "@/components/JobSourceChip";
 
 function JobCard({ job }: { job: Job }) {
   const searchParams = useSearchParams();
-  const { activeJobId, setActiveJobId } = useJobContext();
+  const { activeJobId, setActiveJob } = useJobContext();
 
   // Real crawlable link to the job's URL; active filters are carried
   // along so the close button can restore them.
@@ -27,7 +27,7 @@ function JobCard({ job }: { job: Job }) {
     <Link
       href={href}
       scroll={false}
-      onClick={() => setActiveJobId(job._id)}
+      onClick={() => setActiveJob(job)}
       className="block"
     >
       <article

@@ -27,10 +27,11 @@
 }
 
 
-/* Prevent body scroll when modal is open on mobile ( Background Scroll Leakage ) */
+/* Prevent body scroll when modal is open on mobile ( Background Scroll Leakage ).
+   The job details modal locks via BodyScrollLock instead, which preserves
+   the list scroll position. */
 @media (max-width: 1023px) {
 
-    body:has([data-modal="job-details"]),
     body:has([data-modal="mobile-menu"][data-state="open"]),
     body:has([data-modal="filters-drawer"][data-state="open"]) {
         overflow: hidden;
@@ -77,4 +78,22 @@
 
 body {
     font-family: var(--font-plex-arabic), var(--font-plex-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* Job details panel mount transition: rise on mobile, plain fade on desktop. */
+@keyframes details-rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes details-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.details-enter {
+    animation: details-rise 200ms ease-out;
+}
+@media (min-width: 1024px) {
+    .details-enter {
+        animation-name: details-fade;
+    }
 }

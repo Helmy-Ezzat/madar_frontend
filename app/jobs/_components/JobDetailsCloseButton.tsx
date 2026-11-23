@@ -7,7 +7,7 @@ import { useJobContext } from "../_context/JobContext";
 
 function JobDetailsCloseButtonComponent() {
   const searchParams = useSearchParams();
-  const { setActiveJobId } = useJobContext();
+  const { setActiveJob } = useJobContext();
 
   // Back to the list with the active filters preserved.
   const href = useMemo(() => {
@@ -20,7 +20,7 @@ function JobDetailsCloseButtonComponent() {
       href={href}
       scroll={false}
       replace
-      onClick={() => setActiveJobId(null)}
+      onClick={() => setActiveJob(null)}
       className="text-[#828A93] hover:bg-gray-100 rounded-full transition-colors"
       aria-label="إغلاق"
     >
