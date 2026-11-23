@@ -37,7 +37,7 @@ export default function ActiveFilters({ minimal = false }: { minimal?: boolean }
         const params = new URLSearchParams(searchParams.toString());
         params.delete(key);
         params.set('page', '1'); // Reset pagination
-        router.push(`?${params.toString()}`);
+        router.push(`/jobs?${params.toString()}`);
     };
 
     if (activeFilters.length === 0) return null;
@@ -61,7 +61,7 @@ export default function ActiveFilters({ minimal = false }: { minimal?: boolean }
                         const params = new URLSearchParams(searchParams.toString());
                         filters.forEach(f => params.delete(f.key));
                         params.set('page', '1');
-                        router.push(`?${params.toString()}`);
+                        router.push(`/jobs?${params.toString()}`);
                     }}
                     className="text-xs text-slate-500 hover:text-slate-700 underline px-2 whitespace-nowrap"
                 >

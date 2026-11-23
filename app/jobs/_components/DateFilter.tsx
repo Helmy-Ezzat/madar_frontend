@@ -27,7 +27,7 @@ export default function DateFilter() {
         // Reset page to 1
         params.set('page', '1');
 
-        router.push(`?${params.toString()}`, { scroll: false });
+        router.push(`/jobs?${params.toString()}`, { scroll: false });
     };
 
     return (

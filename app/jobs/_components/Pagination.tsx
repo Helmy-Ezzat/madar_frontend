@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useTransition } from "react";
 
 interface PaginationProps {
@@ -14,7 +14,6 @@ interface PaginationProps {
 }
 
 export default function Pagination({ metadata }: PaginationProps) {
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
   
@@ -27,7 +26,7 @@ export default function Pagination({ metadata }: PaginationProps) {
   const createPageURL = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", pageNumber.toString());
-    return `${pathname}?${params.toString()}`;
+    return `/jobs?${params.toString()}`;
   };
 
   // to handle the navigation programmatically

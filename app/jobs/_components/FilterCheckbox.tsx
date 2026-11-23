@@ -29,7 +29,7 @@ export default function FilterCheckbox({ label, count, value, paramName }: Filte
         // Reset page to 1 when filtering
         params.set('page', '1');
 
-        router.push(`?${params.toString()}`, { scroll: false });
+        router.push(`/jobs?${params.toString()}`, { scroll: false });
     }, [isChecked, paramName, value, searchParams, router]);
 
     return (
