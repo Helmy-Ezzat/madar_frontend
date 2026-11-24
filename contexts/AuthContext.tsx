@@ -28,6 +28,7 @@ interface DbUser {
   officeStatus: "pending" | "approved" | "rejected" | null;
   officeName: string;
   licenseNumber: string;
+  isAdmin?: boolean;
   createdAt: string;
   updatedAt: string;
 }

@@ -5,6 +5,7 @@ import {
   GoogleAuthProvider,
   signOut,
   updateProfile,
+  sendEmailVerification,
   type User,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
@@ -26,17 +27,25 @@ export interface OfficeProfile {
   licenseNumber?: string;
 }
 
-export async function syncUserWithBackend(user: User, officeProfile?: OfficeProfile) {
+export async function syncUserWithBackend(user: User, officeProfile?: OfficeProfile, displayName?: string) {
   const token = await user.getIdToken(true);
+  const body: Record<string, string> = {};
+  // Send the name explicitly: the ID token's name claim can lag right after
+  // updateProfile, which used to create accounts with a blank name.
+  const name = (displayName ?? user.displayName ?? "").trim();
+  if (name) body.displayName = name;
+  if (officeProfile) {
+    body.role = "office";
+    body.officeName = officeProfile.officeName;
+    if (officeProfile.licenseNumber) body.licenseNumber = officeProfile.licenseNumber;
+  }
   const res = await fetch(`${API_BASE_URL}/auth/sync`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: officeProfile
-      ? JSON.stringify({ role: "office", ...officeProfile })
-      : undefined,
+    body: Object.keys(body).length ? JSON.stringify(body) : undefined,
   });
   if (!res.ok) {
     throw new Error("فشل مزامنة المستخدم مع السيرفر");
@@ -53,7 +62,14 @@ export async function registerWithEmail(
   const firebaseAuth = getFirebaseAuth();
   const credential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
   await updateProfile(credential.user, { displayName });
-  const dbUser = await syncUserWithBackend(credential.user, officeProfile);
+  const dbUser = await syncUserWithBackend(credential.user, officeProfile, displayName);
+  // Ownership proof: a verification link goes to the address used at signup.
+  // A delivery failure must not fail registration itself.
+  try {
+    await sendEmailVerification(credential.user);
+  } catch (error) {
+    console.error("فشل إرسال إيميل التأكيد", error);
+  }
   return { user: credential.user, dbUser };
 }
 

@@ -58,10 +58,10 @@ export default function Navbar() {
     }, []);
     const blendTop = pathname === "/" && !scrolled;
 
-    const isAdminEmail = user?.email === "hellmyezzat@gmail.com";
+    const isAdmin = dbUser?.isAdmin === true;
     const [adminPending, setAdminPending] = useState(0);
     useEffect(() => {
-        if (!isAdminEmail) return;
+        if (!isAdmin) return;
         let alive = true;
         const load = async () => {
             try {
@@ -76,7 +76,7 @@ export default function Navbar() {
         load();
         const t = setInterval(load, 60000);
         return () => { alive = false; clearInterval(t); };
-    }, [isAdminEmail]);
+    }, [isAdmin]);
 
     const sendTestNotification = async () => {
         try {
@@ -238,7 +238,7 @@ export default function Navbar() {
                                             <span>لوحة المكتب</span>
                                         </Link>
                                     )}
-                                    {user?.email === "hellmyezzat@gmail.com" && (
+                                    {isAdmin && (
                                         <Link
                                             href="/admin"
                                             onClick={() => setMenuOpen(false)}
@@ -253,7 +253,7 @@ export default function Navbar() {
                                             )}
                                         </Link>
                                     )}
-                                    {user?.email === "hellmyezzat@gmail.com" && (
+                                    {isAdmin && (
                                         <button
                                             onClick={() => {
                                                 setMenuOpen(false);
@@ -418,7 +418,7 @@ export default function Navbar() {
                                 </Link>
                             </li>
                         )}
-                        {user?.email === "hellmyezzat@gmail.com" && (
+                        {isAdmin && (
                             <li>
                                 <Link
                                     href="/admin"
@@ -475,7 +475,7 @@ export default function Navbar() {
                     )}
 
                     {/* Push preview: test button visible only on Helmy's account */}
-                    {user?.email === "hellmyezzat@gmail.com" && (
+                    {isAdmin && (
                         <div className="px-4 pb-2">
                             <button
                                 onClick={() => {

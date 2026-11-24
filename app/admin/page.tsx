@@ -26,8 +26,6 @@ import {
 } from "@/services/officeDashboardService";
 import { Briefcase, Building2, Check, Loader2, MapPin, Plus, X } from "lucide-react";
 
-const ADMIN_EMAILS = ["hellmyezzat@gmail.com"];
-
 const OFFICE_TABS = [
     { key: "pending", label: "تحت المراجعة" },
     { key: "approved", label: "معتمد" },
@@ -43,7 +41,7 @@ const JOB_TABS = [
 ] as const;
 
 export default function AdminPage() {
-    const { user, loading } = useAuth();
+    const { dbUser, loading } = useAuth();
     const showToast = useToast();
     const [section, setSection] = useState<"offices" | "jobs">("offices");
     const [status, setStatus] = useState<string>("pending");
@@ -72,7 +70,7 @@ export default function AdminPage() {
     }, []);
 
 
-    const isAdmin = !!user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase());
+    const isAdmin = dbUser?.isAdmin === true;
     useEffect(() => {
         if (isAdmin) refreshCounts();
     }, [isAdmin, refreshCounts]);
