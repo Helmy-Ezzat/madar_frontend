@@ -1,6 +1,7 @@
 'use client';
 
 import ActiveFilters from "./ActiveFilters";
+import SaveSearchButton from "./SaveSearchButton";
 import { pluralAr, nouns } from "@/lib/arabicPlural";
 
 export default function JobsHeader({ total }: { total: number }) {
@@ -19,6 +20,7 @@ export default function JobsHeader({ total }: { total: number }) {
             <div className="hidden md:block">
                 <ActiveFilters />
             </div>
+            <SaveSearchButton />
         </header>
     );
 }

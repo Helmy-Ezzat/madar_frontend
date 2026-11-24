@@ -11,6 +11,7 @@ import { fetchSavedJobs, type SavedJobEntry } from "@/services/savedJobsService"
 import { fromNow } from "@/lib/date-utils";
 import { JobCardTitle } from "@/app/jobs/_components/JobCardTitle";
 import SaveJobButton from "@/components/SaveJobButton";
+import SavedSearches from "./SavedSearches";
 
 export default function SavedJobsPage() {
   const { user, loading: authLoading } = useAuth();
@@ -72,6 +73,7 @@ export default function SavedJobsPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-10">
       <h1 className="text-2xl font-bold mb-6">الوظائف المحفوظة</h1>
+      <SavedSearches />
       {error && (
         <p className="text-red-500">حصل خطأ أثناء تحميل الوظائف المحفوظة. جرب تاني.</p>
       )}

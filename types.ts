@@ -2,6 +2,7 @@ export interface JobInfo {
     job_titles: string[];
     location: string;
     salary: string;
+    experience?: string;
     summary?: string;
 }
 

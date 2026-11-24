@@ -40,6 +40,10 @@ export interface OfficeJobPayload {
 export const createOfficeJob = (payload: OfficeJobPayload) =>
   authedFetch("/jobs/mine", { method: "POST", body: JSON.stringify(payload) });
 
+// Edit goes back through admin review (backend sets approval_status=pending)
+export const updateOfficeJob = (jobId: string, payload: Partial<OfficeJobPayload>) =>
+  authedFetch(`/jobs/mine/${jobId}`, { method: "PATCH", body: JSON.stringify(payload) });
+
 export const getMyOfficeJobs = () => authedFetch("/jobs/mine");
 
 export const deleteOfficeJob = (jobId: string) =>

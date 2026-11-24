@@ -12,6 +12,7 @@ import {
     getMyOfficeJobs,
     deleteOfficeJob,
     closeOfficeJob,
+    updateOfficeJob,
     getOfficeJobApplicants,
     upgradeToOffice,
 } from "@/services/officeDashboardService";
@@ -45,6 +46,14 @@ export default function OfficeDashboardPage() {
     const [upgrading, setUpgrading] = useState(false);
     const [confirmDeleteJob, setConfirmDeleteJob] = useState<string | null>(null);
     const [confirmCloseJob, setConfirmCloseJob] = useState<string | null>(null);
+    const [confirmReopenJob, setConfirmReopenJob] = useState<string | null>(null);
+    const [editingJobId, setEditingJobId] = useState<string | null>(null);
+    const [editTitle, setEditTitle] = useState("");
+    const [editLocation, setEditLocation] = useState("");
+    const [editSalary, setEditSalary] = useState("");
+    const [editExperience, setEditExperience] = useState("");
+    const [editSummary, setEditSummary] = useState("");
+    const [savingEdit, setSavingEdit] = useState(false);
     const [applicants, setApplicants] = useState<Record<string, Applicant[]>>({});
 
     const isOffice = dbUser?.role === "office";
@@ -190,6 +199,67 @@ export default function OfficeDashboardPage() {
         }
     };
 
+    // Reopen and edit both send the posting back through admin review.
+    const reopenJob = async (jobId: string) => {
+        try {
+            await closeOfficeJob(jobId, false);
+            setJobs((prev) => prev.map((j) => (j._id === jobId ? { ...j, approval_status: "pending" } : j)));
+            showToast("الوظيفة رجعت للمراجعة وهتتنشر بعد موافقة الإدارة");
+        } catch (err) {
+            showToast(err instanceof Error ? err.message : "حصل خطأ، حاول تاني");
+        }
+    };
+
+    const startEdit = (job: Job) => {
+        setEditingJobId(job._id);
+        setEditTitle(job.job_info?.job_titles?.[0] ?? "");
+        setEditLocation(job.job_info?.location ?? "");
+        setEditSalary(job.job_info?.salary ?? "");
+        setEditExperience(job.job_info?.experience ?? "");
+        setEditSummary(job.job_info?.summary ?? "");
+    };
+
+    const submitEdit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editingJobId) return;
+        setSavingEdit(true);
+        try {
+            await updateOfficeJob(editingJobId, {
+                title: editTitle,
+                location: editLocation,
+                summary: editSummary,
+                salary: editSalary || undefined,
+                experience: editExperience || undefined,
+            });
+            setJobs((prev) =>
+                prev.map((j) =>
+                    j._id === editingJobId
+                        ? {
+                              ...j,
+                              approval_status: "pending",
+                              job_info: j.job_info
+                                  ? {
+                                        ...j.job_info,
+                                        job_titles: [editTitle],
+                                        location: editLocation,
+                                        salary: editSalary || j.job_info.salary,
+                                        experience: editExperience || j.job_info.experience,
+                                        summary: editSummary,
+                                    }
+                                  : j.job_info,
+                          }
+                        : j
+                )
+            );
+            setEditingJobId(null);
+            showToast("التعديل اتبعت للمراجعة وهيظهر بعد موافقة الإدارة");
+        } catch (err) {
+            showToast(err instanceof Error ? err.message : "حصل خطأ، حاول تاني");
+        } finally {
+            setSavingEdit(false);
+        }
+    };
+
     const toggleApplicants = async (jobId: string) => {
         if (openApplicants === jobId) {
             setOpenApplicants(null);
@@ -287,6 +357,15 @@ export default function OfficeDashboardPage() {
                                         </p>
                                     </div>
                                     <div className="flex items-center gap-1">
+                                        {["approved", "closed", "pending", null, undefined, ""].includes(job.approval_status ?? null) && (
+                                            <button
+                                                type="button"
+                                                onClick={() => (editingJobId === job._id ? setEditingJobId(null) : startEdit(job))}
+                                                className="text-primary hover:bg-primary/5 text-xs font-bold px-3 py-2 rounded-lg transition"
+                                            >
+                                                {editingJobId === job._id ? "إلغاء" : "تعديل"}
+                                            </button>
+                                        )}
                                         {job.approval_status === "approved" && (
                                             <button
                                                 type="button"
@@ -294,6 +373,15 @@ export default function OfficeDashboardPage() {
                                                 className="text-amber-600 hover:bg-amber-50 text-xs font-bold px-3 py-2 rounded-lg transition"
                                             >
                                                 إنهاء التقديم
+                                            </button>
+                                        )}
+                                        {job.approval_status === "closed" && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setConfirmReopenJob(job._id)}
+                                                className="text-green-600 hover:bg-green-50 text-xs font-bold px-3 py-2 rounded-lg transition"
+                                            >
+                                                إعادة فتح التقديم
                                             </button>
                                         )}
                                         <button
@@ -306,6 +394,31 @@ export default function OfficeDashboardPage() {
                                         </button>
                                     </div>
                                 </div>
+                                {editingJobId === job._id && (
+                                    <form onSubmit={submitEdit} className="border-t border-border-light pt-3 flex flex-col gap-3">
+                                        <p className="text-xs text-text-muted">أي تعديل بيرجع الوظيفة للمراجعة قبل ما تظهر تاني.</p>
+                                        <FloatingInput id={`edit-title-${job._id}`} type="text" label="المسمى الوظيفي" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} required />
+                                        <FloatingInput id={`edit-location-${job._id}`} type="text" label="المدينة / الدولة" value={editLocation} onChange={(e) => setEditLocation(e.target.value)} required />
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <FloatingInput id={`edit-salary-${job._id}`} type="text" label="الراتب (اختياري)" value={editSalary} onChange={(e) => setEditSalary(e.target.value)} />
+                                            <FloatingInput id={`edit-experience-${job._id}`} type="text" label="الخبرة المطلوبة (اختياري)" value={editExperience} onChange={(e) => setEditExperience(e.target.value)} />
+                                        </div>
+                                        <textarea
+                                            value={editSummary}
+                                            onChange={(e) => setEditSummary(e.target.value)}
+                                            required
+                                            rows={4}
+                                            className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:border-primary resize-y"
+                                        />
+                                        <button
+                                            type="submit"
+                                            disabled={savingEdit}
+                                            className="bg-primary hover:bg-primary-hover text-white font-bold py-2.5 rounded-lg transition disabled:opacity-60 text-sm"
+                                        >
+                                            {savingEdit ? "جاري الحفظ..." : "احفظ التعديل"}
+                                        </button>
+                                    </form>
+                                )}
                                 <button
                                     type="button"
                                     onClick={() => toggleApplicants(job._id)}
@@ -344,6 +457,16 @@ export default function OfficeDashboardPage() {
                     setConfirmCloseJob(null);
                 }}
                 onCancel={() => setConfirmCloseJob(null)}
+            />
+            <ConfirmDialog
+                open={confirmReopenJob !== null}
+                title="إعادة فتح التقديم هترجع الوظيفة للمراجعة عند الإدارة قبل ما تتنشر تاني. متأكد؟"
+                confirmLabel="أعد فتح التقديم"
+                onConfirm={() => {
+                    if (confirmReopenJob) reopenJob(confirmReopenJob);
+                    setConfirmReopenJob(null);
+                }}
+                onCancel={() => setConfirmReopenJob(null)}
             />
             <ConfirmDialog
                 open={confirmDeleteJob !== null}
