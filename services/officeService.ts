@@ -6,7 +6,7 @@ export const getOffices = async (): Promise<Office[]> => {
 
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/offices`, {
-            next: { revalidate: 3600 },
+            next: { revalidate: 60 },
             signal: controller.signal,
         });
 

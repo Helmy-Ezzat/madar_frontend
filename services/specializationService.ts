@@ -6,7 +6,7 @@ export interface SpecializationStat {
 export const getSpecializations = async (): Promise<SpecializationStat[]> => {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/specializations?summary=1`, {
-            next: { revalidate: 3600 }
+            next: { revalidate: 60 }
         });
 
         if (!res.ok) {
@@ -25,7 +25,7 @@ export const getSpecializations = async (): Promise<SpecializationStat[]> => {
 export const getSpecializationsTotal = async (): Promise<number> => {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/specializations?summary=1`, {
-            next: { revalidate: 3600 }
+            next: { revalidate: 60 }
         });
         if (!res.ok) throw new Error(`Failed to fetch specializations: ${res.statusText}`);
         const json = await res.json();
