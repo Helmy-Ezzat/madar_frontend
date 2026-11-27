@@ -10,7 +10,7 @@ export function fromNow(date: string | number | Date): string {
     const now = Date.now();
     const diffInSeconds = Math.max(0, Math.floor((now - timeMs) / 1000));
 
-    if (diffInSeconds < 45) return 'الآن';
+    if (diffInSeconds < 60) return 'الآن';
 
     const diffInMinutes = Math.floor(diffInSeconds / 60);
     if (diffInMinutes < 60) {
