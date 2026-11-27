@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useSavedJobs } from "@/contexts/SavedJobsContext";
 import { fetchSavedJobs, type SavedJobEntry } from "@/services/savedJobsService";
 import { fromNow } from "@/lib/date-utils";
+import JobCardSkeleton from "@/app/jobs/_components/skeleton/JobCardSkeleton";
 import { JobCardTitle } from "@/app/jobs/_components/JobCardTitle";
 import SaveJobButton from "@/components/SaveJobButton";
 import SavedSearches from "./SavedSearches";
@@ -43,7 +44,11 @@ export default function SavedJobsPage() {
     return (
       <main className="max-w-4xl mx-auto px-4 py-10">
         <h1 className="text-2xl font-bold mb-6">الوظائف المحفوظة</h1>
-        <p className="text-slate-500">جاري التحميل...</p>
+        <div className="flex flex-col gap-3">
+          {[1, 2, 3].map((i) => (
+            <JobCardSkeleton key={i} />
+          ))}
+        </div>
       </main>
     );
   }
