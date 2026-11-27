@@ -3,38 +3,10 @@ import Link from "next/link";
 import Image from "next/image";
 import SearchInput from "./SearchInput";
 import MarkerHighlight from "./MarkerHighlight";
-import { getSpecializations } from "@/services/specializationService";
-import { getLocations } from "@/services/locationService";
+import HeroChips from "./HeroChips";
+import HeroChipsSkeleton from "./HeroChipsSkeleton";
 
-export default async function Hero() {
-    const [specializations, locations] = await Promise.all([
-        getSpecializations(),
-        getLocations(),
-    ]);
-
-    // Cities only for the chips: drop country-level buckets, shorten
-    // "الرياض، المملكة العربية السعودية" to "الرياض", and dedupe by short name.
-    const countryNames = new Set([
-        "المملكة العربية السعودية", "السعودية", "مصر", "سلطنة عمان", "سلطنه عمان", "عمان",
-        "الإمارات", "الإمارات العربية المتحدة", "الكويت", "قطر", "البحرين", "الأردن", "ليبيا", "العراق",
-    ]);
-    const cityChips: { label: string; href: string }[] = [];
-    const seenCities = new Set<string>();
-    for (const l of locations) {
-        const short = l.name.split("،")[0].trim();
-        if (countryNames.has(l.name.trim()) || countryNames.has(short) || seenCities.has(short)) continue;
-        seenCities.add(short);
-        cityChips.push({ label: short, href: `/jobs?location=${encodeURIComponent(short)}` });
-        if (cityChips.length === 3) break;
-    }
-
-    const quickChips = [
-        ...cityChips,
-        ...specializations.slice(0, 4).map((s) => ({
-            label: s.name,
-            href: `/jobs?specialization=${encodeURIComponent(s.name)}`,
-        })),
-    ];
+export default function Hero() {
 
     return (
         <main className="grid grid-cols-1 lg:grid-cols-2 px-4 sm:px-6 lg:px-8 md:min-h-screen -mt-24 pt-24 md:-mt-20 md:pt-20 bg-gradient-to-b from-primary/10 via-primary/5 to-background">
@@ -78,20 +50,10 @@ export default async function Hero() {
                     </Suspense>
                 </div>
 
-                {/* Quick-search chips: top cities + top titles, one tap to search */}
-                {quickChips.length > 0 && (
-                    <div className="flex flex-wrap items-center justify-center gap-2 max-w-xl -mt-2">
-                        {quickChips.map((chip) => (
-                            <Link
-                                key={chip.href}
-                                href={chip.href}
-                                className="text-xs md:text-sm text-text-body bg-white/70 border border-slate-200 rounded-full px-3.5 py-1.5 hover:border-primary hover:text-primary transition-colors"
-                            >
-                                {chip.label}
-                            </Link>
-                        ))}
-                    </div>
-                )}
+                {/* Quick-search chips stream in: static hero paints immediately, chips follow */}
+                <Suspense fallback={<HeroChipsSkeleton />}>
+                    <HeroChips />
+                </Suspense>
 
                 <Link
                         href="/jobs"

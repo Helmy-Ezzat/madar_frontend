@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Building2, MapPin, Loader2, FileText } from "lucide-react";
+import { Building2, MapPin, FileText } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { getMyApplications, type MyApplication } from "@/services/applicationsService";
 import { fromNow } from "@/lib/date-utils";
+import ApplicationsSkeleton from "./_components/ApplicationsSkeleton";
 
 function statusChip(status: string) {
   if (status === "approved")
@@ -37,9 +38,7 @@ export default function MyApplicationsPage() {
     return (
       <main className="max-w-3xl mx-auto px-4 py-10">
         <h1 className="text-2xl font-bold mb-6">طلباتي</h1>
-        <div className="flex justify-center py-10">
-          <Loader2 className="w-6 h-6 animate-spin text-primary" />
-        </div>
+        <ApplicationsSkeleton />
       </main>
     );
   }

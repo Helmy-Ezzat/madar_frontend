@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import DashboardJobsSkeleton from "./_components/DashboardJobsSkeleton";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/Toast";
@@ -325,7 +326,7 @@ export default function OfficeDashboardPage() {
                 <section className="flex flex-col gap-3">
                     <h2 className="text-lg font-bold text-text-main">وظائفي ({jobs.length})</h2>
                     {loadingJobs ? (
-                        <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
+                        <DashboardJobsSkeleton />
                     ) : jobs.length === 0 ? (
                         <p className="text-text-muted text-sm bg-white border border-border rounded-2xl p-6 text-center">لسه منزلتش وظائف. نزّل أول وظيفة من الفورم اللي فوق.</p>
                     ) : (

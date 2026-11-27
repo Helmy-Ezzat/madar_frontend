@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import AdminListSkeleton from "./_components/AdminListSkeleton";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/Toast";
 import VerifiedTick from "@/components/VerifiedTick";
@@ -253,7 +254,7 @@ export default function AdminPage() {
                 </div>
 
                 {loadingList ? (
-                    <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
+                    <AdminListSkeleton />
                 ) : section === "jobs" ? (
                     <>
                     <button
